@@ -1,0 +1,25 @@
+﻿{
+  "nombre": "Nivel1",
+  "descripcion": "Ajedrez",
+  "id": 0,
+  "objetos": [
+    {
+      "nombre": "bg",
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 372
+        }
+      },
+      "componentes": [
+        {
+          "name": "bgSprite",
+          "type": "sprite",
+          "materialName": "bg",
+          "width": 320,
+          "height": 86
+        }
+      ]
+    }
+  ] 
+}

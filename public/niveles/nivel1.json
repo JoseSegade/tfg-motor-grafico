@@ -1,0 +1,68 @@
+﻿{
+  "nombre": "Nivel1",
+  "descripcion": "Ajedrez",
+  "id": 0,
+  "objetos": [
+    {
+      "nombre": "tablero",
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "componentes": [
+        {
+          "nombre": "tableroSprite",
+          "tipo": "ComponenteSprite",
+          "nombreMaterial": "tablero",
+          "ancho": 512,
+          "alto": 512
+        }
+      ]
+    },
+    {
+      "nombre": "generadorPiezas",
+      "transform": {
+        "x": 0,
+        "y": 0
+      },
+      "funcionalidades": [
+        {
+          "nombre": "generador",
+          "tipo": "FuncionalidadGeneradorPiezas",
+          "jsonPrefabs": [
+            {
+              "nombre": "prefabFichas",
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0
+                }
+              },
+              "componentes": [
+                {
+                  "nombre": "fichasSprite",
+                  "tipo": "ComponenteSpriteAnimado",
+                  "nombreMaterial": "fichas",
+                  "reproducirAutomaticamente": false,
+                  "tiempoEntreFrames": 0,
+                  "ancho": 64,
+                  "alto": 64,
+                  "anchoFrame": 213.5,
+                  "altoFrame": 639,
+                  "offset": 4,
+                  "numeroDeFrames": 1,
+                  "secuenciaFrames": [
+                    0
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "objetosHijo": []
+    }
+  ]
+}

@@ -63,40 +63,20 @@ export default class MotorGrafico implements SuscripcionMensaje {
         Importadores.inicializar();
         EventosInput.inicializar(this._canvas);
 
-        gl.clearColor(146 / 225, 206 / 255, 247 / 255, 1);
+        gl.clearColor(48 / 225, 48 / 255, 48 / 255, 1);
         gl.enable(gl.BLEND);
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
         this._basicShader = new ShaderBase();
         this._basicShader.utilizarShader();
 
-        FuentesBitmap.agregarFuente('default', 'assets/fonts/text.txt');
+        FuentesBitmap.agregarFuente('default', '/fonts/text.txt');
         FuentesBitmap.cargarConfiguracion();
 
-        Materiales.agregarMaterial(new Material('duck', 'assets/textures/duck.png', Color.blanco));
-        Materiales.agregarMaterial(new Material('bg', 'assets/textures/bg.png', Color.blanco));
-        Materiales.agregarMaterial(new Material('end', 'assets/textures/end.png', Color.blanco));
-        Materiales.agregarMaterial(
-            new Material('middle', 'assets/textures/middle.png', Color.blanco),
-        );
-        Materiales.agregarMaterial(
-            new Material('grass', 'assets/textures/grass.png', Color.blanco),
-        );
-        Materiales.agregarMaterial(
-            new Material('tutorial', 'assets/textures/tutorial.png', Color.blanco),
-        );
-        Materiales.agregarMaterial(
-            new Material('title', 'assets/textures/title.png', Color.blanco),
-        );
-        Materiales.agregarMaterial(
-            new Material('score', 'assets/textures/score.png', Color.blanco),
-        );
-        Materiales.agregarMaterial(
-            new Material('restartbtn', 'assets/textures/restartbtn.png', Color.blanco),
-        );
-        Materiales.agregarMaterial(
-            new Material('playbtn', 'assets/textures/playbtn.png', Color.blanco),
-        );
+       
+        Materiales.agregarMaterial(new Material('tablero', '/textures/tablero.png', Color.blanco));
+        Materiales.agregarMaterial(new Material('fichas', '/textures/fichas.png', Color.blanco));
+        
 
         //  Load an audio
         //AudioManager.loadSoundFile('flap', 'assets/sounds/flap.mp3', false);

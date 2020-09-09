@@ -29,7 +29,7 @@ export default class Textura implements SuscripcionMensaje {
      * @param { number } alto Alto de la textura. 1 por defecto.
      */
     public constructor(nombre: string, ancho: number = 1, alto: number = 1) {
-        this._nombre = name;
+        this._nombre = nombre;
         this._ancho = ancho;
         this._alto = alto;
         this._textura = gl.createTexture();

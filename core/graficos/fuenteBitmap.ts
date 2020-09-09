@@ -27,7 +27,7 @@ export default class FuenteBitmap implements SuscripcionMensaje {
      * @param nombreArchivo Nombre del txt donde estan contenidos los datos de la fuente.
      */
     public constructor(nombre: string, nombreArchivo: string) {
-        this._nombre = name;
+        this._nombre = nombre;
         this._nombreArchivo = nombreArchivo;
     }
 

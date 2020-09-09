@@ -33,8 +33,10 @@ export default class NivelManager implements SuscripcionMensaje {
 
     public static inicializarNiveles(directorios: string[]): void {
         directorios.forEach((nivelJson) => {
-            NivelManager.anadirNivel(`assets/niveles/${nivelJson}`);
+            NivelManager.anadirNivel(`niveles/${nivelJson}`);
         });
+
+        Mensaje.suscribirse(ConstantesMensajeria.RECURSO_CARGADO, this.instancia);
     }
 
     private static anadirNivel(nivel: string) {
@@ -46,7 +48,6 @@ export default class NivelManager implements SuscripcionMensaje {
      * @param id Id del nivel al que se quiere cambiar.
      */
     public static cambiarNivel(id: number): void {
-        console.log('NivelManager: cambiar nivel - _niveles: ', this._niveles);
         if (NivelManager._nivelActual !== undefined) {
             NivelManager._nivelActual = undefined;
         }
@@ -111,15 +112,15 @@ export default class NivelManager implements SuscripcionMensaje {
         }
 
         let nombreNivel: string;
-        if (datos.name === undefined) {
+        if (datos.nombre === undefined) {
             throw new Error(ConstantesError.ERROR_NOMBRE_NIVEL);
         } else {
-            nombreNivel = String(datos.name);
+            nombreNivel = String(datos.nombre);
         }
 
         let descripcionNivel: string;
         if (datos.descripcion !== undefined) {
-            descripcionNivel = String(datos.description);
+            descripcionNivel = String(datos.descripcion);
         }
 
         NivelManager._nivelActual = new Nivel(idNivel, nombreNivel, descripcionNivel);

@@ -12,7 +12,7 @@ export default class Material {
     private _color: Color;
 
     public constructor(nombre: string, nombreTexturaDifusa: string, color: Color) {
-        this._nombre = name;
+        this._nombre = nombre;
         this._nombreTexturaDifusa = nombreTexturaDifusa;
         this._color = color;
 
@@ -46,7 +46,7 @@ export default class Material {
      * Color (albedo) del material.
      * */
     public get color(): Color {
-        return this.color;
+        return this._color;
     }
 
     /**

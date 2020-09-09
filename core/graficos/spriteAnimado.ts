@@ -1,21 +1,20 @@
-﻿import Sprite from "./sprite";
-import SuscripcionMensaje from "../mensajes/SuscripcionMensaje";
-import Mensaje from "../mensajes/Mensaje";
-import ConstantesMensajeria from "../constantes/ConstantesMensajeria";
-import RecursoImagen from "../importadores/recursos/RecursoImagen";
-import UVInfo from "./UVInfo";
-import ConstantesError from "../constantes/ConstantesError";
-import Shader from "../gl/shader";
-import Matrix4x4 from "../math/matrix4x4";
-import Materiales from "./materiales";
-import Importadores from "../importadores/Importadores";
-import Vector2 from "../math/vector2";
+﻿import Sprite from './sprite';
+import SuscripcionMensaje from '../mensajes/SuscripcionMensaje';
+import Mensaje from '../mensajes/Mensaje';
+import ConstantesMensajeria from '../constantes/ConstantesMensajeria';
+import RecursoImagen from '../importadores/recursos/RecursoImagen';
+import UVInfo from './UVInfo';
+import ConstantesError from '../constantes/ConstantesError';
+import Shader from '../gl/shader';
+import Matrix4x4 from '../math/matrix4x4';
+import Materiales from './materiales';
+import Importadores from '../importadores/Importadores';
+import Vector2 from '../math/vector2';
 
 /**
  * Util para pasar los datos que cumplan con esta interfaz.
  * */
 export class SpriteAnimadoInfo {
-
     /**
      * Nombre del sprite
      * */
@@ -60,13 +59,17 @@ export class SpriteAnimadoInfo {
      * Tiempo que debe pasar en milisegundos para que el frame cambie en la animacion.
      * */
     public tiempoEntreFrames: number = 1;
+
+    /**
+     * Offset con respecto al primer frame de la animacion.
+     * */
+    public offset: number = 0;
 }
 
 /**
  * Sprite con animacion.
  * */
 export default class SpriteAnimado extends Sprite implements SuscripcionMensaje {
-
     private _anchoFrame: number;
     private _altoFrame: number;
     private _numeroDeFrames: number;
@@ -77,11 +80,12 @@ export default class SpriteAnimado extends Sprite implements SuscripcionMensaje 
     private _tiempoActual: number = 0;
 
     private _UVFrames: UVInfo[] = [];
-    private _imagenCargada: boolean = false;
     private _anchoImagen: number = -1;
+    private _imagenCargada: boolean = false;
     private _altoImagen: number = -1;
 
     private _enMovimiento = true;
+    private _offset: number = 0;
 
     /**
      * Crea un nuevo sprtie
@@ -94,8 +98,12 @@ export default class SpriteAnimado extends Sprite implements SuscripcionMensaje 
         this._numeroDeFrames = info.numeroDeFrames;
         this._secuenciaFrames = info.secuenciaFrames;
         this._tiempoEntreFrames = info.tiempoEntreFrames;
+        this._offset = info.offset;
 
-        Mensaje.suscribirse(ConstantesMensajeria.RECURSO_CARGADO + this._material.nombreTexturaDifusa, this)
+        Mensaje.suscribirse(
+            ConstantesMensajeria.RECURSO_CARGADO + this._material.nombreTexturaDifusa,
+            this,
+        );
     }
 
     /**
@@ -155,7 +163,10 @@ export default class SpriteAnimado extends Sprite implements SuscripcionMensaje 
      * @param message The message to be handled.
      */
     public recibirMensaje(mensaje: Mensaje): void {
-        if (mensaje.codigo === ConstantesMensajeria.RECURSO_CARGADO + this._material.nombreTexturaDifusa) {
+        if (
+            mensaje.codigo ===
+            ConstantesMensajeria.RECURSO_CARGADO + this._material.nombreTexturaDifusa
+        ) {
             this._imagenCargada = true;
             const imagen = mensaje.contexto as RecursoImagen;
             this._anchoImagen = imagen.ancho;
@@ -163,7 +174,6 @@ export default class SpriteAnimado extends Sprite implements SuscripcionMensaje 
             this.calcularUVs();
         }
     }
-
 
     /**
      * Carga la configuracion del sprite.
@@ -173,6 +183,19 @@ export default class SpriteAnimado extends Sprite implements SuscripcionMensaje 
         if (!this._imagenCargada) {
             this.cargarImagen();
         }
+    }
+
+    public cargarVerticesIniciales() {
+        const frameUV: UVInfo = this._UVFrames[this._secuenciaFrames[this._frameActual]];
+        this._vertices[0].coordenadasTextura.copyFrom(frameUV.min);
+        this._vertices[1].coordenadasTextura = new Vector2(frameUV.min.x, frameUV.max.y);
+        this._vertices[2].coordenadasTextura.copyFrom(frameUV.max);
+        this._vertices[3].coordenadasTextura.copyFrom(frameUV.max);
+        this._vertices[4].coordenadasTextura = new Vector2(frameUV.max.x, frameUV.min.y);
+        this._vertices[5].coordenadasTextura.copyFrom(frameUV.min);
+
+        this.actualizarVertices();       
+        
     }
 
     /**
@@ -195,7 +218,7 @@ export default class SpriteAnimado extends Sprite implements SuscripcionMensaje 
             if (this._frameActual >= this._secuenciaFrames.length) {
                 this._frameActual = 0;
             }
-
+            console.log(this._UVFrames, this._secuenciaFrames, this._frameActual);
             const frameUV: UVInfo = this._UVFrames[this._secuenciaFrames[this._frameActual]];
             this._vertices[0].coordenadasTextura.copyFrom(frameUV.min);
             this._vertices[1].coordenadasTextura = new Vector2(frameUV.min.x, frameUV.max.y);
@@ -212,18 +235,29 @@ export default class SpriteAnimado extends Sprite implements SuscripcionMensaje 
 
     private calcularUVs(): void {
         let anchoTotal: number = 0;
-        for (let j: number = 0, i: number = 0; i < this._numeroDeFrames; ++i) {
+        for (
+            let j: number = 0, i: number = this._offset;
+            i < this._offset + this._numeroDeFrames;
+            ++i
+        ) {
             anchoTotal = i * this._anchoFrame;
             if (anchoTotal > this._anchoImagen) {
                 ++j;
                 anchoTotal = 0;
             }
 
-            const min: Vector2 = new Vector2((i * this._anchoFrame) / this._anchoImagen, (j * this._altoFrame) / this._altoImagen);
-            const max: Vector2 = new Vector2(((i * this._anchoFrame) + this._anchoFrame) / this._anchoImagen, ((j * this._altoFrame) + this._altoFrame) / this._altoImagen);
+            const min: Vector2 = new Vector2(
+                (i * this._anchoFrame) / this._anchoImagen,
+                (j * this._altoFrame) / this._altoImagen,
+            );
+            const max: Vector2 = new Vector2(
+                (i * this._anchoFrame + this._anchoFrame) / this._anchoImagen,
+                (j * this._altoFrame + this._altoFrame) / this._altoImagen,
+            );
 
             this._UVFrames.push(new UVInfo(min, max));
         }
+        this.cargarVerticesIniciales();
     }
 
     private cargarImagen(): void {
@@ -231,10 +265,10 @@ export default class SpriteAnimado extends Sprite implements SuscripcionMensaje 
             const material = Materiales.obtenerMaterial(this._nombreMaterial);
             if (material.texturaDifusa.estaCargado) {
                 if (Importadores.estaRecursoCargadoEnMemoria(material.nombreTexturaDifusa)) {
-                    this._imagenCargada = true;
                     this._anchoImagen = material.texturaDifusa.ancho;
                     this._altoImagen = material.texturaDifusa.alto;
                     this.calcularUVs();
+                    this._imagenCargada = true;
                 }
             }
         }

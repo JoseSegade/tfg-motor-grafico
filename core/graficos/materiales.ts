@@ -1,4 +1,4 @@
-﻿import Material from "./material";
+﻿import Material from './material';
 
 /**
  * Corresponde con un material y un contador propio que lleva la cuenta de los objetos que la estan utilizando.
@@ -16,12 +16,9 @@ class UnidadDeMaterial {
  * Gestiona los materiales. Patron sigleton.
  * */
 export default class Materiales {
-
     private static _materiales: { [nombre: string]: UnidadDeMaterial } = {};
 
-    private constructor() {
-
-    }
+    private constructor() {}
 
     /**
      * Agrega un nuevo material.
@@ -40,9 +37,12 @@ export default class Materiales {
      */
     public static obtenerMaterial(nombre: string): Material {
         if (Materiales._materiales[nombre] === undefined) {
+            console.warn(
+                'El material al que se esta refiriendo no esta cargado en memoria: Nombre del material:',
+                nombre,
+            );
             return undefined;
-        }
-        else {
+        } else {
             Materiales._materiales[nombre].referencias++;
             return Materiales._materiales[nombre].material;
         }

@@ -10,6 +10,7 @@ export default class MundoVirtual {
 
     public constructor() {
         this._objetoMundo = new ObjetoVirtual(0, MundoVirtual.IDENTIFICADOR_RAIZ, this);
+        console.log(this.objetoMundo);
     }
 
     /**

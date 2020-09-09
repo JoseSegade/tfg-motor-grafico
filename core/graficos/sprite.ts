@@ -1,18 +1,17 @@
-﻿import Vector3 from "../math/vector3";
-import BufferWebGl from "../gl/bufferWebGl";
-import Material from "./material";
-import Vertice from "./vertice";
-import Materiales from "./materiales";
-import { gl } from "../gl/gl";
-import Matrix4x4 from "../math/matrix4x4";
-import Shader from "../gl/shader";
-import AttributeInfo from "../gl/attributeInfo";
+﻿import Vector3 from '../math/vector3';
+import BufferWebGl from '../gl/bufferWebGl';
+import Material from './material';
+import Vertice from './vertice';
+import Materiales from './materiales';
+import { gl } from '../gl/gl';
+import Matrix4x4 from '../math/matrix4x4';
+import Shader from '../gl/shader';
+import AttributeInfo from '../gl/attributeInfo';
 
 /**
  * Almacena los datos necesarios para pintar un sprite bidimensional.
  * */
 export default class Sprite {
-
     protected _nombre: string;
     protected _ancho: number;
     protected _alto: number;
@@ -30,7 +29,12 @@ export default class Sprite {
      * @param ancho Ancho del sprite.
      * @param alto Alto del sprite.
      */
-    public constructor(nombre: string, nombreMaterial: string, ancho: number = 100, alto: number = 100) {
+    public constructor(
+        nombre: string,
+        nombreMaterial: string,
+        ancho: number = 100,
+        alto: number = 100,
+    ) {
         this._nombre = nombre;
         this._ancho = ancho;
         this._alto = alto;
@@ -93,7 +97,6 @@ export default class Sprite {
      * Carga la configuracion necesaria para el sprite.
      * */
     public cargarConfiguracion(): void {
-
         const atributoPosicion: AttributeInfo = new AttributeInfo();
         atributoPosicion.cargar(0, 3);
 
@@ -110,9 +113,7 @@ export default class Sprite {
      * Actualiza el sprite.
      * @param milisegundos Tiempo desde la ultima actualizacion.
      */
-    public update(milisegundos: number) {
-
-    }
+    public update(milisegundos: number) {}
 
     /**
      * Dibuja el sprite.
@@ -120,7 +121,6 @@ export default class Sprite {
      * @param model Matrix model.
      */
     public dibujar(shader: Shader, model: Matrix4x4): void {
-
         const modelId: WebGLUniformLocation = shader.obtenerIdentificacion('u_model', true);
         gl.uniformMatrix4fv(modelId, false, model.toFloat32Array());
 
@@ -146,7 +146,7 @@ export default class Sprite {
             new Vertice(maxX, maxY, 0.0, 1.0, 1.0),
             new Vertice(maxX, maxY, 0.0, 1.0, 1.0),
             new Vertice(maxX, minY, 0.0, 1.0, 0.0),
-            new Vertice(minX, minY, 0.0, 0.0, 0.0)
+            new Vertice(minX, minY, 0.0, 0.0, 0.0),
         ];
 
         this.actualizarVertices();
@@ -167,7 +167,7 @@ export default class Sprite {
 
     protected actualizarVertices(): void {
         this._buffer.limpiarBuffer();
-        this._vertices.forEach(v => this._buffer.agregarDatos(v.toArray()));
+        this._vertices.forEach((v) => this._buffer.agregarDatos(v.toArray()));
         this._buffer.cargarBufferEnWebGl();
         this._buffer.unbind();
     }
@@ -177,7 +177,7 @@ export default class Sprite {
             minX: -(this._ancho * this._origen.x),
             maxX: this._ancho * (1.0 - this._origen.x),
             minY: -(this._alto * this._origen.y),
-            maxY: this._alto * (1.0 - this._origen.y)
-        }
+            maxY: this._alto * (1.0 - this._origen.y),
+        };
     }
 }

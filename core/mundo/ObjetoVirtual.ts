@@ -44,6 +44,10 @@ export default class ObjetoVirtual {
         this._mundoVirtual = mundoVirtual;
     }
 
+    public get mundoVirtual(): MundoVirtual {
+        return this._mundoVirtual;
+    }
+
     /**
      * Id del objeto.
      */
@@ -191,6 +195,7 @@ export default class ObjetoVirtual {
     public cargarConfiguracion(): void {
         this._estaConfigurado = true;
         this._componentes.forEach((c) => c.cargarConfiguracion());
+        this._funcionalidades.forEach((c) => c.cargarConfiguracion());
         this._objetosHijo.forEach((c) => c.cargarConfiguracion());
     }
 

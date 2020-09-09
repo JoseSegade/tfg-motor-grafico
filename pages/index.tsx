@@ -1,5 +1,4 @@
 ﻿import React, { useState, useEffect } from 'react';
-import Head from 'next/head';
 import MotorGrafico from 'core/motorGrafico';
 import { GetStaticProps } from 'next';
 import lectorRecursos, { RecursosLeidos } from 'core/importadores/lectorRecursos';
@@ -13,9 +12,8 @@ interface TamanoVentana {
     alto: number;
 }
 
-
 const ElementoMotor = ({ recursos }: props): JSX.Element => {
-    const motorGrafico: MotorGrafico = new MotorGrafico(500, 500);
+    const motorGrafico: MotorGrafico = new MotorGrafico(512, 512);
     motorGrafico.inicializarRecursosProgramables(recursos);
     const tamanoVentana: TamanoVentana = useWindowSize();
     const ventanaCargada: boolean = useWindowLoad();
@@ -30,11 +28,15 @@ const ElementoMotor = ({ recursos }: props): JSX.Element => {
 
     return (
         <React.Fragment>
-            <Head>
-                <title>Typescript Engine</title>
-            </Head>
-            <div id="gameArea">
-                <canvas id="viewport"></canvas>
+            <div id="gameArea" style={{
+                position: 'absolute',
+                left: '50%',
+                top: '50%'
+            }}>
+                <canvas id="viewport" style= {{
+                    width: '100%',
+                    height: '100%'
+                }}></canvas>
             </div>
         </React.Fragment>
     );

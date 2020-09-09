@@ -9,7 +9,6 @@ export default class ComponenteSpriteAnimado extends ComponenteBase {
     public reproducirAutomaticamente: boolean;
     public sprite: SpriteAnimado;
     public tiempoEntreFrames: number;
-    public name: string;
     public nombreMaterial: string;
     public ancho: number;
     public alto: number;
@@ -17,6 +16,7 @@ export default class ComponenteSpriteAnimado extends ComponenteBase {
     public altoFrame: number;
     public numeroDeFrames: number;
     public secuenciaFrames: number[];
+    public offset: number;
 
     /**
      * True si el sprite esta reproduciendose actualmente.
@@ -39,10 +39,12 @@ export default class ComponenteSpriteAnimado extends ComponenteBase {
             numeroDeFrames: this.numeroDeFrames,
             secuenciaFrames: this.secuenciaFrames,
             tiempoEntreFrames: this.tiempoEntreFrames,
+            offset: this.offset
         });
         this.sprite.cargarConfiguracion();
+        
     }
-
+    
     /**
      * Ejecuta la primera vez que ya se ha cargado la configuracion.
      * */

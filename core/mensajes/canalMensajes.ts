@@ -72,7 +72,7 @@ export default class CanalMensaje {
      * Actualiza la cola de suscripcion.
      * @param milisegundos Tiempo desde la ultima actualizacion.
      */
-    public static update(milisegundos: number): void {
+    public static update(_milisegundos: number): void {
         if (CanalMensaje._colaMensajes.length === 0) {
             return;
         }

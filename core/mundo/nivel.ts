@@ -71,11 +71,11 @@ export default class Nivel {
      * @param configNivel Objeto proveniente de un json que contenga todos los datos del nivel.
      */
     public inicializar(configNivel: any) {
-        if (configNivel.objectos === undefined) {
+        if (configNivel.objetos === undefined) {
             throw new Error(ConstantesError.ERROR_NIVEL_VACIO);
         }
 
-        const objs: Array<any> = configNivel.objectos;
+        const objs: Array<any> = configNivel.objetos;
         objs.forEach((obj) => this.cargarObjetoVirtual(obj, this._mundo.objetoMundo));
     }
 
@@ -109,13 +109,13 @@ export default class Nivel {
         }
     }
 
-    private cargarObjetoVirtual(configuracion: any, objetoPadre: ObjetoVirtual): void {
+    public cargarObjetoVirtual(configuracion: any, objetoPadre: ObjetoVirtual) {
         let nombre: string;
         if (configuracion.nombre !== undefined) {
             nombre = String(configuracion.nombre);
         }
 
-        const objetoVirtual: ObjetoVirtual = new ObjetoVirtual(++this._idGlobal, name, this._mundo);
+        const objetoVirtual: ObjetoVirtual = new ObjetoVirtual(++this._idGlobal, nombre, objetoPadre.mundoVirtual);
 
         if (configuracion.transform !== undefined) {
             objetoVirtual.transform.setFromJson(configuracion.transform);

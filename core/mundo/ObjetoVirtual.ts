@@ -10,9 +10,9 @@ import MundoVirtual from './mundoVirtual';
  * Objeto que se renderizara en una escena
  * */
 export default class ObjetoVirtual {
-    private _id: number;
+    public id: number;
+    public objetoPadre: ObjetoVirtual;
     private _objetosHijo: ObjetoVirtual[] = [];
-    private _objetoPadre: ObjetoVirtual;
     private _estaConfigurado: boolean = false;
     private _mundoVirtual: MundoVirtual;
     private _componentes: Componente[] = [];
@@ -39,27 +39,13 @@ export default class ObjetoVirtual {
      * @param scene Scene to bind this object to. Required just in the container of all the rest of the objects.
      */
     public constructor(id: number, nombre: string, mundoVirtual?: MundoVirtual) {
-        this._id = id;
+        this.id = id;
         this.nombre = nombre;
         this._mundoVirtual = mundoVirtual;
     }
 
     public get mundoVirtual(): MundoVirtual {
         return this._mundoVirtual;
-    }
-
-    /**
-     * Id del objeto.
-     */
-    public get id(): number {
-        return this._id;
-    }
-
-    /**
-     * Objeto padre.
-     */
-    public get objetoPadre(): ObjetoVirtual {
-        return this._objetoPadre;
     }
 
     /**
@@ -95,7 +81,7 @@ export default class ObjetoVirtual {
      * @param objetoHijo Objeto hijo.
      */
     public anadirObjetoHijo(objetoHijo: ObjetoVirtual): void {
-        objetoHijo._objetoPadre = this;
+        objetoHijo.objetoPadre = this;
         this._objetosHijo.push(objetoHijo);
         objetoHijo.referenciaMundoVirtual(this._mundoVirtual);
     }
@@ -107,7 +93,7 @@ export default class ObjetoVirtual {
     public eliminarObjetoHijo(objetoHijo: ObjetoVirtual): void {
         const idx = this._objetosHijo.indexOf(objetoHijo);
         if (idx !== -1) {
-            objetoHijo._objetoPadre = undefined;
+            objetoHijo.objetoPadre = undefined;
             this._objetosHijo.splice(idx, 1);
         }
     }
@@ -212,8 +198,7 @@ export default class ObjetoVirtual {
      * Actualiza este objeto y todos sus hijos.
      * @param milisegundos Tiempo transcurrido desde la ultima actualizacion.
      */
-    public update(milisegundos: number): void {
-        this._localM = this.transform.getTransformationMatrix();
+    public update(milisegundos: number): void {        
         this.actualizarMatrizGlobal(
             this.objetoPadre !== undefined ? this.objetoPadre._worldM : undefined,
         );
@@ -249,7 +234,8 @@ export default class ObjetoVirtual {
         this._mundoVirtual = mundoVirtual;
     }
 
-    private actualizarMatrizGlobal(matrizPadre: Matrix4x4): void {
+    public actualizarMatrizGlobal(matrizPadre: Matrix4x4): void {
+        this._localM = this.transform.getTransformationMatrix();
         if (matrizPadre !== undefined) {
             this._worldM = Matrix4x4.multiply(matrizPadre, this._localM);
         } else {

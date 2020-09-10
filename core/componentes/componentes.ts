@@ -28,8 +28,7 @@ export default class Componentes {
      * @param json Objeto json que contiene la configuracion y el tipo del componente que se quiere generar.
      */
     public static generarComponente(json: any): Componente {
-        if (json.tipo) {     
-            console.log(json.tipo);        
+        if (json.tipo) {
             return Object.assign(new Componentes._componentes[json.tipo](), json);
         } else {
             throw new Error(ConstantesError.ERROR_OBTENER_COMPONENTE);

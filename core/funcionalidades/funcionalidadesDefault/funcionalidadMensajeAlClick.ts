@@ -2,7 +2,7 @@
 import SuscripcionMensaje from '../../mensajes/SuscripcionMensaje';
 import Mensaje from '../../mensajes/Mensaje';
 import ConstantesMensajeria from '../../constantes/ConstantesMensajeria';
-import DatosRaton from '../../input/DatosRaton';
+import DatosRaton from '../../input/datosRaton';
 
 /**
  * Manda un mensaje cuando se pulsa click (similar a lo que haria un boton).

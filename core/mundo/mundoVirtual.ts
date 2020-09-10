@@ -10,7 +10,6 @@ export default class MundoVirtual {
 
     public constructor() {
         this._objetoMundo = new ObjetoVirtual(0, MundoVirtual.IDENTIFICADOR_RAIZ, this);
-        console.log(this.objetoMundo);
     }
 
     /**
@@ -64,5 +63,9 @@ export default class MundoVirtual {
      */
     public render(shader: Shader): void {
         this._objetoMundo.render(shader);
+    }
+
+    public debug_imprimirEscenaPorPantalla() {
+        console.log(this.objetoMundo);
     }
 }

@@ -194,8 +194,7 @@ export default class SpriteAnimado extends Sprite implements SuscripcionMensaje 
         this._vertices[4].coordenadasTextura = new Vector2(frameUV.max.x, frameUV.min.y);
         this._vertices[5].coordenadasTextura.copyFrom(frameUV.min);
 
-        this.actualizarVertices();       
-        
+        this.actualizarVertices();
     }
 
     /**
@@ -218,7 +217,6 @@ export default class SpriteAnimado extends Sprite implements SuscripcionMensaje 
             if (this._frameActual >= this._secuenciaFrames.length) {
                 this._frameActual = 0;
             }
-            console.log(this._UVFrames, this._secuenciaFrames, this._frameActual);
             const frameUV: UVInfo = this._UVFrames[this._secuenciaFrames[this._frameActual]];
             this._vertices[0].coordenadasTextura.copyFrom(frameUV.min);
             this._vertices[1].coordenadasTextura = new Vector2(frameUV.min.x, frameUV.max.y);
@@ -234,17 +232,9 @@ export default class SpriteAnimado extends Sprite implements SuscripcionMensaje 
     }
 
     private calcularUVs(): void {
-        let anchoTotal: number = 0;
-        for (
-            let j: number = 0, i: number = this._offset;
-            i < this._offset + this._numeroDeFrames;
-            ++i
-        ) {
-            anchoTotal = i * this._anchoFrame;
-            if (anchoTotal > this._anchoImagen) {
-                ++j;
-                anchoTotal = 0;
-            }
+        for (let idx = this._offset; idx < (this._offset + this._numeroDeFrames); idx++) {
+            const i = Math.floor( idx % (this._anchoImagen / this._anchoFrame));
+            const j = Math.floor(idx  / (this._anchoImagen / this._anchoFrame));
 
             const min: Vector2 = new Vector2(
                 (i * this._anchoFrame) / this._anchoImagen,

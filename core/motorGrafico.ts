@@ -7,7 +7,7 @@ import NivelManager from './mundo/nivelManager';
 import WebGl_Util, { gl } from './gl/gl';
 import Vector2 from './math/vector2';
 import Mensaje from './mensajes/Mensaje';
-import CanalMensaje from './mensajes/CanalMensajes';
+import CanalMensaje from './mensajes/canalMensajes';
 import Colisiones from './colision/colisiones';
 import Color from './graficos/color';
 import FuentesBitmap from './graficos/fuentesBitmap';

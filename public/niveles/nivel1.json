@@ -31,36 +31,47 @@
         {
           "nombre": "generador",
           "tipo": "FuncionalidadGeneradorPiezas",
-          "jsonPrefabs": [
-            {
-              "nombre": "prefabFichas",
-              "transform": {
-                "position": {
-                  "x": 0,
-                  "y": 0
-                }
-              },
-              "componentes": [
-                {
-                  "nombre": "fichasSprite",
-                  "tipo": "ComponenteSpriteAnimado",
-                  "nombreMaterial": "fichas",
-                  "reproducirAutomaticamente": false,
-                  "tiempoEntreFrames": 0,
-                  "ancho": 64,
-                  "alto": 64,
-                  "anchoFrame": 213.5,
-                  "altoFrame": 639,
-                  "offset": 4,
-                  "numeroDeFrames": 1,
-                  "secuenciaFrames": [
-                    0
-                  ]
-                }
-              ]
+          "anchoTablero": 512,
+          "altoTablero":  512,
+          "anchoFicha":  64,
+          "altoFicha":  64,
+          "framesFichas": [10,9,8,7,6,8,9,10,
+            11,11,11,11,11,11,11,11,
+          5,5,5,5,5,5,5,5,
+          4,3,2,1,0,2,3,4],
+          "jsonPrefab": {
+            "nombre": "prefabFichas",
+            "transform": {
+              "position": {
+                "x": 0,
+                "y": 0
+              }
+            },
+            "funcionalidades": [{
+              "nombre": "comportamientoArrastrar",
+              "tipo": "FuncionalidadArrastrarPieza"
             }
-          ]
-        }
+            ],
+            "componentes": [
+              {
+                "nombre": "fichasSprite",
+                "tipo": "ComponenteSpriteAnimado",
+                "nombreMaterial": "fichas",
+                "reproducirAutomaticamente": false,
+                "tiempoEntreFrames": 1,
+                "ancho": 64,
+                "alto": 64,
+                "anchoFrame": 213.5,
+                "altoFrame": 639,
+                "offset": 0,
+                "numeroDeFrames": 1,
+                "secuenciaFrames": [
+                  0
+                ]
+              }
+            ]
+          }
+        }        
       ],
       "objetosHijo": []
     }

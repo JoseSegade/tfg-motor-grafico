@@ -23,7 +23,7 @@ export default class Nivel {
     private _descripcion: string;
     private _mundo: MundoVirtual;
     private _estadoActual: EstadosNivel = EstadosNivel.SIN_CARGAR;
-    private _idGlobal: number = -1;
+    private static _idGlobal: number = -1;
 
     /**
      * Crea un nuevo nivel.
@@ -76,7 +76,7 @@ export default class Nivel {
         }
 
         const objs: Array<any> = configNivel.objetos;
-        objs.forEach((obj) => this.cargarObjetoVirtual(obj, this._mundo.objetoMundo));
+        objs.forEach((obj) => Nivel.cargarObjetoVirtual(obj, this._mundo.objetoMundo));
     }
 
     /**
@@ -109,13 +109,17 @@ export default class Nivel {
         }
     }
 
-    public cargarObjetoVirtual(configuracion: any, objetoPadre: ObjetoVirtual) {
+    public static cargarObjetoVirtual(configuracion: any, objetoPadre: ObjetoVirtual): ObjetoVirtual {
         let nombre: string;
         if (configuracion.nombre !== undefined) {
             nombre = String(configuracion.nombre);
         }
 
-        const objetoVirtual: ObjetoVirtual = new ObjetoVirtual(++this._idGlobal, nombre, objetoPadre.mundoVirtual);
+        const objetoVirtual: ObjetoVirtual = new ObjetoVirtual(
+            ++this._idGlobal,
+            nombre,
+            objetoPadre?.mundoVirtual,
+        );
 
         if (configuracion.transform !== undefined) {
             objetoVirtual.transform.setFromJson(configuracion.transform);
@@ -141,5 +145,7 @@ export default class Nivel {
         if (objetoPadre !== undefined) {
             objetoPadre.anadirObjetoHijo(objetoVirtual);
         }
+
+        return objetoVirtual;
     }
 }

@@ -1,5 +1,5 @@
-﻿import SuscripcionMensaje from "./SuscripcionMensaje";
-import ImplementadorMensaje from "./ImplementadorMensaje";
+﻿import SuscripcionMensaje from "./suscripcionMensaje";
+import ImplementadorMensaje from "./implementadorMensaje";
 import Mensaje, { PrioridadMensaje } from "./Mensaje";
 
 
@@ -10,7 +10,7 @@ export default class CanalMensaje {
 
     private static _suscripciones: { [codigo: string]: SuscripcionMensaje[] } = {};
 
-    private static _mensajesPorUpdate: number = 10;
+    private static _mensajesPorUpdate: number = 120;
     private static _colaMensajes: ImplementadorMensaje[] = [];
 
     private constructor() {

@@ -28,7 +28,7 @@ export default class Funcionalidades {
      * @param json Objeto json que contiene la configuracion y el tipo del funcionalidad que se quiere generar.
      */
     public static generarFuncionalidad(json: any): Funcionalidad {
-        if (json.tipo) { 
+        if (json.tipo) {
             return Object.assign(new Funcionalidades._funcionalidades[json.tipo](), json);
         } else {
             throw new Error(ConstantesError.ERROR_OBTENER_COMPONENTE);

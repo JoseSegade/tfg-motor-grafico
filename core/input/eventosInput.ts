@@ -1,7 +1,7 @@
-﻿import Vector2 from "../math/vector2";
-import ConstantesMensajeria from "../constantes/ConstantesMensajeria";
-import DatosRaton from "./DatosRaton";
-import Mensaje from "../mensajes/Mensaje";
+﻿import Vector2 from '../math/vector2';
+import ConstantesMensajeria from '../constantes/ConstantesMensajeria';
+import DatosRaton from './datosRaton';
+import Mensaje from '../mensajes/Mensaje';
 
 /**
  * Codigos de las flechas del teclado.
@@ -10,7 +10,7 @@ export enum FlechasTeclado {
     IZQUIERDA = 37,
     ARRIBA = 38,
     DERECHA = 39,
-    ABAJO = 40
+    ABAJO = 40,
 }
 
 /**
@@ -18,8 +18,6 @@ export enum FlechasTeclado {
  * */
 export default class EventosInput {
     private static _teclas: boolean[];
-    private static _prevCursorX: number;
-    private static _prevCursorY: number;
     private static _cursorX: number;
     private static _cursorY: number;
     private static _clickIzd: boolean = false;
@@ -47,7 +45,9 @@ export default class EventosInput {
      * @param codigoTecla Codigo de la tecla sobre la que se desea obtener la informacion.
      */
     public static teclaPulsada(codigoTecla: FlechasTeclado): boolean {
-        return EventosInput._teclas[codigoTecla] === undefined ? false : EventosInput._teclas[codigoTecla];
+        return EventosInput._teclas[codigoTecla] === undefined
+            ? false
+            : EventosInput._teclas[codigoTecla];
     }
 
     /**
@@ -76,33 +76,55 @@ export default class EventosInput {
     }
 
     private static moverCursor(event: MouseEvent): void {
-        EventosInput._prevCursorX = EventosInput._cursorX;
-        EventosInput._prevCursorY = EventosInput._cursorY;
-
         const rect: DOMRect = (event.target as HTMLElement).getBoundingClientRect();
-        EventosInput._cursorX = (event.clientX - Math.round(rect.left)) * (1 / EventosInput._resolucion.x);
-        EventosInput._cursorY = (event.clientY - Math.round(rect.top)) * (1 / EventosInput._resolucion.y);
+        EventosInput._cursorX =
+            (event.clientX - Math.round(rect.left)) * (1 / EventosInput._resolucion.x);
+        EventosInput._cursorY =
+            (event.clientY - Math.round(rect.top)) * (1 / EventosInput._resolucion.y);
+
+        Mensaje.enviar(
+            ConstantesMensajeria.MOVER_CLICK,
+            this,
+            new DatosRaton(
+                EventosInput._clickIzd,
+                EventosInput._clickDch,
+                EventosInput.obtenerPosicionCursor(),
+            ),
+        );
     }
 
     private static pulsarClick(event: MouseEvent): void {
         if (event.button === 0) {
             this._clickIzd = true;
-        }
-        else if (event.button === 2) {
+        } else if (event.button === 2) {
             this._clickDch = true;
         }
-
-        Mensaje.enviar(ConstantesMensajeria.PULSAR_CLICK, this, new DatosRaton(EventosInput._clickIzd, EventosInput._clickDch, EventosInput.obtenerPosicionCursor()));
+        Mensaje.enviar(
+            ConstantesMensajeria.PULSAR_CLICK,
+            this,
+            new DatosRaton(
+                EventosInput._clickIzd,
+                EventosInput._clickDch,
+                EventosInput.obtenerPosicionCursor(),
+            ),
+        );
     }
 
     private static soltarClick(event: MouseEvent): void {
         if (event.button === 0) {
             this._clickIzd = false;
-        }
-        else if (event.button === 2) {
+        } else if (event.button === 2) {
             this._clickDch = false;
         }
 
-        Mensaje.enviar(ConstantesMensajeria.SOLTAR_CLICK, this, new DatosRaton(EventosInput._clickIzd, EventosInput._clickDch, EventosInput.obtenerPosicionCursor()));
+        Mensaje.enviar(
+            ConstantesMensajeria.SOLTAR_CLICK,
+            this,
+            new DatosRaton(
+                EventosInput._clickIzd,
+                EventosInput._clickDch,
+                EventosInput.obtenerPosicionCursor(),
+            ),
+        );
     }
 }

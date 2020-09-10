@@ -1,4 +1,4 @@
-﻿import CanalMensaje from "./CanalMensajes";
+﻿import CanalMensaje from "./canalMensajes";
 import SuscripcionMensaje from "./SuscripcionMensaje";
 
 /**

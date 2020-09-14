@@ -21,182 +21,180 @@ import Funcionalidades from './funcionalidades/funcionalidades';
  * MotorGrafico
  * */
 export default class MotorGrafico implements SuscripcionMensaje {
-    private _canvas: HTMLCanvasElement;
-    private _basicShader: ShaderBase;
-    private _projection: Matrix4x4;
-    private _previousTime: number = 0;
+  private _canvas: HTMLCanvasElement;
+  private _basicShader: ShaderBase;
+  private _projection: Matrix4x4;
+  private _previousTime: number = 0;
 
-    private _gameWidth: number;
-    private _gameHeight: number;
+  private _gameWidth: number;
+  private _gameHeight: number;
 
-    private _isFirstUpdate: boolean = true;
-    private _aspect: number;
+  private _isFirstUpdate: boolean = true;
+  private _aspect: number;
 
-    /**
-     * Crea un nuevo motor.
-     *  @param width The width of the game in pixels.
-     *  @param height The height of the game in pixels.
-     * */
-    public constructor(width?: number, height?: number) {
-        this._gameWidth = width;
-        this._gameHeight = height;
+  /**
+   * Crea un nuevo motor.
+   *  @param width The width of the game in pixels.
+   *  @param height The height of the game in pixels.
+   * */
+  public constructor(width?: number, height?: number) {
+    this._gameWidth = width;
+    this._gameHeight = height;
+  }
+
+  public inicializarRecursosProgramables({
+    componentes,
+    funcionalidades,
+    niveles,
+  }: RecursosLeidos): void {
+    Componentes.guardarComponentes(componentes);
+    Funcionalidades.guardarfuncionalidades(funcionalidades);
+    NivelManager.inicializarNiveles(niveles);
+  }
+
+  /**
+   * Starts up this engine.
+   * */
+  public iniciar(elementName?: string): void {
+    this._canvas = WebGl_Util.inicializarWebGl(elementName);
+    if (this._gameWidth !== undefined && this._gameHeight !== undefined) {
+      this._aspect = this._gameWidth / this._gameHeight;
     }
+    Importadores.inicializar();
+    EventosInput.inicializar(this._canvas);
 
-    public inicializarRecursosProgramables({
-        componentes,
-        funcionalidades,
-        niveles,
-    }: RecursosLeidos): void {
-        Componentes.guardarComponentes(componentes);
-        Funcionalidades.guardarfuncionalidades(funcionalidades);
-        NivelManager.inicializarNiveles(niveles);
-    }
+    gl.clearColor(48 / 225, 48 / 255, 48 / 255, 1);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-    /**
-     * Starts up this engine.
-     * */
-    public iniciar(elementName?: string): void {
-        this._canvas = WebGl_Util.inicializarWebGl(elementName);
-        if (this._gameWidth !== undefined && this._gameHeight !== undefined) {
-            this._aspect = this._gameWidth / this._gameHeight;
-        }
-        Importadores.inicializar();
-        EventosInput.inicializar(this._canvas);
+    this._basicShader = new ShaderBase();
+    this._basicShader.utilizarShader();
 
-        gl.clearColor(48 / 225, 48 / 255, 48 / 255, 1);
-        gl.enable(gl.BLEND);
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    FuentesBitmap.agregarFuente('default', '/fonts/default.txt');
+    FuentesBitmap.cargarConfiguracion();
 
-        this._basicShader = new ShaderBase();
-        this._basicShader.utilizarShader();
+    Materiales.agregarMaterial(new Material('tablero', '/textures/tablero.png', Color.blanco));
+    Materiales.agregarMaterial(new Material('fichas', '/textures/fichas.png', Color.blanco));
+    Materiales.agregarMaterial(new Material('fondo', '/textures/fondo.png', Color.blanco));
+    Materiales.agregarMaterial(
+      new Material('blancas_seleccion', '/textures/blancas_seleccion.png', Color.blanco),
+    );
+    Materiales.agregarMaterial(
+      new Material('negras_seleccion', '/textures/negras_seleccion.png', Color.blanco),
+    );
 
-        FuentesBitmap.agregarFuente('default', '/fonts/text.txt');
-        FuentesBitmap.cargarConfiguracion();
+    //  Load an audio
+    //AudioManager.loadSoundFile('flap', 'assets/sounds/flap.mp3', false);
 
-       
-        Materiales.agregarMaterial(new Material('tablero', '/textures/tablero.png', Color.blanco));
-        Materiales.agregarMaterial(new Material('fichas', '/textures/fichas.png', Color.blanco));
-        
+    this._projection = Matrix4x4.ortographic(
+      0,
+      this._canvas.width,
+      this._canvas.height,
+      0,
+      -100.0,
+      100.0,
+    );
 
-        //  Load an audio
-        //AudioManager.loadSoundFile('flap', 'assets/sounds/flap.mp3', false);
+    this.cambiarTamano(this._gameWidth, this._gameHeight);
 
-        this._projection = Matrix4x4.ortographic(
-            0,
-            this._canvas.width,
-            this._canvas.height,
-            0,
-            -100.0,
-            100.0,
-        );
+    this.precargar();
+  }
 
-        this.cambiarTamano(this._gameWidth, this._gameHeight);
+  /**
+   * Resizes the canvas to fit the window.
+   * */
+  public cambiarTamano(anchoVentana: number, altoVentana: number): void {
+    if (this._canvas !== undefined) {
+      if (!this._gameWidth || !this._gameHeight) {
+        this._canvas.width = anchoVentana;
+        this._canvas.height = altoVentana;
+        gl.viewport(0, 0, anchoVentana, altoVentana);
+        this._projection = Matrix4x4.ortographic(0, anchoVentana, altoVentana, 0, -100.0, 100.0);
+      } else {
+        let newWidth: number = anchoVentana;
+        let newHeight: number = altoVentana;
+        const newWidthToHeight: number = newWidth / newHeight;
+        const gameArea: HTMLElement = document.getElementById('gameArea');
 
-        this.precargar();
-    }
-
-    /**
-     * Resizes the canvas to fit the window.
-     * */
-    public cambiarTamano(anchoVentana: number, altoVentana: number): void {
-        if (this._canvas !== undefined) {
-            if (!this._gameWidth || !this._gameHeight) {
-                this._canvas.width = anchoVentana;
-                this._canvas.height = altoVentana;
-                gl.viewport(0, 0, anchoVentana, altoVentana);
-                this._projection = Matrix4x4.ortographic(
-                    0,
-                    anchoVentana,
-                    altoVentana,
-                    0,
-                    -100.0,
-                    100.0,
-                );
-            } else {
-                let newWidth: number = anchoVentana;
-                let newHeight: number = altoVentana;
-                const newWidthToHeight: number = newWidth / newHeight;
-                const gameArea: HTMLElement = document.getElementById('gameArea');
-
-                if (newWidthToHeight > this._aspect) {
-                    newWidth = newHeight * this._aspect;
-                } else {
-                    newHeight = newWidth * this._aspect;
-                }
-                gameArea.style.width = `${newWidth}px`;
-                gameArea.style.height = `${newHeight}px`;
-
-                gameArea.style.marginLeft = `${-newWidth / 2}px`;
-                gameArea.style.marginTop = `${-newHeight / 2}px`;
-
-                this._canvas.width = newWidth;
-                this._canvas.height = newHeight;
-
-                gl.viewport(0, 0, newWidth, newHeight);
-                this._projection = Matrix4x4.ortographic(
-                    0,
-                    this._gameWidth,
-                    this._gameHeight,
-                    0,
-                    -100.0,
-                    100.0,
-                );
-
-                const resolutionScale: Vector2 = new Vector2(
-                    newWidth / this._gameWidth,
-                    newHeight / this._gameHeight,
-                );
-                EventosInput.cambiarResolucion(resolutionScale);
-            }
-        }
-    }
-
-    /**
-     * Gets the subscription message.
-     * @param message Message sent.
-     */
-    public recibirMensaje(_mensaje: Mensaje): void {}
-
-    private loop(): void {
-        if (this._isFirstUpdate) {
-        }
-
-        this.update();
-        this.render();
-        requestAnimationFrame(this.loop.bind(this));
-    }
-
-    private precargar(): void {
-        CanalMensaje.update(0);
-
-        if (!FuentesBitmap.estanActivadas()) {
-            requestAnimationFrame(this.precargar.bind(this));
+        if (newWidthToHeight > this._aspect) {
+          newWidth = newHeight * this._aspect;
         } else {
-            NivelManager.cambiarNivel(0);
-            this.loop();
+          newHeight = newWidth * this._aspect;
         }
-    }
+        gameArea.style.width = `${newWidth}px`;
+        gameArea.style.height = `${newHeight}px`;
 
-    private update(): void {
-        const delta: number = performance.now() - this._previousTime;
+        gameArea.style.marginLeft = `${-newWidth / 2}px`;
+        gameArea.style.marginTop = `${-newHeight / 2}px`;
 
-        CanalMensaje.update(delta);
+        this._canvas.width = newWidth;
+        this._canvas.height = newHeight;
 
-        NivelManager.update(delta);
-
-        Colisiones.update(delta);
-        this._previousTime = performance.now();
-    }
-
-    private render(): void {
-        gl.clear(gl.COLOR_BUFFER_BIT);
-
-        NivelManager.render(this._basicShader);
-
-        const projectionPosition: WebGLUniformLocation = this._basicShader.obtenerIdentificacion(
-            'u_projection',
-            true,
+        gl.viewport(0, 0, newWidth, newHeight);
+        this._projection = Matrix4x4.ortographic(
+          0,
+          this._gameWidth,
+          this._gameHeight,
+          0,
+          -100.0,
+          100.0,
         );
-        gl.uniformMatrix4fv(projectionPosition, false, new Float32Array(this._projection.data));
+
+        const resolutionScale: Vector2 = new Vector2(
+          newWidth / this._gameWidth,
+          newHeight / this._gameHeight,
+        );
+        EventosInput.cambiarResolucion(resolutionScale);
+      }
     }
+  }
+
+  /**
+   * Gets the subscription message.
+   * @param message Message sent.
+   */
+  public recibirMensaje(_mensaje: Mensaje): void {}
+
+  private loop(): void {
+    if (this._isFirstUpdate) {
+    }
+
+    this.update();
+    this.render();
+    requestAnimationFrame(this.loop.bind(this));
+  }
+
+  private precargar(): void {
+    CanalMensaje.update(0);
+
+    if (!FuentesBitmap.estanActivadas()) {
+      requestAnimationFrame(this.precargar.bind(this));
+    } else {
+      NivelManager.cambiarNivel(0);
+      this.loop();
+    }
+  }
+
+  private update(): void {
+    const delta: number = performance.now() - this._previousTime;
+
+    CanalMensaje.update(delta);
+
+    NivelManager.update(delta);
+
+    Colisiones.update(delta);
+    this._previousTime = performance.now();
+  }
+
+  private render(): void {
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    NivelManager.render(this._basicShader);
+
+    const projectionPosition: WebGLUniformLocation = this._basicShader.obtenerIdentificacion(
+      'u_projection',
+      true,
+    );
+    gl.uniformMatrix4fv(projectionPosition, false, new Float32Array(this._projection.data));
+  }
 }

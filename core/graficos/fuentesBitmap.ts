@@ -13,7 +13,7 @@ export default class FuentesBitmap {
      * @param nombreArchivo Nombre del archivo con la configuracion de la fuente.
      */
     public static agregarFuente(nombre: string, nombreArchivo: string): void {
-        FuentesBitmap._fuentes[nombre] = new FuenteBitmap(name, nombreArchivo);
+        FuentesBitmap._fuentes[nombre] = new FuenteBitmap(nombre, nombreArchivo);
     }
 
     /**

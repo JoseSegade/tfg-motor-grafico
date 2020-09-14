@@ -1,12 +1,12 @@
 ﻿import SuscripcionMensaje from "../mensajes/SuscripcionMensaje";
 import ConstantesMensajeria from "../constantes/ConstantesMensajeria";
-import { CaracterBitmap } from "./caracterBitmap";
+import CaracterBitmap from "./caracterBitmap";
 import Mensaje from "../mensajes/Mensaje";
 import RecursoTexto from "../importadores/recursos/RecursoTexto";
 import Importadores from "../importadores/Importadores";
 import Vector2 from "../math/vector2";
 import ConstantesError from "../constantes/ConstantesError";
-import ConstruirRuta, { Rutas } from "../constantes/construirRuta";
+import Path from 'path';
 
 /**
  * Carga y lee los valores de una fuente en formato bitmap.
@@ -41,7 +41,7 @@ export default class FuenteBitmap implements SuscripcionMensaje {
     /**
      * Tamano total.
      * */
-    public get tanamo(): number {
+    public get tamano(): number {
         return this._tamano;
     }
 
@@ -137,10 +137,10 @@ export default class FuenteBitmap implements SuscripcionMensaje {
     private extraerInformacionTxt(content: string): void {
         let nChar: number = 0;
         const lineas: string[] = content.split('\n');
-        lineas.forEach((linea, index) => {
+        lineas.forEach((linea) => {
             const datos: string = linea.replace(/\s\s+/g, ' ');
             const campos: string[] = datos.split(' ');
-            switch (datos[0]) {
+            switch (campos[0]) {
                 case 'info':
                     this._tamano = Number(CaracterBitmap.extraerValor(campos[2]));
                     break;
@@ -151,10 +151,10 @@ export default class FuenteBitmap implements SuscripcionMensaje {
                 case 'page':
                     this._archivoImagen = CaracterBitmap.extraerValor(campos[2]);
                     this._archivoImagen = this._archivoImagen.replace(/"/g, "");
-                    this._archivoImagen = ConstruirRuta.construirRuta(Rutas.FUENTES, this._archivoImagen);
+                    this._archivoImagen = Path.join(process.cwd(), `/fonts/${this._archivoImagen}`);
                     break;
                 case 'chars':
-                    nChar = (Number(CaracterBitmap.extraerValor(campos[1]))) + 1;
+                    nChar = (Number(CaracterBitmap.extraerValor(campos[1])));
                     break;
                 case 'char':
                     const caracter = CaracterBitmap.separarCampos(campos);
@@ -166,7 +166,7 @@ export default class FuenteBitmap implements SuscripcionMensaje {
                     break;
             }
         });
-
+        
         if (Object.keys(this._caracteres).filter(key => this._caracteres.hasOwnProperty(key)).length !== nChar) {
             throw new Error(ConstantesError.ERROR_CARACTERES);
         }

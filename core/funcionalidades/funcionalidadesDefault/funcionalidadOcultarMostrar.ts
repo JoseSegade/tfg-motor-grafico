@@ -1,6 +1,7 @@
 ﻿import FuncionalidadBase from "../funcionalidadBase";
 import SuscripcionMensaje from "../../mensajes/SuscripcionMensaje";
 import Mensaje from "../../mensajes/Mensaje";
+import ObjetoVirtual from "core/mundo/ObjetoVirtual";
 
 export default class FuncionalidadOcultarMostrar extends FuncionalidadBase implements SuscripcionMensaje {
      public esVisible: boolean;
@@ -12,7 +13,12 @@ export default class FuncionalidadOcultarMostrar extends FuncionalidadBase imple
 
     public recibirMensaje(mensaje: Mensaje): void {
         if (mensaje.codigo === this.codigoMensaje) {
-            this.objetoVirtual.esVisible = this.esVisible;
+            this.ocultar(this.objetoVirtual, this.esVisible);
         }
+    }
+
+    public ocultar(objetoVirtual: ObjetoVirtual, visibilidad: boolean): void {
+        objetoVirtual.esVisible = visibilidad;
+        objetoVirtual.objetosHijo.forEach(obj => this.ocultar(obj, visibilidad));
     }
 }

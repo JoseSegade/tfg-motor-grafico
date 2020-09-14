@@ -2,7 +2,7 @@
 /**
  * Almacena la informacion de un caracter. Coincide con la informacion que se pasa por el archivo de fuente.
  * */
-export class CaracterBitmap {
+export default class CaracterBitmap {
 
     /**
      * Id del caracter

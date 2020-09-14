@@ -9,8 +9,6 @@ import Mensaje, { PrioridadMensaje } from "./Mensaje";
 export default class CanalMensaje {
 
     private static _suscripciones: { [codigo: string]: SuscripcionMensaje[] } = {};
-
-    private static _mensajesPorUpdate: number = 120;
     private static _colaMensajes: ImplementadorMensaje[] = [];
 
     private constructor() {
@@ -77,10 +75,9 @@ export default class CanalMensaje {
             return;
         }
 
-        const limite: number = Math.min(CanalMensaje._mensajesPorUpdate, CanalMensaje._colaMensajes.length);
-        for (let i: number = 0; i < limite; ++i) {
-            const nodo: ImplementadorMensaje = CanalMensaje._colaMensajes.pop();
+        CanalMensaje._colaMensajes.forEach(nodo => {
             nodo.subscriptor.recibirMensaje(nodo.mensaje);
-        }
+        });
+        CanalMensaje._colaMensajes.splice(0, CanalMensaje._colaMensajes.length);
     }
 }

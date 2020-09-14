@@ -29,16 +29,30 @@
       },
       "funcionalidades": [
         {
+          "nombre": "funcionalidadTablero",
+          "tipo": "FuncionalidadTablero"
+        },
+        {
           "nombre": "generador",
           "tipo": "FuncionalidadGeneradorPiezas",
           "anchoTablero": 512,
-          "altoTablero":  512,
-          "anchoFicha":  64,
-          "altoFicha":  64,
-          "framesFichas": [10,9,8,7,6,8,9,10,
-            11,11,11,11,11,11,11,11,
-          5,5,5,5,5,5,5,5,
-          4,3,2,1,0,2,3,4],
+          "altoTablero": 512,
+          "anchoFicha": 64,
+          "altoFicha": 64,
+          "framesFichas": {
+            "A": 0,
+            "Q": 1,
+            "B": 2,
+            "K": 3,
+            "R": 4,
+            "P": 5,
+            "a": 6,
+            "q": 7,
+            "b": 8,
+            "k": 9,
+            "r": 10,
+            "p": 11
+          },
           "jsonPrefab": {
             "nombre": "prefabFichas",
             "transform": {
@@ -47,10 +61,11 @@
                 "y": 0
               }
             },
-            "funcionalidades": [{
-              "nombre": "comportamientoArrastrar",
-              "tipo": "FuncionalidadArrastrarPieza"
-            }
+            "funcionalidades": [
+              {
+                "nombre": "comportamientoArrastrar",
+                "tipo": "FuncionalidadArrastrarPieza"
+              }
             ],
             "componentes": [
               {
@@ -71,9 +86,119 @@
               }
             ]
           }
-        }        
+        }
       ],
-      "objetosHijo": []
+      "objetosHijo": [
+        {
+          "nombre": "fondo",
+          "transform": {
+            "x": 0,
+            "y": 0
+          },
+          "componentes": [
+            {
+              "nombre": "fondo",
+              "tipo": "ComponenteSprite",
+              "nombreMaterial": "fondo",
+              "ancho": 512,
+              "alto": 512
+            }
+          ],
+          "funcionalidades": [
+            {
+              "nombre": "ocultarFondo",
+              "tipo": "FuncionalidadOcultarMostrar",
+              "esVisible": false,
+              "codigoMensaje": "OCULTAR_FONDO"
+            }
+          ],
+          "objetosHijo": [
+            {
+              "nombre": "texto",
+              "transform": {
+                "position": {
+                  "x": 50,
+                  "y": 55
+                },
+                "scale": {
+                  "x": 0.5,
+                  "y": 0.5
+                }
+              },
+              "componentes": [
+                {
+                  "nombre": "texto",
+                  "tipo": "ComponenteTextoBitmap",
+                  "nombreFuente": "default",
+                  "texto": "Empezar partida"
+                }
+              ]
+            },
+            {
+              "nombre": "elegirBlancas",
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0
+                }
+              },
+              "componentes": [
+                {
+                  "nombre": "blancasSeleccion",
+                  "tipo": "ComponenteSprite",
+                  "nombreMaterial": "blancas_seleccion",
+                  "ancho": 512,
+                  "alto": 512
+                }
+              ],
+              "funcionalidades": [
+                {
+                  "nombre": "mensajeOcultarFondo_B",
+                  "tipo": "FuncionalidadMensajeAlClick",
+                  "origen": {
+                    "x": 50,
+                    "y": 100
+                  },
+                  "ancho": 200,
+                  "alto": 200,
+                  "codigosMensaje": ["OCULTAR_FONDO", "SELECCIONAR_BLANCAS"]
+                }
+              ]
+            },
+            {
+              "nombre": "elegirNegras",
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0
+                }
+              },
+              "componentes": [
+                {
+                  "nombre": "negrasSeleccion",
+                  "tipo": "ComponenteSprite",
+                  "nombreMaterial": "negras_seleccion",
+                  "ancho": 512,
+                  "alto": 512
+                }
+              ],
+              "funcionalidades": [
+                {
+                  "nombre": "mensajeOcultarFondo_B",
+                  "tipo": "FuncionalidadMensajeAlClick",
+                  "origen": {
+                    "x": 50,
+                    "y": 300
+                  },
+                  "ancho": 200,
+                  "alto": 200,
+                  "codigosMensaje": ["OCULTAR_FONDO", "SELECCIONAR_NEGRAS"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

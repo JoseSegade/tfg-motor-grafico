@@ -66,23 +66,22 @@ export default class EventosInput {
     }
 
     private static pulsarTecla(event: KeyboardEvent): boolean {
-        EventosInput._teclas[event.keyCode] = true;
+        EventosInput._teclas[event.key] = true;
         return true;
     }
 
     private static soltarTecla(event: KeyboardEvent): boolean {
-        EventosInput._teclas[event.keyCode] = false;
+        EventosInput._teclas[event.key] = false;
         return true;
     }
 
     private static moverCursor(event: MouseEvent): void {
         const rect: DOMRect = (event.target as HTMLElement).getBoundingClientRect();
         EventosInput._cursorX =
-            (event.clientX - Math.round(rect.left)) * (1 / EventosInput._resolucion.x);
+        Math.floor((event.clientX - Math.floor(rect.left)) * (1 / EventosInput._resolucion.x));
         EventosInput._cursorY =
-            (event.clientY - Math.round(rect.top)) * (1 / EventosInput._resolucion.y);
-
-        Mensaje.enviar(
+        Math.floor((event.clientY - Math.floor(rect.top)) * (1 / EventosInput._resolucion.y));
+        Mensaje.enviarPrioritariamente(
             ConstantesMensajeria.MOVER_CLICK,
             this,
             new DatosRaton(
@@ -99,7 +98,7 @@ export default class EventosInput {
         } else if (event.button === 2) {
             this._clickDch = true;
         }
-        Mensaje.enviar(
+        Mensaje.enviarPrioritariamente(
             ConstantesMensajeria.PULSAR_CLICK,
             this,
             new DatosRaton(
@@ -117,7 +116,7 @@ export default class EventosInput {
             this._clickDch = false;
         }
 
-        Mensaje.enviar(
+        Mensaje.enviarPrioritariamente(
             ConstantesMensajeria.SOLTAR_CLICK,
             this,
             new DatosRaton(

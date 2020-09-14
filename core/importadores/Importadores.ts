@@ -49,9 +49,9 @@ export default class Importadores {
      * @param nombre Nombre del recurso.
      */
     public static cargarRecurso(nombre: string): void {
-        const extension: string = nombre.split('.').pop().toLowerCase();
+        const extension: string = nombre.split('.').pop().trim().toLowerCase();
         for (let l of Importadores._importadores) {
-            if (l.extensiones.indexOf(extension) !== -1) {
+            if (l.extensiones.some(e => e === extension)) {
                 l.cargarRecurso(nombre);
                 return;
             }

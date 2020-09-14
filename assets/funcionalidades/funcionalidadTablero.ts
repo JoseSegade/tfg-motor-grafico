@@ -10,7 +10,7 @@ import {
 } from 'assets/funcionalidades/chessRating';
 
 export default class FuncionalidadTablero extends FuncionalidadBase {
-  public chessBoard: string[][] = [
+  public readonly defaultChessBoard: string[][] = [
     ['r', 'k', 'b', 'q', 'a', 'b', 'k', 'r'],
     ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
@@ -20,16 +20,19 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
     ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
     ['R', 'K', 'B', 'Q', 'A', 'B', 'K', 'R'],
   ];
-  public kingPositionC: number;
-  public kingPositionL: number;
-  public humanAsWhite: number = -1; //1=human as white, 0=human as black
-  public globalDepth: number = 4;
+  public chessBoard: string[][];
+  public kingPositionC: number = 0;
+  public kingPositionL: number = 0;
+  public humanAsWhite: number = 1; //1=human as white, 0=human as black
+  public static globalDepth: number = 2;
 
-  public main(): void {
-    while ('A' !== this.chessBoard[this.kingPositionC / 8][this.kingPositionC % 8]) {
+  public cargarConfiguracion(): void {
+    this.chessBoard = this.cloneBoard(this.defaultChessBoard);
+
+    while ('A' !== this.chessBoard[Math.floor(this.kingPositionC / 8)][this.kingPositionC % 8]) {
       this.kingPositionC++;
     } //get King's location
-    while ('a' !== this.chessBoard[this.kingPositionL / 8][this.kingPositionL % 8]) {
+    while ('a' !== this.chessBoard[Math.floor(this.kingPositionL / 8)][this.kingPositionL % 8]) {
       this.kingPositionL++;
     } //get king's location
     /*
@@ -46,16 +49,25 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
      *
      * (1234b represents row1,column2 moves to row3, column4 which captured
      * b (a space represents no capture))
-     */
-    if (this.humanAsWhite === 0) {
-      this.makeMove(this.alphaBeta(this.globalDepth, 1000000, -1000000, '', 0));
-      this.flipBoard();
-    }
-    this.makeMove('7655 ');
-    this.undoMove('7655 ');
+     */    
   }
 
-  private alphaBeta(
+  public cloneBoard(board: string[][]): string[][] {
+    const cloned: string[][] = new Array();
+    board.forEach(e => {
+      cloned.push([...e]); 
+    });
+    return cloned;
+  }
+
+  public primerMovimiento(): void {
+    if (this.humanAsWhite === 0) {
+      this.makeMove(this.alphaBeta(FuncionalidadTablero.globalDepth, 1000000, -1000000, '', 0));
+      this.flipBoard();
+    }
+  }
+
+  public alphaBeta(
     depth: number,
     beta: number,
     alpha: number,
@@ -85,37 +97,37 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
       if (player === 0) {
         if (value <= beta) {
           beta = value;
-          if (depth == this.globalDepth) {
+          if (depth === FuncionalidadTablero.globalDepth) {
             move = returnString.substring(0, 5);
           }
         }
       } else {
         if (value > alpha) {
           alpha = value;
-          if (depth == this.globalDepth) {
+          if (depth === FuncionalidadTablero.globalDepth) {
             move = returnString.substring(0, 5);
           }
         }
       }
       if (alpha >= beta) {
-        if (player == 0) {
+        if (player === 0) {
           return move + beta;
         } else {
           return move + alpha;
         }
       }
     }
-    if (player == 0) {
+    if (player === 0) {
       return move + beta;
     } else {
       return move + alpha;
     }
   }
 
-  private flipBoard(): void {
+  public flipBoard(): void {
     let temp: string;
     for (let i: number = 0; i < 32; i++) {
-      let r: number = i / 8;
+      let r: number = Math.floor(i / 8);
       let c: number = i % 8;
       if (this.esMayuscula(this.chessBoard[r][c])) {
         temp = this.chessBoard[r][c].toLowerCase();
@@ -134,8 +146,8 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
     this.kingPositionL = 63 - kingTemp;
   }
 
-  private makeMove(move: string) {
-    if (move.charAt(4) != 'P') {
+  public makeMove(move: string) {
+    if (move.charAt(4) !== 'P') {
       this.chessBoard[this.obtenerValorNumerico(move.charAt(2))][
         this.obtenerValorNumerico(move.charAt(3))
       ] = this.chessBoard[this.obtenerValorNumerico(move.charAt(0))][
@@ -157,11 +169,11 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
       //if pawn promotion
       this.chessBoard[1][this.obtenerValorNumerico(move.charAt(0))] = ' ';
       this.chessBoard[0][this.obtenerValorNumerico(move.charAt(1))] = String(move.charAt(3));
-    }
+    }    
   }
 
   private undoMove(move: string) {
-    if (move.charAt(4) != 'P') {
+    if (move.charAt(4) !== 'P') {
       this.chessBoard[this.obtenerValorNumerico(move.charAt(0))][
         this.obtenerValorNumerico(move.charAt(1))
       ] = this.chessBoard[this.obtenerValorNumerico(move.charAt(2))][
@@ -186,10 +198,10 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
     }
   }
 
-  private posibleMoves(): string {
+  public posibleMoves(): string {
     let list: string = '';
     for (let i: number = 0; i < 64; i++) {
-      switch (this.chessBoard[i / 8][i % 8]) {
+      switch (this.chessBoard[Math.floor(i / 8)][i % 8]) {
         case 'P':
           list += this.posibleP(i);
           break;
@@ -214,9 +226,9 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
   }
 
   private posibleP(i: number): string {
-    let list: string;
+    let list: string ='';
     let oldPiece: string;
-    const r: number = i / 8;
+    const r: number = Math.floor(i / 8);
     const c: number = i % 8;
     for (let j: number = -1; j <= 1; j += 2) {
       try {
@@ -299,7 +311,7 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
   private posibleR(i: number): string {
     let list: string = '';
     let oldPiece: string = '';
-    let r: number = i / 8;
+    let r: number = Math.floor(i / 8);
     let c: number = i % 8;
     let temp: number = 1;
     for (let j: number = -1; j <= 1; j += 2) {
@@ -358,7 +370,7 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
   private posibleK(i: number): string {
     let list: string = '';
     let oldPiece: string = '';
-    let r: number = i / 8;
+    let r: number = Math.floor(i / 8);
     let c: number = i % 8;
     for (let j: number = -1; j <= 1; j += 2) {
       for (let k: number = -1; k <= 1; k += 2) {
@@ -398,7 +410,7 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
   private posibleB(i: number): string {
     let list: string = '';
     let oldPiece: string = '';
-    let r: number = i / 8;
+    let r: number = Math.floor(i / 8);
     let c: number = i % 8;
     let temp: number = 1;
     for (let j: number = -1; j <= 1; j += 2) {
@@ -435,12 +447,12 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
   private posibleQ(i: number): string {
     let list: string = '';
     let oldPiece: string = '';
-    let r: number = i / 8;
+    let r: number = Math.floor(i / 8);
     let c: number = i % 8;
     let temp: number = 1;
     for (let j: number = -1; j <= 1; j++) {
       for (let k: number = -1; k <= 1; k++) {
-        if (j != 0 || k != 0) {
+        if (j !== 0 || k !== 0) {
           try {
             while (' ' === this.chessBoard[r + temp * j][c + temp * k]) {
               oldPiece = this.chessBoard[r + temp * j][c + temp * k];
@@ -474,25 +486,25 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
   private posibleA(i: number): string {
     let list: string = '';
     let oldPiece: string = '';
-    let r: number = i / 8;
+    let r: number = Math.floor(i / 8);
     let c: number = i % 8;
     for (let j: number = 0; j < 9; j++) {
-      if (j != 4) {
+      if (j !== 4) {
         try {
           if (
-            this.esMinuscula(this.chessBoard[r - 1 + j / 3][c - 1 + (j % 3)]) ||
-            ' ' === this.chessBoard[r - 1 + j / 3][c - 1 + (j % 3)]
+            this.esMinuscula(this.chessBoard[r - 1 + Math.floor(j / 3)][c - 1 + (j % 3)]) ||
+            ' ' === this.chessBoard[r - 1 + Math.floor(j / 3)][c - 1 + (j % 3)]
           ) {
-            oldPiece = this.chessBoard[r - 1 + j / 3][c - 1 + (j % 3)];
+            oldPiece = this.chessBoard[r - 1 + Math.floor(j / 3)][c - 1 + (j % 3)];
             this.chessBoard[r][c] = ' ';
-            this.chessBoard[r - 1 + j / 3][c - 1 + (j % 3)] = 'A';
+            this.chessBoard[r - 1 + Math.floor(j / 3)][c - 1 + (j % 3)] = 'A';
             const kingTemp: number = this.kingPositionC;
-            this.kingPositionC = i + (j / 3) * 8 + (j % 3) - 9;
+            this.kingPositionC = i + Math.floor(j / 3) * 8 + (j % 3) - 9;
             if (this.kingSafe()) {
-              list = list + r + c + (r - 1 + j / 3) + (c - 1 + (j % 3)) + oldPiece;
+              list = list + r + c + (r - 1 + Math.floor(j / 3)) + (c - 1 + (j % 3)) + oldPiece;
             }
             this.chessBoard[r][c] = 'A';
-            this.chessBoard[r - 1 + j / 3][c - 1 + (j % 3)] = oldPiece;
+            this.chessBoard[r - 1 + Math.floor(j / 3)][c - 1 + (j % 3)] = oldPiece;
             this.kingPositionC = kingTemp;
           }
         } catch (e) {}
@@ -503,7 +515,7 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
   }
 
   private sortMoves(list: string): string {
-    const score: number[] = new Array[list.length / 5]();
+    const score: number[] = new Array(Math.floor(list.length / 5));
     for (let i: number = 0; i < list.length; i += 5) {
       this.makeMove(list.substring(i, i + 5));
       score[i / 5] = -this.rating(-1, 0);
@@ -511,11 +523,11 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
     }
     let newListA: string = '';
     let newListB: string = list;
-    for (let i: number = 0; i < Math.min(6, list.length / 5); i++) {
+    for (let i: number = 0; i < Math.min(6, Math.floor(list.length / 5)); i++) {
       //first few moves only
       let max: number = -1000000;
       let maxLocation: number = 0;
-      for (let j: number = 0; j < list.length / 5; j++) {
+      for (let j: number = 0; j < Math.floor(list.length / 5); j++) {
         if (score[j] > max) {
           max = score[j];
           maxLocation = j;
@@ -536,17 +548,17 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
         try {
           while (
             ' ' ===
-            this.chessBoard[this.kingPositionC / 8 + temp * i][(this.kingPositionC % 8) + temp * j]
+            this.chessBoard[Math.floor(this.kingPositionC / 8) + temp * i][(this.kingPositionC % 8) + temp * j]
           ) {
             temp++;
           }
           if (
             'b' ===
-              this.chessBoard[this.kingPositionC / 8 + temp * i][
+              this.chessBoard[Math.floor(this.kingPositionC / 8) + temp * i][
                 (this.kingPositionC % 8) + temp * j
               ] ||
             'q' ===
-              this.chessBoard[this.kingPositionC / 8 + temp * i][
+              this.chessBoard[Math.floor(this.kingPositionC / 8) + temp * i][
                 (this.kingPositionC % 8) + temp * j
               ]
           ) {
@@ -560,25 +572,25 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
     for (let i: number = -1; i <= 1; i += 2) {
       try {
         while (
-          ' ' === this.chessBoard[this.kingPositionC / 8][(this.kingPositionC % 8) + temp * i]
+          ' ' === this.chessBoard[Math.floor(this.kingPositionC / 8)][(this.kingPositionC % 8) + temp * i]
         ) {
           temp++;
         }
         if (
-          'r' === this.chessBoard[this.kingPositionC / 8][(this.kingPositionC % 8) + temp * i] ||
-          'q' === this.chessBoard[this.kingPositionC / 8][(this.kingPositionC % 8) + temp * i]
+          'r' === this.chessBoard[Math.floor(this.kingPositionC / 8)][(this.kingPositionC % 8) + temp * i] ||
+          'q' === this.chessBoard[Math.floor(this.kingPositionC / 8)][(this.kingPositionC % 8) + temp * i]
         ) {
           return false;
         }
       } catch (e) {}
       temp = 1;
       try {
-        while (' ' === this.chessBoard[this.kingPositionC / 8 + temp * i][this.kingPositionC % 8]) {
+        while (' ' === this.chessBoard[Math.floor(this.kingPositionC / 8) + temp * i][this.kingPositionC % 8]) {
           temp++;
         }
         if (
-          'r' === this.chessBoard[this.kingPositionC / 8 + temp * i][this.kingPositionC % 8] ||
-          'q' === this.chessBoard[this.kingPositionC / 8 + temp * i][this.kingPositionC % 8]
+          'r' === this.chessBoard[Math.floor(this.kingPositionC / 8) + temp * i][this.kingPositionC % 8] ||
+          'q' === this.chessBoard[Math.floor(this.kingPositionC / 8) + temp * i][this.kingPositionC % 8]
         ) {
           return false;
         }
@@ -590,14 +602,14 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
       for (let j: number = -1; j <= 1; j += 2) {
         try {
           if (
-            'k' === this.chessBoard[this.kingPositionC / 8 + i][(this.kingPositionC % 8) + j * 2]
+            'k' === this.chessBoard[Math.floor(this.kingPositionC / 8) + i][(this.kingPositionC % 8) + j * 2]
           ) {
             return false;
           }
         } catch (e) {}
         try {
           if (
-            'k' === this.chessBoard[this.kingPositionC / 8 + i * 2][(this.kingPositionC % 8) + j]
+            'k' === this.chessBoard[Math.floor(this.kingPositionC / 8) + i * 2][(this.kingPositionC % 8) + j]
           ) {
             return false;
           }
@@ -607,22 +619,22 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
     //pawn
     if (this.kingPositionC >= 16) {
       try {
-        if ('p' === this.chessBoard[this.kingPositionC / 8 - 1][(this.kingPositionC % 8) - 1]) {
+        if ('p' === this.chessBoard[Math.floor(this.kingPositionC / 8) - 1][(this.kingPositionC % 8) - 1]) {
           return false;
         }
       } catch (e) {}
       try {
-        if ('p' === this.chessBoard[this.kingPositionC / 8 - 1][(this.kingPositionC % 8) + 1]) {
+        if ('p' === this.chessBoard[Math.floor(this.kingPositionC / 8) - 1][(this.kingPositionC % 8) + 1]) {
           return false;
         }
       } catch (e) {}
       //king
       for (let i: number = -1; i <= 1; i++) {
         for (let j: number = -1; j <= 1; j++) {
-          if (i != 0 || j != 0) {
+          if (i !== 0 || j !== 0) {
             try {
               if (
-                'a' === this.chessBoard[this.kingPositionC / 8 + i][(this.kingPositionC % 8) + j]
+                'a' === this.chessBoard[Math.floor(this.kingPositionC / 8) + i][(this.kingPositionC % 8) + j]
               ) {
                 return false;
               }
@@ -655,7 +667,7 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
     let counter: number = 0;
     let tempPositionC: number = this.kingPositionC;
     for (let i: number = 0; i < 64; i++) {
-      switch (this.chessBoard[i / 8][i % 8]) {
+      switch (this.chessBoard[Math.floor(i / 8)][i % 8]) {
         case 'P':
           {
             this.kingPositionC = i;
@@ -702,14 +714,14 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
     if (!this.kingSafe()) {
       counter -= 200;
     }
-    return counter / 2;
+    return Math.floor(counter / 2);
   }
 
   private rateMaterial(): number {
     let counter: number = 0;
     let bishopCounter: number = 0;
     for (let i: number = 0; i < 64; i++) {
-      switch (this.chessBoard[i / 8][i % 8]) {
+      switch (this.chessBoard[Math.floor(i / 8)][i % 8]) {
         case 'P':
           counter += 100;
           break;
@@ -740,7 +752,7 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
   private rateMoveablitly(listLength: number, depth: number, material: number): number {
     let counter: number = 0;
     counter += listLength; //5 pointer per valid move
-    if (listLength == 0) {
+    if (listLength === 0) {
       //current side is in checkmate or stalemate
       if (!this.kingSafe()) {
         //if checkmate
@@ -756,28 +768,28 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
   private ratePositional(material: number): number {
     let counter: number = 0;
     for (let i: number = 0; i < 64; i++) {
-      switch (this.chessBoard[i / 8][i % 8]) {
+      switch (this.chessBoard[Math.floor(i / 8)][i % 8]) {
         case 'P':
-          counter += pawnBoard[i / 8][i % 8];
+          counter += pawnBoard[Math.floor(i / 8)][i % 8];
           break;
         case 'R':
-          counter += rookBoard[i / 8][i % 8];
+          counter += rookBoard[Math.floor(i / 8)][i % 8];
           break;
         case 'K':
-          counter += knightBoard[i / 8][i % 8];
+          counter += knightBoard[Math.floor(i / 8)][i % 8];
           break;
         case 'B':
-          counter += bishopBoard[i / 8][i % 8];
+          counter += bishopBoard[Math.floor(i / 8)][i % 8];
           break;
         case 'Q':
-          counter += queenBoard[i / 8][i % 8];
+          counter += queenBoard[Math.floor(i / 8)][i % 8];
           break;
         case 'A':
           if (material >= 1750) {
-            counter += kingMidBoard[i / 8][i % 8];
+            counter += kingMidBoard[Math.floor(i / 8)][i % 8];
             counter += this.posibleA(this.kingPositionC).length * 10;
           } else {
-            counter += kingEndBoard[i / 8][i % 8];
+            counter += kingEndBoard[Math.floor(i / 8)][i % 8];
             counter += this.posibleA(this.kingPositionC).length * 30;
           }
           break;
@@ -788,20 +800,41 @@ export default class FuncionalidadTablero extends FuncionalidadBase {
 
   private esMayuscula(value: string): boolean {
     const char = value.charAt(0);
-    return char === char.toUpperCase();
+    return char !== ' ' && char === char.toUpperCase();
   }
 
   private esMinuscula(value: string): boolean {
     const char = value.charAt(0);
-    return char === char.toLowerCase();
+    return char !== ' ' && char === char.toLowerCase();
   }
 
   private obtenerValorNumerico(value: string): number {
     // Number('z'.charCodeAt(0) - 'a'.charCodeAt(0) + 10)
     const char: string = value.charAt(0);
     if (isNaN(Number(char))) {
+      if(char === '-' || char === ' ') return -1;
       return Number(char.charCodeAt(0) - 'a'.charCodeAt(0) + 10);
     }
     return Number(char);
+  }
+
+  public printTablero(): void {
+    let print : string = '';
+    this.chessBoard.forEach(element => {
+      
+      element.forEach((e, idx) => {
+        if(idx < 1){
+          print += '[';
+        }
+        print += e;
+        if(idx < 7) {
+          print += ',';
+        }
+        else {
+          print += ']\n';
+        }
+      })
+    });
+    console.log(print);
   }
 }

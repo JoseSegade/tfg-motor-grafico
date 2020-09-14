@@ -1,5 +1,5 @@
 ﻿import Mensaje from "./Mensaje";
-import SuscripcionMensaje from "./SuscripcionMensaje";
+import SuscripcionMensaje from "./suscripcionMensaje";
 
 /**
  * Contiene el mensaje y el suscriptor al mismo

@@ -6,9 +6,24 @@ import Shader from '../../gl/shader';
  * Esta clase asocia un sprite a un componente para que el objeto se pueda pintar en pantalla
  * */
 export default class ComponenteSprite extends ComponenteBase {
+    /**
+     * Objeto srpite que se pintara por pantalla.
+     */
     public sprite: Sprite;
+
+    /**
+     * Ancho del sprite.
+     */
     public ancho: number;
+
+    /**
+     * Alto del sprite.
+     */
     public alto: number;
+
+    /**
+     * Nombre del material empleado.
+     */
     public nombreMaterial: string;
 
     /**

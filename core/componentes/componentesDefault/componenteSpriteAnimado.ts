@@ -6,16 +6,60 @@ import Shader from '../../gl/shader';
  * Asocia un sprite animado al componente.
  * */
 export default class ComponenteSpriteAnimado extends ComponenteBase {
+
+    /**
+     * True para empezar la animacion en movimiento una vez empiece a ser renderizada.
+     */
     public reproducirAutomaticamente: boolean;
+
+    /**
+     * Objeto que pinta el sprite por pantalla.
+     */
     public sprite: SpriteAnimado;
+
+    /**
+     * Tiempo minimo que tiene que transcurrir para camfiar de frame en la animacion.
+     */
     public tiempoEntreFrames: number;
+
+    /**
+     * Nombre del material que se empleara.
+     */
     public nombreMaterial: string;
+
+    /**
+     * Ancho total de la imagen que se utiliza como spritesheet.
+     */
     public ancho: number;
+
+    /**
+     * Alto total de la imagen que se utiliza como spritesheet.
+     */
     public alto: number;
+
+    /**
+     * Ancho de cada frame.
+     */
     public anchoFrame: number;
+
+    /**
+     * Alto de cada frame.
+     */
     public altoFrame: number;
+
+    /**
+     * Numbero total de frames que tiene la animacion.
+     */
     public numeroDeFrames: number;
+
+    /**
+     * Orden de pintado de la secuencia.
+     */
     public secuenciaFrames: number[];
+
+    /**
+     * Indice del frame desde el que empieza el dibujado.
+     */
     public offset: number;
 
     /**

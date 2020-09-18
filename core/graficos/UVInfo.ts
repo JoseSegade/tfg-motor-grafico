@@ -15,6 +15,11 @@ export default class UVInfo {
      * */
     public max: Vector2;
 
+    /**
+     * Crea una nueva informacion UV
+     * @param min Valor minimo del UV de la textura.
+     * @param max Valor maximo del UV de la textura.
+     */
     public constructor(min: Vector2, max: Vector2) {
         this.min = min;
         this.max = max;

@@ -11,6 +11,10 @@ export default class ComponenteColision extends ComponenteBase {
      * Devuelve la forma 2D del componente.
      * */
     public forma: Forma2D;
+
+    /**
+     * True si el componente no se mueve. No se comparara con otros componentes estaticos.
+     * */
     public estatico: boolean;
 
     /**

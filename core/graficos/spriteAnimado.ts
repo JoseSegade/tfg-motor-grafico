@@ -185,6 +185,9 @@ export default class SpriteAnimado extends Sprite implements SuscripcionMensaje 
         }
     }
 
+    /**
+     * Carga los vertices por primera vez.
+     */
     public cargarVerticesIniciales() {
         const frameUV: UVInfo = this._UVFrames[this._secuenciaFrames[this._frameActual]];
         this._vertices[0].coordenadasTextura.copyFrom(frameUV.min);

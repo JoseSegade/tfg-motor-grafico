@@ -8,8 +8,19 @@ import Shader from '../../gl/shader';
  * Componente para poder pintar un texto bitmap.
  * */
 export default class ComponenteTextoBitmap extends ComponenteBase implements SuscripcionMensaje {
+  /**
+   * Objeto que se pintara como sprite que genera el texto en bitmap.
+   */
   public textoBitmap: TextoBitmap;
+
+  /**
+   * Nombre de la fuente a emplear.
+   */
   public nombreFuente: string;
+
+  /**
+   * Texto que se mostrara en pantalla.
+   */
   public texto: string;
 
   /**

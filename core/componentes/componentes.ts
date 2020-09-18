@@ -8,6 +8,10 @@ export default class Componentes {
 
     private static _componentes: { [type: string]: any } = {};
 
+    /**
+     * Guarda en memoria los import necesarios para trabajar con ellos.
+     * @param funcionalidades Nombres de los componentes existentes. 
+     */
     public static guardarComponentes(componentes: string[][]) {
         componentes[0].forEach((c) => {
             const componente = require(`core/componentes/componentesDefault/${c}`).default;

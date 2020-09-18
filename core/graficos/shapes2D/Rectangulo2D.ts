@@ -6,11 +6,24 @@ import Circulo2D from "./Circulo2D";
  * Rectangulo en 2D util para las colisiones.
  * */
 export class Rectangulo2D implements Forma2D {
-
+    /**
+     * Posicion en el espacio.
+     */
     public posicion: Vector2 = Vector2.zero;
+
+    /**
+     * Origen con respecto a su posicion.
+     */
     public origen: Vector2 = Vector2.zero;
 
+    /**
+     * Ancho del rectangulo.
+     */
     public ancho: number;
+
+    /**
+     * Alto del rectangulo.
+     */
     public alto: number;
 
     /**

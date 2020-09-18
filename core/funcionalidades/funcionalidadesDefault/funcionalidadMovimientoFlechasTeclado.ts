@@ -5,9 +5,17 @@ import FuncionalidadBase from '../funcionalidadBase';
  * Utiliza las flechas del teclado para mover la posicion del objeto.
  * */
 export class FuncionalidadMovimientoFlechasTeclado extends FuncionalidadBase {
+    /**
+     * Velocidad de movimiento con las teclas.
+     */
     public velocidad: number = 0.1;
 
-    public update(time: number): void {
+
+    /**
+     * Actualiza el componente.
+     * @param milisegundos Milisegundos transcurridos desde la ultima actualizacion.
+     */
+    public update(milisegundos: number): void {
         if (EventosInput.teclaPulsada(FlechasTeclado.IZQUIERDA)) {
             this.objetoVirtual.transform.position.x -= this.velocidad;
         }
@@ -24,6 +32,6 @@ export class FuncionalidadMovimientoFlechasTeclado extends FuncionalidadBase {
             this.objetoVirtual.transform.position.y += this.velocidad;
         }
 
-        super.update(time);
+        super.update(milisegundos);
     }
 }

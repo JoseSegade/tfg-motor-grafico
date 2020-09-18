@@ -8,6 +8,10 @@ export default class Funcionalidades {
 
     private static _funcionalidades: { [type: string]: any } = {};
 
+    /**
+     * Guarda en memoria los import necesarios para trabajar con ellos.
+     * @param funcionalidades Nombres de las funcionalidades existentes. 
+     */
     public static guardarfuncionalidades(funcionalidades: string[][]) {
         funcionalidades[0].forEach((c) => {
             const funcionalidad = require(`core/funcionalidades/funcionalidadesDefault/${c}`).default;

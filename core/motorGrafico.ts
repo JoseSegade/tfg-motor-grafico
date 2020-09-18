@@ -42,6 +42,10 @@ export default class MotorGrafico implements SuscripcionMensaje {
     this._gameHeight = height;
   }
 
+  /**
+   * Carga los recursos programables
+   * @param RecursosLeidos Datos con los que carga los recursos.
+   */
   public inicializarRecursosProgramables({
     componentes,
     funcionalidades,
@@ -52,9 +56,11 @@ export default class MotorGrafico implements SuscripcionMensaje {
     NivelManager.inicializarNiveles(niveles);
   }
 
+  
   /**
-   * Starts up this engine.
-   * */
+   * Inicia el motor
+   * @param elementName En caso de que se haya creado un canvas, nombre del elemento. 
+   */
   public iniciar(elementName?: string): void {
     this._canvas = WebGl_Util.inicializarWebGl(elementName);
     if (this._gameWidth !== undefined && this._gameHeight !== undefined) {
@@ -63,7 +69,7 @@ export default class MotorGrafico implements SuscripcionMensaje {
     Importadores.inicializar();
     EventosInput.inicializar(this._canvas);
 
-    gl.clearColor(48 / 225, 48 / 255, 48 / 255, 1);
+    gl.clearColor(0 / 225, 0 / 255, 0 / 255, 1);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
@@ -101,8 +107,10 @@ export default class MotorGrafico implements SuscripcionMensaje {
   }
 
   /**
-   * Resizes the canvas to fit the window.
-   * */
+   * Cambia el tamano del canvas en caso de que se cambie la ventana.
+   * @param anchoVentana Ancho en pixeles de la ventana.
+   * @param altoVentana Alto en pixeles de la ventana.
+   */
   public cambiarTamano(anchoVentana: number, altoVentana: number): void {
     if (this._canvas !== undefined) {
       if (!this._gameWidth || !this._gameHeight) {
@@ -150,8 +158,8 @@ export default class MotorGrafico implements SuscripcionMensaje {
   }
 
   /**
-   * Gets the subscription message.
-   * @param message Message sent.
+   * Recibe el mensaje por suscripcion.
+   * @param _mensaje Mensaje recibido.
    */
   public recibirMensaje(_mensaje: Mensaje): void {}
 

@@ -88,7 +88,7 @@ export default class BufferWebGl {
     }
 
     /**
-     * Anade un nuebo atributo al buffer.
+     * Anade un nuevo atributo al buffer.
      * @param info Atributo que desea anadirse.
      */
     public anadirIdAtributo(info: AttributeInfo): void {

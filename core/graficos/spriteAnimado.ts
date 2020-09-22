@@ -236,7 +236,7 @@ export default class SpriteAnimado extends Sprite implements SuscripcionMensaje 
 
     private calcularUVs(): void {
         for (let idx = this._offset; idx < (this._offset + this._numeroDeFrames); idx++) {
-            const i = Math.floor( idx % (this._anchoImagen / this._anchoFrame));
+            const i = Math.floor(idx % (this._anchoImagen / this._anchoFrame));
             const j = Math.floor(idx  / (this._anchoImagen / this._anchoFrame));
 
             const min: Vector2 = new Vector2(

@@ -3,7 +3,6 @@ import SuscripcionMensaje from "../mensajes/SuscripcionMensaje";
 import Mensaje from "../mensajes/Mensaje";
 import RecursoImagen from "../importadores/recursos/RecursoImagen";
 import ConstantesMensajeria from "../constantes/ConstantesMensajeria";
-import Recurso from "../importadores/recursos/Recurso";
 import Importadores from "../importadores/Importadores";
 
 

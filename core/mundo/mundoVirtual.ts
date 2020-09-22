@@ -31,7 +31,7 @@ export default class MundoVirtual {
      * @param objetoVirtual Objeto que sera anadido.
      */
     public anadirObjetoVirtual(objetoVirtual: ObjetoVirtual): void {
-        this._objetoMundo.anadirObjetoHijo(objetoVirtual);
+        this._objetoMundo.anadirObjetoHijo(objetoVirtual);  
     }
 
     /**

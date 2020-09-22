@@ -175,9 +175,9 @@ export default class Sprite {
   private calcularCoordenadas() {
     return {
       minX: -(this._ancho * this._origen.x),
-      maxX: this._ancho * (1.0 - this._origen.x),
+      maxX: (this._ancho * (1.0 - this._origen.x)),
       minY: -(this._alto * this._origen.y),
-      maxY: this._alto * (1.0 - this._origen.y),
+      maxY: (this._alto * (1.0 - this._origen.y)),
     };
   }
 }

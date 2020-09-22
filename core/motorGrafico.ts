@@ -89,18 +89,6 @@ export default class MotorGrafico implements SuscripcionMensaje {
       new Material('negras_seleccion', '/textures/negras_seleccion.png', Color.blanco),
     );
 
-    //  Load an audio
-    //AudioManager.loadSoundFile('flap', 'assets/sounds/flap.mp3', false);
-
-    this._projection = Matrix4x4.ortographic(
-      0,
-      this._canvas.width,
-      this._canvas.height,
-      0,
-      -100.0,
-      100.0,
-    );
-
     this.cambiarTamano(this._gameWidth, this._gameHeight);
 
     this.precargar();
@@ -117,7 +105,7 @@ export default class MotorGrafico implements SuscripcionMensaje {
         this._canvas.width = anchoVentana;
         this._canvas.height = altoVentana;
         gl.viewport(0, 0, anchoVentana, altoVentana);
-        this._projection = Matrix4x4.ortographic(0, anchoVentana, altoVentana, 0, -100.0, 100.0);
+        this._projection = Matrix4x4.ortographic(0, anchoVentana,  altoVentana, 0, -100.0, 100.0);
       } else {
         let newWidth: number = anchoVentana;
         let newHeight: number = altoVentana;

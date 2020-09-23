@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "next",
+    "dev": "next --port 3000",
     "build": "next build",
     "start": "next start",
     "test": "jest",

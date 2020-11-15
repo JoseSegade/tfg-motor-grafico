@@ -1,7 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
-import MotorGrafico from 'core/motorGrafico';
+import MotorGrafico from 'motor/motorGrafico';
 import { GetStaticProps } from 'next';
-import lectorRecursos, { RecursosLeidos } from 'core/importadores/lectorRecursos';
+import lectorRecursos, { RecursosLeidos } from 'motor/logica/importadores/lectorRecursos';
 
 interface props {
     recursos: RecursosLeidos;

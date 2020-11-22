@@ -1,4 +1,4 @@
-﻿import { gl } from './gl';
+﻿import { gl } from './canvasWebGl';
 import AttributeInfo from './attributeInfo';
 import ConstantesError from '../../constantes/constantesError';
 

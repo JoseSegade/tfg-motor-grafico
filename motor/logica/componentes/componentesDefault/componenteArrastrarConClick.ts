@@ -1,16 +1,16 @@
 import ComponenteBase from '../componenteBase';
-import SuscripcionMensaje from '../../mensajes/suscripcionMensaje';
 import Vector2 from '../../../fisica/matematicas/vector2';
-import Mensaje from '../../mensajes/mensaje';
 import ConstantesMensajeria from '../../../constantes/constantesMensajeria';
-import DatosRaton from '../../../sistema/datosRaton';
+import DatosRaton from '../../../sistema/input/datosRaton';
+import Clickable from 'motor/sistema/input/clickable';
+import Input from 'motor/sistema/input/input';
 
 /**
  * Permite ejecutar la funcion deseada al clickar en un objeto.
  */
-export default abstract class ComponenteArrastrarConClick
+export default abstract class ComponenteClickable  
   extends ComponenteBase
-  implements SuscripcionMensaje {
+  implements Clickable {
   private click: boolean = false;
 
   /**
@@ -23,9 +23,7 @@ export default abstract class ComponenteArrastrarConClick
    */
   public cargarConfiguracion(): void {
     this.click = false;
-    Mensaje.suscribirse(ConstantesMensajeria.PULSAR_CLICK, this);
-    Mensaje.suscribirse(ConstantesMensajeria.SOLTAR_CLICK, this);
-    Mensaje.suscribirse(ConstantesMensajeria.MOVER_CLICK, this);
+    Input.suscribirse(this);
   }
 
   /**
@@ -45,23 +43,23 @@ export default abstract class ComponenteArrastrarConClick
 
   /**
    * Recibe el mensaje al que se esta suscrito.
-   * @param mensaje Mensaje que se recibe.
+   * @param codigo Mensaje que se recibe.
    */
-  public recibirMensaje(mensaje: Mensaje) {
-    switch (mensaje.codigo) {
+  public notificar(codigo: string, datos: DatosRaton) {
+    switch (codigo) {
       case ConstantesMensajeria.PULSAR_CLICK:
         this.click = true;
-        this.posRaton.copyFrom((mensaje.contexto as DatosRaton).posicion);
+        this.posRaton.copyFrom(datos.posicion);
         this.alEmpezarClick();
         break;
       case ConstantesMensajeria.SOLTAR_CLICK:
         this.click = false;
-        this.posRaton.copyFrom((mensaje.contexto as DatosRaton).posicion);
+        this.posRaton.copyFrom(datos.posicion);
         this.alSoltarClick();
         break;
       case ConstantesMensajeria.MOVER_CLICK:
         if(this.click) {
-          this.posRaton.copyFrom((mensaje.contexto as DatosRaton).posicion);          
+          this.posRaton.copyFrom(datos.posicion);          
           this.alMoverRaton();
         }
         break;

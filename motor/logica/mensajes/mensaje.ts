@@ -2,14 +2,6 @@
 import SuscripcionMensaje from "./suscripcionMensaje";
 
 /**
- * Indica la prioridad de un mensaje. Normal | Alta.
- * */
-export enum PrioridadMensaje {
-    NORMAL,
-    ALTA
-}
-
-/**
  * Mensaje que se envia de un objeto a otro.
  * */
 export default class Mensaje {
@@ -30,22 +22,15 @@ export default class Mensaje {
     public remitente: any;
 
     /**
-     * Prioridad de envio del mensaje.
-     * */
-    public prioridad: PrioridadMensaje;
-
-    /**
      * Crea un nuevo mensaje.
      * @param codigo Codigo identificatorio del mensaje.
      * @param remitente Referencia al objeto que envia el mensaje.
      * @param contexto Contexto de envio. Opcional.
-     * @param prioridad Prioridad de envio del mensaje.
      */
-    public constructor(codigo: string, remitente: any, contexto?: any, prioridad: PrioridadMensaje = PrioridadMensaje.NORMAL) {
+    public constructor(codigo: string, remitente: any, contexto?: any) {
         this.codigo = codigo;
         this.remitente = remitente;
         this.contexto = contexto;
-        this.prioridad = prioridad;
     }
 
     /**
@@ -55,17 +40,7 @@ export default class Mensaje {
      * @param contexto Contexto de envio. Opcional.
      */
     public static enviar(codigo: string, remitente: any, contexto?: any): void {
-        CanalMensaje.enviar(new Mensaje(codigo, remitente, contexto, PrioridadMensaje.NORMAL));
-    }
-
-    /**
-     * Envia el mensaje con prioridad alta.
-     * @param codigo  Codigo identificatorio del mensaje.
-     * @param remitente Referencia al objeto que envia el mensaje.
-     * @param contexto Contexto de envio. Opcional.
-     */
-    public static enviarPrioritariamente(codigo: string, remitente: any, contexto?: any): void {
-        CanalMensaje.enviar(new Mensaje(codigo, remitente, contexto, PrioridadMensaje.ALTA));
+        CanalMensaje.enviar(new Mensaje(codigo, remitente, contexto));
     }
 
     /**

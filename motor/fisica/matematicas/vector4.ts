@@ -1,6 +1,4 @@
-﻿import Matrix4x4 from "./matrix4x4";
-
-/**
+﻿/**
  * Represents a 4 parameter vector (x, y, z, w).
  * */
 export default class Vector4 {
@@ -17,14 +15,14 @@ export default class Vector4 {
      * @param z
      * @param w
      */
-    public constructor(x: number = 0, y: number = 0, z: number = 0, w: number = 0) {
+    public constructor(x = 0, y = 0, z = 0, w = 0) {
         this._x = x;
         this._y = y;
         this._z = z;
         this._w = w;
     }
 
-    public copyFrom(vector: any): void {
+    public copyFrom(vector: Vector4): void {
         this.x = vector.x;
         this.y = vector.y;
         this.z = vector.z;
@@ -69,6 +67,10 @@ export default class Vector4 {
 
     public toFloat32Array(): Float32Array {
         return new Float32Array(this.toArray());
+    }
+
+    public get length(): number {
+        return Math.sqrt(this._x*this._x + this._y*this._y + this._z*this._z +this._w*this._w)    
     }
 
     /**
@@ -170,21 +172,7 @@ export default class Vector4 {
      * */
     public sum(): number {
         return this._x + this._y + this._z + this._w;
-    }
-
-    /**
-     * Subdivides the provided matrix in an array of four vectors.
-     * @param matrix Matrix to subdivide.
-     */
-    public static subdivideMatrix4x4(matrix: Matrix4x4): Vector4[] {
-        const array: Vector4[] = [];
-
-        for (let i = 0; i < 4; ++i) {
-            array[i] = new Vector4(matrix.data[i * 4 + 0], matrix.data[i * 4 + 1], matrix.data[i * 4 + 2], matrix.data[i * 4 + 3]);
-        }
-
-        return array;
-    }
+    }    
 
     public static get zero(): Vector4 {
         return new Vector4();

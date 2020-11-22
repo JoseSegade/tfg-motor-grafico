@@ -106,7 +106,21 @@ export default class Vector3 {
         this._z *= a._z;
         return this;
     }
+    
+    /**
+     * Calculates the cross product between this vector and another vector a.
+     * @param a Vector to cross by.
+     */
+    public cross(a: Vector3): Vector3 {
+        const vec = new Vector3((this._y*a._z - this._z*a._y), (this._x*a._z - this._z*a._x), (this._x*a._y - this._y*a._x));
+        this.copyFrom(vec);
+        return this;
+    }
 
+    /**
+     * Multiplies the vector by a factor of scale
+     * @param factor 
+     */
     public scale(factor: number): Vector3 {
         this._x *= factor;
         this._y *= factor;
@@ -162,9 +176,34 @@ export default class Vector3 {
         return new Vector3(a._x / b._x, a._y / b._y, a._z / b._z);
     }
 
+    /**
+     * Calculates the cross product between a vector a and vector b.
+     * @param a First vector to cross by.
+     * @param b Second vector to cross by.
+     */
+    public static cross(a: Vector3, b: Vector3) {
+        return new Vector3((a._y*b._z - a._z*b._y), (a._x*b._z - a._z*b._x), (a._x*b._y - a._y*b._x));
+    }
+
     public static distance(a: Vector3, b: Vector3): number {
         const diff = Vector3.sub(a, b);
         return Math.sqrt(diff._x * diff._x + diff._y * diff._y + diff._z * diff._z);
+    }
+
+    /**
+     * Multiplies the vector by a factor of scale
+     * @param factor 
+     */
+    public static scale(vector: Vector3, factor: number): Vector3 {
+        const ret = Vector3.zero;
+        ret._x = vector._x * factor;
+        ret._y = vector._y * factor;
+        ret._z = vector._z * factor;
+        return ret;
+    }
+
+    public static normalize(vector: Vector3): Vector3 {        
+        return Vector3.zero.copyFrom(this.scale(vector, vector.length));
     }
 
     /**
@@ -174,10 +213,15 @@ export default class Vector3 {
         return this._x + this._y + this._z;
     }
 
-    public copyFrom(vector: Vector3): void {
+    public get length(): number {
+        return Math.sqrt(this._x*this._x + this._y*this._y + this._z*this._z);
+    }
+
+    public copyFrom(vector: Vector3): Vector3 {
         this._x = vector._x;
         this._y = vector._y;
         this._z = vector._z;
+        return this;
     }
 
     /**
@@ -219,11 +263,22 @@ export default class Vector3 {
         return new Vector3(1, 1, 1);
     }
 
+    public static get up(): Vector3{
+        return new Vector3(0.0, 1.0, 0.0);
+    }
+
+    public static get forward(): Vector3{
+        return new Vector3(0.0, 0.0, 1.0);
+    }
+
     /**
-     * Converts json data into numbers for each field (x, y, z).
+     * Converts json data into numbers x, y, z.
      * @param json Json data.
      */
-    public setFromJson(json: any): void {
+    public setFromJson(json: any): Vector3 {
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
         if (json.x !== undefined) {
             this._x = Number(json.x);
         }
@@ -233,5 +288,7 @@ export default class Vector3 {
         if (json.z !== undefined) {
             this._z = Number(json.z);
         }
+
+        return this;
     }
 }

@@ -2,7 +2,7 @@
 import Vector3 from '../../fisica/matematicas/vector3';
 import Transform from '../../fisica/matematicas/transform';
 import Componente from '../componentes/componente';
-import Shader from '../../graficos/gl/shader';
+import Shader from '../../sistema/gl/shader';
 import MundoVirtual from './mundoVirtual';
 
 /**
@@ -189,7 +189,7 @@ export default class ObjetoVirtual {
    */
   public render(shader: Shader): void {
     if (this._esVisible) {
-      this._componentes.forEach((c) => c.render(shader));
+      this._componentes.filter(c => typeof c['render'] === 'function').forEach((c) => c['render'](shader));
       this._objetosHijo.forEach((c) => c.render(shader));
     }
   }

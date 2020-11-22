@@ -1,4 +1,4 @@
-﻿import Forma2D from '../../../graficos/shapes2D/forma2D';
+﻿import Forma2D from '../../../graficos/formas/forma2D';
 import Colisiones from '../../../fisica/colision/colisiones';
 import Colisionable from '../../../fisica/colision/colisionable';
 import ComponenteBase from '../componenteBase';

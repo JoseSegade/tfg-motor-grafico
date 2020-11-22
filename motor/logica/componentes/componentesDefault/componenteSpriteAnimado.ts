@@ -1,11 +1,12 @@
 ﻿import ComponenteBase from '../componenteBase';
 import SpriteAnimado from '../../../graficos/spriteAnimado';
-import Shader from '../../../graficos/gl/shader';
+import Shader from '../../../sistema/gl/shader';
+import Renderizable from '../renderizable';
 
 /**
  * Asocia un sprite animado al componente.
  * */
-export default class ComponenteSpriteAnimado extends ComponenteBase {
+export default class ComponenteSpriteAnimado extends ComponenteBase implements Renderizable {
 
     /**
      * True para empezar la animacion en movimiento una vez empiece a ser renderizada.
@@ -109,7 +110,6 @@ export default class ComponenteSpriteAnimado extends ComponenteBase {
      */
     public render(shader: Shader): void {
         this.sprite.dibujar(shader, this.objetoVirtual.worldMatrix);
-        super.render(shader);
     }
 
     /**

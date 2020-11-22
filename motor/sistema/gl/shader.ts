@@ -1,4 +1,4 @@
-﻿import { gl } from './gl';
+﻿import { gl } from './canvasWebGl';
 import ConstantesError from '../../constantes/constantesError';
 
 /**
@@ -9,15 +9,15 @@ export default abstract class Shader {
     private _programaWebGl: WebGLProgram;
     private _attributes: { [nombre: string]: number } = {};
     private _uniforms: { [nombre: string]: WebGLUniformLocation } = {};
+    protected _estaCargado: boolean;
 
     /**
      * Creates a new shader.
      * @param name The name of this shader.
-     * @param vertexSource The source of the vertex shader.
-     * @param fragmentSource The source of the fragment shader.
      */
     public constructor(nombre: string) {
         this._nombre = nombre;
+        this._estaCargado = false;        
     }
 
     /**
@@ -25,6 +25,10 @@ export default abstract class Shader {
      */
     public get nombre(): string {
         return this._nombre;
+    }
+
+    public get estaCargado() {
+        return this._estaCargado;
     }
 
     /**
@@ -45,7 +49,7 @@ export default abstract class Shader {
     ): number | WebGLUniformLocation {
         const id = esVariableUniform ? this._uniforms[nombre] : this._attributes[nombre];
         if (id === undefined) {
-            throw new Error(
+            console.warn(
                 (esVariableUniform
                     ? ConstantesError.ERROR_OBTENER_UNIFORM
                     : ConstantesError.ERROR_OBTENER_ATTRIBUTE) + ` ${nombre} en ${this.nombre}`,
@@ -117,7 +121,7 @@ export default abstract class Shader {
                 ? gl.getActiveUniform(this._programaWebGl, i)
                 : gl.getActiveAttrib(this._programaWebGl, i);
             if (!info) {
-                break;
+                return;
             }
             if (esVariableUniforme) {
                 this._uniforms[info.name] = gl.getUniformLocation(this._programaWebGl, info.name);

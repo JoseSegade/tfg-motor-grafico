@@ -4,7 +4,7 @@ import Escena from './escena';
 import ConstantesMensajeria from '../../constantes/constantesMensajeria';
 import RecursoJson from '../importadores/recursos/recursoJson';
 import Mensaje from '../mensajes/mensaje';
-import Shader from '../../graficos/gl/shader';
+import Shader from '../../sistema/gl/shader';
 import ConstantesError from '../../constantes/constantesError';
 
 /**
@@ -13,7 +13,7 @@ import ConstantesError from '../../constantes/constantesError';
  * */
 export default class EscenaControlador implements SuscripcionMensaje {
     private static _numeroEscenas: number = -1;
-    private static _escenas: { [id: number]: string } = {};
+    private static _escenas: { [id: string]: string } = {};
     private static _escenaActual: Escena;
     private static _instanciaSingleton: EscenaControlador;
 
@@ -30,24 +30,32 @@ export default class EscenaControlador implements SuscripcionMensaje {
         return this._instanciaSingleton;
     }
 
+    public static get numeroEscenas(): number {
+        return this._numeroEscenas;
+    }
+
+    public static updateCamara(ancho: number, alto: number): void {
+        this._escenaActual?.updateCamara(ancho, alto);
+    }    
 
     public static inicializarEscenas(directorios: string[]): void {
-        directorios.forEach((EscenaJson) => {
-            EscenaControlador.anadirEscena(`Escenas/${EscenaJson}`);
+        directorios.forEach((escenaJson) => {
+            EscenaControlador.anadirEscena(escenaJson);
         });
 
         Mensaje.suscribirse(ConstantesMensajeria.RECURSO_CARGADO, this.instancia);
     }
 
-    private static anadirEscena(Escena: string) {
-        this._escenas[++this._numeroEscenas] = Escena;
+    private static anadirEscena(escena: string) {
+        this._escenas[escena.split('.')[0]] = `Escenas/${escena}`;
+        ++this._numeroEscenas;
     }
 
     /**
      * Cambia entre las escenas.
      * @param id Id de la escena al que se quiere cambiar.
      */
-    public static cambiarEscena(id: number): void {
+    public static cambiarEscena(id: string): void {
         if (EscenaControlador._escenaActual !== undefined) {
             EscenaControlador._escenaActual = undefined;
         }
@@ -118,12 +126,7 @@ export default class EscenaControlador implements SuscripcionMensaje {
             nombreEscena = String(datos.nombre);
         }
 
-        let descripcionEscena: string;
-        if (datos.descripcion !== undefined) {
-            descripcionEscena = String(datos.descripcion);
-        }
-
-        EscenaControlador._escenaActual = new Escena(idEscena, nombreEscena, descripcionEscena);
+        EscenaControlador._escenaActual = new Escena(idEscena, nombreEscena);
         EscenaControlador._escenaActual.inicializar(datos);
         EscenaControlador._escenaActual.cargarConfiguracion();
 

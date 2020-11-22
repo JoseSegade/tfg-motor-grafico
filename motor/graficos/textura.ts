@@ -1,4 +1,4 @@
-﻿import { gl } from "./gl/gl";
+﻿import { gl } from "../sistema/gl/canvasWebGl";
 import SuscripcionMensaje from "../logica/mensajes/suscripcionMensaje";
 import Mensaje from "../logica/mensajes/mensaje";
 import RecursoImagen from "../logica/importadores/recursos/recursoImagen";

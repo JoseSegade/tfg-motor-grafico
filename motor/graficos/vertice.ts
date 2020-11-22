@@ -24,7 +24,7 @@ export default class Vertice {
      * @param tu Coordenada U de la textura.
      * @param tv Coordenada V de la textura.
      */
-    public constructor(x: number = 0, y: number = 0, z: number = 0, tu: number = 0, tv: number = 0) {
+    public constructor(x = 0, y = 0, z = 0, tu = 0, tv = 0) {
         this.posicion.x = x;
         this.posicion.y = y;
         this.posicion.z = z;

@@ -1,5 +1,6 @@
 ﻿import Vector3 from "./vector3";
 import Matrix4x4 from "./matrix4x4";
+import Quaternion from "./quaternion";
 
 /**
  * This class manage the position, rotation and scale of an object.
@@ -7,7 +8,7 @@ import Matrix4x4 from "./matrix4x4";
 export default class Transform {
 
     public position: Vector3 = Vector3.zero;
-    public rotation: Vector3 = Vector3.zero;
+    public rotation: Quaternion = Quaternion.identity;
     public scale: Vector3 = Vector3.one;
 
     /**
@@ -25,7 +26,7 @@ export default class Transform {
      * */
     public getTransformationMatrix(): Matrix4x4 {
         const tra = Matrix4x4.translation(this.position);
-        const rot = Matrix4x4.rotationXYZ(this.rotation);
+        const rot = Quaternion.toMatrix4x4(this.rotation);
         const sca = Matrix4x4.scale(this.scale);
 
         //  position x rotation x scale

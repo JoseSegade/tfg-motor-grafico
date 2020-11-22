@@ -1,12 +1,12 @@
 ﻿import Vector3 from '../fisica/matematicas/vector3';
-import BufferWebGl from './gl/bufferWebGl';
+import BufferWebGl from '../sistema/gl/bufferWebGl';
 import Material from './material';
 import Vertice from './vertice';
 import Materiales from './materiales';
-import { gl } from './gl/gl';
+import { gl } from '../sistema/gl/canvasWebGl';
 import Matrix4x4 from '../fisica/matematicas/matrix4x4';
-import Shader from './gl/shader';
-import AttributeInfo from './gl/attributeInfo';
+import Shader from '../sistema/gl/shader';
+import AttributeInfo from '../sistema/gl/attributeInfo';
 
 /**
  * Almacena los datos necesarios para pintar un sprite bidimensional.
@@ -121,15 +121,15 @@ export default class Sprite {
    * @param model Matrix model.
    */
   public dibujar(shader: Shader, model: Matrix4x4): void {
-    const modelId: WebGLUniformLocation = shader.obtenerIdentificacion('u_model', true);
+    const modelId: WebGLUniformLocation = shader.obtenerIdentificacion('model', true);
     gl.uniformMatrix4fv(modelId, false, model.toFloat32Array());
 
-    const colorId: WebGLUniformLocation = shader.obtenerIdentificacion('u_tint', true);
+    const colorId: WebGLUniformLocation = shader.obtenerIdentificacion('tint', true);
     gl.uniform4fv(colorId, this._material.color.toFloat32Array());
 
     if (this._material.texturaDifusa !== undefined) {
       this._material.texturaDifusa.activarYAsociarTextura(0);
-      const difId: WebGLUniformLocation = shader.obtenerIdentificacion('u_diffuse', true);
+      const difId: WebGLUniformLocation = shader.obtenerIdentificacion('diffuse', true);
       gl.uniform1i(difId, 0);
     }
 

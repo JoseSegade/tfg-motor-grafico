@@ -48,30 +48,6 @@ export class Rectangulo2D implements Forma2D {
     }
 
     /**
-     * Carga los datos desde el json que se pasa.
-     * @param json
-     */
-    public configurarDesdeJson(json: any): void {
-        if (json.posicion !== undefined) {
-            this.posicion.setFromJson(json.posicion);
-        }
-
-        if (json.ancho === undefined) {
-            throw new Error("Rectangle2D requires ancho to be present.");
-        }
-        this.ancho = Number(json.ancho);
-
-        if (json.alto === undefined) {
-            throw new Error("Rectangle2D requires alto to be present.");
-        }
-        this.alto = Number(json.alto);
-
-        if (json.origen !== undefined) {
-            this.origen.setFromJson(json.origen);
-        }
-    }
-
-    /**
      * Devuelve true en caso de interseccionar con otra forma 2D.
      * @param otro Forma 2D con la que se quiere comparar las posiciones.
      */
@@ -91,21 +67,6 @@ export class Rectangulo2D implements Forma2D {
             }
         }
         return false;
-    }
-
-    /**
-     * Devuelve true si el punto seleccionado esta dentro del rectangulo.
-     * @param point Punto con el que se quiere comparar.
-     */
-    public estaDentro(point: Vector2): boolean {
-
-        const x = this.ancho < 0 ? this.posicion.x - this.ancho : this.posicion.x;
-        const y = this.alto < 0 ? this.posicion.y - this.alto : this.posicion.y;
-
-        const extentX = this.ancho < 0 ? this.posicion.x : this.posicion.x + this.ancho;
-        const extentY = this.alto < 0 ? this.posicion.y : this.posicion.y + this.alto;
-
-        return (point.x >= x && point.x <= extentX && point.y >= y && point.y < extentY);
     }
 
     private obtenerLaterales(forma: Rectangulo2D): Rectangulo2D {

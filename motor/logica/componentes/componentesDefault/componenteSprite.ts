@@ -1,11 +1,12 @@
 ﻿import ComponenteBase from '../componenteBase';
 import Sprite from '../../../graficos/sprite';
-import Shader from '../../../graficos/gl/shader';
+import Shader from '../../../sistema/gl/shader';
+import Renderizable from '../renderizable';
 
 /**
  * Esta clase asocia un sprite a un componente para que el objeto se pueda pintar en pantalla
  * */
-export default class ComponenteSprite extends ComponenteBase {
+export default class ComponenteSprite extends ComponenteBase implements Renderizable {
     /**
      * Objeto srpite que se pintara por pantalla.
      */
@@ -40,6 +41,5 @@ export default class ComponenteSprite extends ComponenteBase {
      */
     public render(shader: Shader): void {
         this.sprite.dibujar(shader, this.objetoVirtual.worldMatrix);
-        super.render(shader);
     }
 }

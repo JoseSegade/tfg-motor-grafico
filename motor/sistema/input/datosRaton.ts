@@ -1,4 +1,4 @@
-﻿import Vector2 from '../fisica/matematicas/vector2';
+﻿import Vector2 from '../../fisica/matematicas/vector2';
 
 /**
  * Indica el estado actual del raton.

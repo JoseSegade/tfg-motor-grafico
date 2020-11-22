@@ -1,7 +1,5 @@
 ﻿import Componente from './componente';
 import ObjetoVirtual from '../escena/objetoVirtual';
-import Shader from '../../graficos/gl/shader';
-
 /**
  * Clase principal de la que deben heredar todos los componentes que se programen.
  * */
@@ -38,11 +36,5 @@ export default abstract class ComponenteBase implements Componente {
      * Actualiza los datos del componente.
      * @param _milisegundos Milisegundos desde la ultima actualizacion.
      */
-    public update(_milisegundos: number): void {}
-
-    /**
-     * Rendea por pantalla el componente.
-     * @param _shader Shader que se utilizara.
-     */
-    public render(_shader: Shader): void {}
+    public update(_milisegundos: number): void {}    
 }

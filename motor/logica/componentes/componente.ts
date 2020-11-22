@@ -1,5 +1,4 @@
 ﻿import ObjetoVirtual from '../escena/objetoVirtual';
-import Shader from '../../graficos/gl/shader';
 
 /**
  * Define las funciones que debe tener un componente.
@@ -36,10 +35,4 @@ export default interface Componente {
      * @param milisegundos Milisegundos desde la ultima actualizacion.
      */
     update(milisegundos: number): void;
-
-    /**
-     * Rendea el componente.
-     * @param shader Shader de pintado.
-     */
-    render(shader: Shader): void;
 }

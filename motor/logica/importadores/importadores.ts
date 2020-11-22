@@ -3,8 +3,8 @@ import Importador from './importador';
 import Mensaje from '../mensajes/mensaje';
 import ImportadorImagen from './importadorImagen';
 import ImportadorJson from './importadorJson';
-import ImportadorTxt from './importadorTxt';
 import ConstantesMensajeria from '../../constantes/constantesMensajeria';
+import ImportadorShader from './importadorShader';
 
 /**
  * Gestor de los importadores de recursos.
@@ -22,17 +22,9 @@ export default class Importadores {
      * Inicializa los posibles importadores de recursos: imagenes, json y textos (Bitmap).
      * */
     public static inicializar(): void {
-        Importadores._importadores.push(new ImportadorImagen());
-        Importadores._importadores.push(new ImportadorJson());
-        Importadores._importadores.push(new ImportadorTxt());
-    }
-
-    /**
-     * Agrega un importador.
-     * @param importador
-     */
-    public static agregarImportador(importador: Importador): void {
-        Importadores._importadores.push(importador);
+        this._importadores.push(new ImportadorImagen());
+        this._importadores.push(new ImportadorJson());
+        this._importadores.push(new ImportadorShader());
     }
 
     /**
@@ -40,7 +32,7 @@ export default class Importadores {
      * @param recurso Recurso que se ha terminado de cargar.
      */
     public static recursoCargado(recurso: Recurso): void {
-        Importadores._recursosCargados[recurso.nombre] = recurso;
+        this._recursosCargados[recurso.nombre] = recurso;
         Mensaje.enviar(ConstantesMensajeria.RECURSO_CARGADO + recurso.nombre, this, recurso);
     }
 
@@ -50,7 +42,7 @@ export default class Importadores {
      */
     public static cargarRecurso(nombre: string): void {
         const extension: string = nombre.split('.').pop().trim().toLowerCase();
-        for (let l of Importadores._importadores) {
+        for (const l of this._importadores) {
             if (l.extensiones.some(e => e === extension)) {
                 l.cargarRecurso(nombre);
                 return;
@@ -70,7 +62,7 @@ export default class Importadores {
      * Devuelve el recurso siempre y cuando este cargado en memoria, en caso contrario devuelve undefined.
      * @param nombre Nombre del recurso.
      */
-    public static obtenerRecurso(nombre: string): Recurso {
+    public static obtenerRecurso(nombre: string): Recurso {            
         if (Importadores._recursosCargados[nombre] !== undefined) {
             return Importadores._recursosCargados[nombre];
         }

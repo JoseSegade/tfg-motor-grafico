@@ -5,7 +5,7 @@ import ConstantesMensajeria from '../constantes/constantesMensajeria';
 import RecursoImagen from '../logica/importadores/recursos/recursoImagen';
 import UVInfo from './UVInfo';
 import ConstantesError from '../constantes/constantesError';
-import Shader from './gl/shader';
+import Shader from '../sistema/gl/shader';
 import Matrix4x4 from '../fisica/matematicas/matrix4x4';
 import Materiales from './materiales';
 import Importadores from '../logica/importadores/importadores';

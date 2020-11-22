@@ -1,8 +1,9 @@
 ﻿import MundoVirtual from './mundoVirtual';
 import ConstantesError from '../../constantes/constantesError';
-import Shader from '../../graficos/gl/shader';
+import Shader from '../../sistema/gl/shader';
 import ObjetoVirtual from './objetoVirtual';
 import Componentes from '../componentes/componentes';
+import Camara from './camara';
 
 /**
  * Posibles estados de un Escena.
@@ -19,21 +20,20 @@ export enum EstadosEscena {
 export default class Escena {
     private _id: number;
     private _nombre: string;
-    private _descripcion: string;
     private _mundo: MundoVirtual;
     private _estadoActual: EstadosEscena = EstadosEscena.SIN_CARGAR;
+    private _camaras: {[id: number]: Camara} = { };
+    private _camaraActual: number = -1;
     private static _idGlobal: number = -1;
 
     /**
      * Crea un nuevo Escena.
      * @param id Identificador del Escena.
      * @param nombre Nombre del Escena.
-     * @param descripcion Descripcion del Escena.
      */
-    public constructor(id: number, nombre: string, descripcion: string) {
+    public constructor(id: number, nombre: string) {
         this._id = id;
         this._nombre = nombre;
-        this._descripcion = descripcion;
         this._mundo = new MundoVirtual();
     }
 
@@ -52,13 +52,6 @@ export default class Escena {
     }
 
     /**
-     * Descripcion del Escena.
-     */
-    public get descripcion(): string {
-        return this._descripcion;
-    }
-
-    /**
      * Mundo donde se contienen los objetos del mundo.
      */
     public get mundo(): MundoVirtual {
@@ -72,6 +65,15 @@ export default class Escena {
     public inicializar(configEscena: any) {
         if (configEscena.objetos === undefined) {
             throw new Error(ConstantesError.ERROR_ESCENA_VACIA);
+        }
+
+        if(configEscena.camaras) {
+            const camaras: Array<any> = configEscena.camaras;
+            camaras.forEach((cam) => {
+                const camara = Escena.cargarCamara(cam);
+                this._camaras[camara.id] = camara;
+                this._camaraActual = this._camaraActual < 0 ? camara.id : this._camaraActual;
+            });
         }
 
         const objs: Array<any> = configEscena.objetos;
@@ -108,6 +110,22 @@ export default class Escena {
         }
     }
 
+    public updateCamara(ancho: number, alto: number) {
+        this._camaras[this._camaraActual]?.updateProporcionCamara(ancho, alto);
+    }
+
+    public static cargarCamara(cam: any): Camara {
+        if(!cam.id) {
+            throw new Error(ConstantesError.ERROR_ID_CAMARA);
+        }
+        const camara = new Camara(cam.id, cam.nombre, undefined, cam.isOrtho); 
+
+        Escena.cargarConfiguraciones(camara, cam);
+
+        return camara;
+    }
+
+
     public static cargarObjetoVirtual(configuracion: any, objetoPadre: ObjetoVirtual): ObjetoVirtual {
         let nombre: string;
         if (configuracion.nombre !== undefined) {
@@ -120,6 +138,16 @@ export default class Escena {
             objetoPadre?.mundoVirtual,
         );
 
+        Escena.cargarConfiguraciones(objetoVirtual, configuracion);
+
+        if (objetoPadre !== undefined) {
+            objetoPadre.anadirObjetoHijo(objetoVirtual);
+        }        
+
+        return objetoVirtual;
+    }
+
+    public static cargarConfiguraciones(objetoVirtual: ObjetoVirtual, configuracion: any): void {
         if (configuracion.transform !== undefined) {
             objetoVirtual.transform.setFromJson(configuracion.transform);
         }
@@ -134,10 +162,6 @@ export default class Escena {
             hijos.forEach((hijo) => this.cargarObjetoVirtual(hijo, objetoVirtual));
         }
 
-        if (objetoPadre !== undefined) {
-            objetoPadre.anadirObjetoHijo(objetoVirtual);
-        }
-
-        return objetoVirtual;
+        
     }
 }

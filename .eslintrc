@@ -36,9 +36,12 @@
         "tsx": "never"
       }
     ],
+    "import/no-dynamic-require": "off",
     "no-unused-vars": "off",
     "no-plusplus": "off",
     "no-underscore-dangle": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-console": [ "error", { "allow": "warn" } ],
     "@typescript-eslint/no-misused-promises": [
       "error",
       {
@@ -57,7 +60,6 @@
     "@typescript-eslint/member-delimiter-style": "error",
     "@typescript-eslint/no-array-constructor": "error",
     "@typescript-eslint/no-empty-interface": "error",
-    "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/no-inferrable-types": "error",
     "@typescript-eslint/no-misused-new": "error",
     "@typescript-eslint/no-namespace": "error",

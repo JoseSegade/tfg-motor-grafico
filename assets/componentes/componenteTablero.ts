@@ -1,4 +1,4 @@
-import ComponenteBase from 'motor/logica/componentes/componenteBase';
+import ComponenteBase from '../../motor/logica/componentes/componenteBase';
 import {
   pawnBoard,
   rookBoard,
@@ -7,7 +7,7 @@ import {
   queenBoard,
   kingEndBoard,
   kingMidBoard,
-} from 'assets/componentes/chessRating';
+} from './chessRating';
 
 export default class ComponenteTablero extends ComponenteBase {
   public readonly defaultChessBoard: string[][] = [
@@ -21,10 +21,10 @@ export default class ComponenteTablero extends ComponenteBase {
     ['R', 'K', 'B', 'Q', 'A', 'B', 'K', 'R'],
   ];
   public chessBoard: string[][];
-  public kingPositionC: number = 0;
-  public kingPositionL: number = 0;
-  public humanAsWhite: number = 1; //1=human as white, 0=human as black
-  public static globalDepth: number = 2;
+  public kingPositionC = 0;
+  public kingPositionL = 0;
+  public humanAsWhite = 1; //1=human as white, 0=human as black
+  public static globalDepth = 2;
 
   public cargarConfiguracion(): void {
     this.chessBoard = this.cloneBoard(this.defaultChessBoard);
@@ -53,7 +53,7 @@ export default class ComponenteTablero extends ComponenteBase {
   }
 
   public cloneBoard(board: string[][]): string[][] {
-    const cloned: string[][] = new Array();
+    const cloned: string[][] = [];
     board.forEach(e => {
       cloned.push([...e]); 
     });
@@ -81,17 +81,17 @@ export default class ComponenteTablero extends ComponenteBase {
     }
     list = this.sortMoves(list);
     player = 1 - player; //either 1 or 0
-    for (let i: number = 0; i < list.length; i += 5) {
+    for (let i = 0; i < list.length; i += 5) {
       this.makeMove(list.substring(i, i + 5));
       this.flipBoard();
-      let returnString: string = this.alphaBeta(
+      const returnString: string = this.alphaBeta(
         depth - 1,
         beta,
         alpha,
         list.substring(i, i + 5),
         player,
       );
-      let value: number = Number(returnString.substring(5));
+      const value = Number(returnString.substring(5));
       this.flipBoard();
       this.undoMove(list.substring(i, i + 5));
       if (player === 0) {
@@ -126,9 +126,9 @@ export default class ComponenteTablero extends ComponenteBase {
 
   public flipBoard(): void {
     let temp: string;
-    for (let i: number = 0; i < 32; i++) {
-      let r: number = Math.floor(i / 8);
-      let c: number = i % 8;
+    for (let i = 0; i < 32; i++) {
+      const r: number = Math.floor(i / 8);
+      const c: number = i % 8;
       if (this.esMayuscula(this.chessBoard[r][c])) {
         temp = this.chessBoard[r][c].toLowerCase();
       } else {
@@ -146,7 +146,7 @@ export default class ComponenteTablero extends ComponenteBase {
     this.kingPositionL = 63 - kingTemp;
   }
 
-  public makeMove(move: string) {
+  public makeMove(move: string): void {
     if (move.charAt(4) !== 'P') {
       this.chessBoard[this.obtenerValorNumerico(move.charAt(2))][
         this.obtenerValorNumerico(move.charAt(3))
@@ -172,7 +172,7 @@ export default class ComponenteTablero extends ComponenteBase {
     }    
   }
 
-  private undoMove(move: string) {
+  private undoMove(move: string): void {
     if (move.charAt(4) !== 'P') {
       this.chessBoard[this.obtenerValorNumerico(move.charAt(0))][
         this.obtenerValorNumerico(move.charAt(1))
@@ -199,8 +199,8 @@ export default class ComponenteTablero extends ComponenteBase {
   }
 
   public posibleMoves(): string {
-    let list: string = '';
-    for (let i: number = 0; i < 64; i++) {
+    let list = '';
+    for (let i = 0; i < 64; i++) {
       switch (this.chessBoard[Math.floor(i / 8)][i % 8]) {
         case 'P':
           list += this.posibleP(i);
@@ -226,11 +226,11 @@ export default class ComponenteTablero extends ComponenteBase {
   }
 
   private posibleP(i: number): string {
-    let list: string ='';
+    let list ='';
     let oldPiece: string;
     const r: number = Math.floor(i / 8);
     const c: number = i % 8;
-    for (let j: number = -1; j <= 1; j += 2) {
+    for (let j = -1; j <= 1; j += 2) {
       try {
         //capture
         if (this.esMinuscula(this.chessBoard[r - 1][c + j]) && i >= 16) {
@@ -243,12 +243,12 @@ export default class ComponenteTablero extends ComponenteBase {
           this.chessBoard[r][c] = 'P';
           this.chessBoard[r - 1][c + j] = oldPiece;
         }
-      } catch (e) {}
+      } catch (_) { _; }
       try {
         //promotion && capture
         if (this.esMinuscula(this.chessBoard[r - 1][c + j]) && i < 16) {
           const temp: string[] = ['Q', 'R', 'B', 'K'];
-          for (let k: number = 0; k < 4; k++) {
+          for (let k = 0; k < 4; k++) {
             oldPiece = this.chessBoard[r - 1][c + j];
             this.chessBoard[r][c] = ' ';
             this.chessBoard[r - 1][c + j] = temp[k];
@@ -260,7 +260,7 @@ export default class ComponenteTablero extends ComponenteBase {
             this.chessBoard[r - 1][c + j] = oldPiece;
           }
         }
-      } catch (e) {}
+      } catch (_) { _; }
     }
     try {
       //move one up
@@ -274,12 +274,12 @@ export default class ComponenteTablero extends ComponenteBase {
         this.chessBoard[r][c] = 'P';
         this.chessBoard[r - 1][c] = oldPiece;
       }
-    } catch (e) {}
+    } catch (_) {_;}
     try {
       //promotion && no capture
       if (' ' === this.chessBoard[r - 1][c] && i < 16) {
         const temp: string[] = ['Q', 'R', 'B', 'K'];
-        for (let k: number = 0; k < 4; k++) {
+        for (let k = 0; k < 4; k++) {
           oldPiece = this.chessBoard[r - 1][c];
           this.chessBoard[r][c] = ' ';
           this.chessBoard[r - 1][c] = temp[k];
@@ -291,7 +291,7 @@ export default class ComponenteTablero extends ComponenteBase {
           this.chessBoard[r - 1][c] = oldPiece;
         }
       }
-    } catch (e) {}
+    } catch (_) {_;}
     try {
       //move two up
       if (' ' === this.chessBoard[r - 1][c] && ' ' === this.chessBoard[r - 2][c] && i >= 48) {
@@ -304,17 +304,17 @@ export default class ComponenteTablero extends ComponenteBase {
         this.chessBoard[r][c] = 'P';
         this.chessBoard[r - 2][c] = oldPiece;
       }
-    } catch (e) {}
+    } catch (_) {_;}
     return list;
   }
 
   private posibleR(i: number): string {
-    let list: string = '';
-    let oldPiece: string = '';
-    let r: number = Math.floor(i / 8);
-    let c: number = i % 8;
-    let temp: number = 1;
-    for (let j: number = -1; j <= 1; j += 2) {
+    let list = '';
+    let oldPiece = '';
+    const r: number = Math.floor(i / 8);
+    const c: number = i % 8;
+    let temp = 1;
+    for (let j = -1; j <= 1; j += 2) {
       try {
         while (' ' === this.chessBoard[r][c + temp * j]) {
           oldPiece = this.chessBoard[r][c + temp * j];
@@ -337,7 +337,7 @@ export default class ComponenteTablero extends ComponenteBase {
           this.chessBoard[r][c] = 'R';
           this.chessBoard[r][c + temp * j] = oldPiece;
         }
-      } catch (e) {}
+      } catch (_) {_;}
       temp = 1;
       try {
         while (' ' === this.chessBoard[r + temp * j][c]) {
@@ -361,19 +361,19 @@ export default class ComponenteTablero extends ComponenteBase {
           this.chessBoard[r][c] = 'R';
           this.chessBoard[r + temp * j][c] = oldPiece;
         }
-      } catch (e) {}
+      } catch (_) {_;}
       temp = 1;
     }
     return list;
   }
 
   private posibleK(i: number): string {
-    let list: string = '';
-    let oldPiece: string = '';
-    let r: number = Math.floor(i / 8);
-    let c: number = i % 8;
-    for (let j: number = -1; j <= 1; j += 2) {
-      for (let k: number = -1; k <= 1; k += 2) {
+    let list = '';
+    let oldPiece = '';
+    const r: number = Math.floor(i / 8);
+    const c: number = i % 8;
+    for (let j = -1; j <= 1; j += 2) {
+      for (let k = -1; k <= 1; k += 2) {
         try {
           if (
             this.esMinuscula(this.chessBoard[r + j][c + k * 2]) ||
@@ -387,7 +387,7 @@ export default class ComponenteTablero extends ComponenteBase {
             this.chessBoard[r][c] = 'K';
             this.chessBoard[r + j][c + k * 2] = oldPiece;
           }
-        } catch (e) {}
+        } catch (_) {_;}
         try {
           if (
             this.esMinuscula(this.chessBoard[r + j * 2][c + k]) ||
@@ -401,20 +401,20 @@ export default class ComponenteTablero extends ComponenteBase {
             this.chessBoard[r][c] = 'K';
             this.chessBoard[r + j * 2][c + k] = oldPiece;
           }
-        } catch (e) {}
+        } catch (_) {_;}
       }
     }
     return list;
   }
 
   private posibleB(i: number): string {
-    let list: string = '';
-    let oldPiece: string = '';
-    let r: number = Math.floor(i / 8);
-    let c: number = i % 8;
-    let temp: number = 1;
-    for (let j: number = -1; j <= 1; j += 2) {
-      for (let k: number = -1; k <= 1; k += 2) {
+    let list = '';
+    let oldPiece = '';
+    const r: number = Math.floor(i / 8);
+    const c: number = i % 8;
+    let temp = 1;
+    for (let j = -1; j <= 1; j += 2) {
+      for (let k = -1; k <= 1; k += 2) {
         try {
           while (' ' === this.chessBoard[r + temp * j][c + temp * k]) {
             oldPiece = this.chessBoard[r + temp * j][c + temp * k];
@@ -437,7 +437,7 @@ export default class ComponenteTablero extends ComponenteBase {
             this.chessBoard[r][c] = 'B';
             this.chessBoard[r + temp * j][c + temp * k] = oldPiece;
           }
-        } catch (e) {}
+        } catch (_) {_;}
         temp = 1;
       }
     }
@@ -445,13 +445,13 @@ export default class ComponenteTablero extends ComponenteBase {
   }
 
   private posibleQ(i: number): string {
-    let list: string = '';
-    let oldPiece: string = '';
-    let r: number = Math.floor(i / 8);
-    let c: number = i % 8;
-    let temp: number = 1;
-    for (let j: number = -1; j <= 1; j++) {
-      for (let k: number = -1; k <= 1; k++) {
+    let list = '';
+    let oldPiece = '';
+    const r: number = Math.floor(i / 8);
+    const c: number = i % 8;
+    let temp = 1;
+    for (let j = -1; j <= 1; j++) {
+      for (let k = -1; k <= 1; k++) {
         if (j !== 0 || k !== 0) {
           try {
             while (' ' === this.chessBoard[r + temp * j][c + temp * k]) {
@@ -475,7 +475,7 @@ export default class ComponenteTablero extends ComponenteBase {
               this.chessBoard[r][c] = 'Q';
               this.chessBoard[r + temp * j][c + temp * k] = oldPiece;
             }
-          } catch (e) {}
+          } catch (_) {_;}
           temp = 1;
         }
       }
@@ -484,11 +484,11 @@ export default class ComponenteTablero extends ComponenteBase {
   }
 
   private posibleA(i: number): string {
-    let list: string = '';
-    let oldPiece: string = '';
-    let r: number = Math.floor(i / 8);
-    let c: number = i % 8;
-    for (let j: number = 0; j < 9; j++) {
+    let list = '';
+    let oldPiece = '';
+    const r: number = Math.floor(i / 8);
+    const c: number = i % 8;
+    for (let j = 0; j < 9; j++) {
       if (j !== 4) {
         try {
           if (
@@ -507,7 +507,7 @@ export default class ComponenteTablero extends ComponenteBase {
             this.chessBoard[r - 1 + Math.floor(j / 3)][c - 1 + (j % 3)] = oldPiece;
             this.kingPositionC = kingTemp;
           }
-        } catch (e) {}
+        } catch (_) {_;}
       }
     }
     //need to add casting later
@@ -516,18 +516,18 @@ export default class ComponenteTablero extends ComponenteBase {
 
   private sortMoves(list: string): string {
     const score: number[] = new Array(Math.floor(list.length / 5));
-    for (let i: number = 0; i < list.length; i += 5) {
+    for (let i = 0; i < list.length; i += 5) {
       this.makeMove(list.substring(i, i + 5));
       score[i / 5] = -this.rating(-1, 0);
       this.undoMove(list.substring(i, i + 5));
     }
-    let newListA: string = '';
+    let newListA = '';
     let newListB: string = list;
-    for (let i: number = 0; i < Math.min(6, Math.floor(list.length / 5)); i++) {
+    for (let i = 0; i < Math.min(6, Math.floor(list.length / 5)); i++) {
       //first few moves only
-      let max: number = -1000000;
-      let maxLocation: number = 0;
-      for (let j: number = 0; j < Math.floor(list.length / 5); j++) {
+      let max = -1000000;
+      let maxLocation = 0;
+      for (let j = 0; j < Math.floor(list.length / 5); j++) {
         if (score[j] > max) {
           max = score[j];
           maxLocation = j;
@@ -542,9 +542,9 @@ export default class ComponenteTablero extends ComponenteBase {
 
   private kingSafe(): boolean {
     //bishop/queen
-    let temp: number = 1;
-    for (let i: number = -1; i <= 1; i += 2) {
-      for (let j: number = -1; j <= 1; j += 2) {
+    let temp = 1;
+    for (let i = -1; i <= 1; i += 2) {
+      for (let j = -1; j <= 1; j += 2) {
         try {
           while (
             ' ' ===
@@ -564,12 +564,12 @@ export default class ComponenteTablero extends ComponenteBase {
           ) {
             return false;
           }
-        } catch (e) {}
+        } catch (_) {_;}
         temp = 1;
       }
     }
     //rook/queen
-    for (let i: number = -1; i <= 1; i += 2) {
+    for (let i = -1; i <= 1; i += 2) {
       try {
         while (
           ' ' === this.chessBoard[Math.floor(this.kingPositionC / 8)][(this.kingPositionC % 8) + temp * i]
@@ -582,7 +582,7 @@ export default class ComponenteTablero extends ComponenteBase {
         ) {
           return false;
         }
-      } catch (e) {}
+      } catch (_) {_;}
       temp = 1;
       try {
         while (' ' === this.chessBoard[Math.floor(this.kingPositionC / 8) + temp * i][this.kingPositionC % 8]) {
@@ -594,26 +594,26 @@ export default class ComponenteTablero extends ComponenteBase {
         ) {
           return false;
         }
-      } catch (e) {}
+      } catch (_) {_;}
       temp = 1;
     }
     //knight
-    for (let i: number = -1; i <= 1; i += 2) {
-      for (let j: number = -1; j <= 1; j += 2) {
+    for (let i = -1; i <= 1; i += 2) {
+      for (let j = -1; j <= 1; j += 2) {
         try {
           if (
             'k' === this.chessBoard[Math.floor(this.kingPositionC / 8) + i][(this.kingPositionC % 8) + j * 2]
           ) {
             return false;
           }
-        } catch (e) {}
+        } catch (_) {_;}
         try {
           if (
             'k' === this.chessBoard[Math.floor(this.kingPositionC / 8) + i * 2][(this.kingPositionC % 8) + j]
           ) {
             return false;
           }
-        } catch (e) {}
+        } catch (_) {_;}
       }
     }
     //pawn
@@ -622,15 +622,15 @@ export default class ComponenteTablero extends ComponenteBase {
         if ('p' === this.chessBoard[Math.floor(this.kingPositionC / 8) - 1][(this.kingPositionC % 8) - 1]) {
           return false;
         }
-      } catch (e) {}
+      } catch (_) {_;}
       try {
         if ('p' === this.chessBoard[Math.floor(this.kingPositionC / 8) - 1][(this.kingPositionC % 8) + 1]) {
           return false;
         }
-      } catch (e) {}
+      } catch (_) {_;}
       //king
-      for (let i: number = -1; i <= 1; i++) {
-        for (let j: number = -1; j <= 1; j++) {
+      for (let i = -1; i <= 1; i++) {
+        for (let j = -1; j <= 1; j++) {
           if (i !== 0 || j !== 0) {
             try {
               if (
@@ -638,7 +638,7 @@ export default class ComponenteTablero extends ComponenteBase {
               ) {
                 return false;
               }
-            } catch (e) {}
+            } catch (_) {_;}
           }
         }
       }
@@ -646,27 +646,27 @@ export default class ComponenteTablero extends ComponenteBase {
     return true;
   }
 
-  private rating(list: number, depth: number): number {
-    let counter: number = 0;
+  private rating(_: number, depth: number): number {
+    let counter = 0;
     let material: number = this.rateMaterial();
     counter += this.rateAttack();
     counter += material;
-    counter += this.rateMoveablitly(list, depth, material);
+    //counter += this.rateMoveablitly(list, depth, material);
     counter += this.ratePositional(material);
     this.flipBoard();
     material = this.rateMaterial();
     counter -= this.rateAttack();
     counter -= material;
-    counter -= this.rateMoveablitly(list, depth, material);
+    //counter -= this.rateMoveablitly(list, depth, material);
     counter -= this.ratePositional(material);
     this.flipBoard();
     return -(counter + depth * 50);
   }
 
   private rateAttack(): number {
-    let counter: number = 0;
-    let tempPositionC: number = this.kingPositionC;
-    for (let i: number = 0; i < 64; i++) {
+    let counter = 0;
+    const tempPositionC: number = this.kingPositionC;
+    for (let i = 0; i < 64; i++) {
       switch (this.chessBoard[Math.floor(i / 8)][i % 8]) {
         case 'P':
           {
@@ -718,9 +718,9 @@ export default class ComponenteTablero extends ComponenteBase {
   }
 
   private rateMaterial(): number {
-    let counter: number = 0;
-    let bishopCounter: number = 0;
-    for (let i: number = 0; i < 64; i++) {
+    let counter = 0;
+    let bishopCounter = 0;
+    for (let i = 0; i < 64; i++) {
       switch (this.chessBoard[Math.floor(i / 8)][i % 8]) {
         case 'P':
           counter += 100;
@@ -748,9 +748,10 @@ export default class ComponenteTablero extends ComponenteBase {
     }
     return counter;
   }
-
-  private rateMoveablitly(listLength: number, depth: number, _: number): number {
-    let counter: number = 0;
+  
+  /*
+  private rateMoveablitly(_0: number, _1: number, _2: number): number {
+    let counter = 0;
     counter += listLength; //5 pointer per valid move
     if (listLength === 0) {
       //current side is in checkmate or stalemate
@@ -764,10 +765,11 @@ export default class ComponenteTablero extends ComponenteBase {
     }
     return 0;
   }
+  */
 
   private ratePositional(material: number): number {
-    let counter: number = 0;
-    for (let i: number = 0; i < 64; i++) {
+    let counter = 0;
+    for (let i = 0; i < 64; i++) {
       switch (this.chessBoard[Math.floor(i / 8)][i % 8]) {
         case 'P':
           counter += pawnBoard[Math.floor(i / 8)][i % 8];
@@ -819,7 +821,7 @@ export default class ComponenteTablero extends ComponenteBase {
   }
 
   public printTablero(): void {
-    let print : string = '';
+    let print = '';
     this.chessBoard.forEach(element => {
       
       element.forEach((e, idx) => {
@@ -835,6 +837,7 @@ export default class ComponenteTablero extends ComponenteBase {
         }
       })
     });
+    // eslint-disable-next-line no-console
     console.log(print);
   }
 }

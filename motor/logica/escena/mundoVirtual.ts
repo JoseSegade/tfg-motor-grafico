@@ -1,12 +1,12 @@
 ﻿import ObjetoVirtual from './objetoVirtual';
-import Shader from '../../graficos/gl/shader';
+import Shader from '../../sistema/gl/shader';
 
 /**
  * Mundo virtual donde se cargaran los objetos.
  * */
 export default class MundoVirtual {
     private _objetoMundo: ObjetoVirtual;
-    private static readonly IDENTIFICADOR_RAIZ: string = '__ROOT__';
+    private static readonly IDENTIFICADOR_RAIZ: string = 'MUNDO_VIRTUAL';
 
     public constructor() {
         this._objetoMundo = new ObjetoVirtual(0, MundoVirtual.IDENTIFICADOR_RAIZ, this);
@@ -47,6 +47,7 @@ export default class MundoVirtual {
      * */
     public cargarConfiguracion(): void {
         this._objetoMundo.cargarConfiguracion();
+        this.debug_imprimirEscenaPorPantalla();
     }
 
     /**

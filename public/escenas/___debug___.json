@@ -1,0 +1,187 @@
+{
+  "nombre": "Ajedrez",
+  "id": 0,
+  "objetos": [
+    {
+      "nombre": "tablero",
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "componentes": [
+        {
+          "nombre": "tableroSprite",
+          "tipo": "ComponenteSprite",
+          "nombreMaterial": "tablero",
+          "ancho": 512,
+          "alto": 512
+        }
+      ]
+    },
+    {
+      "nombre": "generadorPiezas",
+      "transform": {
+        "x": 0,
+        "y": 0
+      },
+      "componentes": [
+        {
+          "nombre": "componenteTablero",
+          "tipo": "ComponenteTablero"
+        },
+        {
+          "nombre": "generador",
+          "tipo": "ComponenteGeneradorPiezas",
+          "anchoTablero": 512,
+          "altoTablero": 512,
+          "anchoFicha": 64,
+          "altoFicha": 64,
+          "framesFichas": {
+            "A": 0,
+            "Q": 1,
+            "B": 2,
+            "K": 3,
+            "R": 4,
+            "P": 5,
+            "a": 6,
+            "q": 7,
+            "b": 8,
+            "k": 9,
+            "r": 10,
+            "p": 11
+          },
+          "jsonPrefab": {
+            "nombre": "prefabFichas",
+            "transform": {
+              "position": {
+                "x": 0,
+                "y": 0
+              }
+            },
+            "componentes": [
+                  {
+                    "nombre": "comportamientoArrastrar",
+                    "tipo": "ComponenteArrastrarPieza"
+                  },
+              {
+                "nombre": "fichasSprite",
+                "tipo": "ComponenteSpriteAnimado",
+                "nombreMaterial": "fichas",
+                "reproducirAutomaticamente": false,
+                "tiempoEntreFrames": 1,
+                "ancho": 64,
+                "alto": 64,
+                "anchoFrame": 213.5,
+                "altoFrame": 639,
+                "offset": 0,
+                "numeroDeFrames": 1,
+                "secuenciaFrames": [
+                  0
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "objetosHijo": [
+        {
+          "nombre": "fondo",
+          "transform": {
+            "x": 0,
+            "y": 0
+          },
+          "componentes": [
+            {
+              "nombre": "fondo",
+              "tipo": "ComponenteSprite",
+              "nombreMaterial": "fondo",
+              "ancho": 512,
+              "alto": 512
+            },
+            {
+              "nombre": "ocultarFondo",
+              "tipo": "ComponenteOcultarMostrar",
+              "esVisible": false,
+              "codigoMensaje": "OCULTAR_FONDO"
+            }
+          ],
+          "objetosHijo": [
+            {
+              "nombre": "texto",
+              "transform": {
+                "position": {
+                  "x": 50,
+                  "y": 55
+                },
+                "scale": {
+                  "x": 0.5,
+                  "y": 0.5
+                }
+              }
+            },
+            {
+              "nombre": "elegirBlancas",
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0
+                }
+              },
+              "componentes": [
+                {
+                  "nombre": "blancasSeleccion",
+                  "tipo": "ComponenteSprite",
+                  "nombreMaterial": "blancas_seleccion",
+                  "ancho": 512,
+                  "alto": 512
+                },
+                {
+                  "nombre": "mensajeOcultarFondo_B",
+                  "tipo": "ComponenteMensajeAlClick",
+                  "origen": {
+                    "x": 50,
+                    "y": 100
+                  },
+                  "ancho": 200,
+                  "alto": 200,
+                  "codigosMensaje": ["OCULTAR_FONDO", "SELECCIONAR_BLANCAS"]
+                }
+              ]
+            },
+            {
+              "nombre": "elegirNegras",
+              "transform": {
+                "position": {
+                  "x": 0,
+                  "y": 0
+                }
+              },
+              "componentes": [
+                {
+                  "nombre": "negrasSeleccion",
+                  "tipo": "ComponenteSprite",
+                  "nombreMaterial": "negras_seleccion",
+                  "ancho": 512,
+                  "alto": 512
+                },
+                {
+                  "nombre": "mensajeOcultarFondo_B",
+                  "tipo": "ComponenteMensajeAlClick",
+                  "origen": {
+                    "x": 50,
+                    "y": 300
+                  },
+                  "ancho": 200,
+                  "alto": 200,
+                  "codigosMensaje": ["OCULTAR_FONDO", "SELECCIONAR_NEGRAS"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

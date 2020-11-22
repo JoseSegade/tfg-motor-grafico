@@ -30,25 +30,6 @@ export default class Circulo2D implements Forma2D {
     }
 
     /**
-     * Carga los datos desde un json.
-     * @param json Json desde el que se obtienen los datos.
-     */
-    public configurarDesdeJson(json: any): void {
-        if (json.posicion !== undefined) {
-            this.posicion.setFromJson(json.posicion);
-        }
-
-        if (json.origin !== undefined) {
-            this.posicion.setFromJson(json.posicion);
-        }
-
-        if (json.radio === undefined) {
-            throw new Error("Circle2D requires radio to be present.");
-        }
-        this.radio = Number(json.radio);
-    }
-
-    /**
      * Devuelve true en caso de interseccionar con otra forma 2D.
      * @param otro Forma 2D con la que se quiere comparar las posiciones.
      */
@@ -65,18 +46,6 @@ export default class Circulo2D implements Forma2D {
             if ((xDiff * xDiff + yDiff * yDiff) < (this.radio * this.radio)) {
                 return true;
             }
-        }
-
-        return false;
-    }
-
-    /**
-     * Devuelve true si el punto seleccionado esta dentro del circulo.
-     * @param point Punto con el que se quiere comparar.
-     */
-    public estaDentro(punto: Vector2): boolean {
-        if (Vector2.distance(this.posicion, punto) <= this.radio) {
-            return true;
         }
         return false;
     }

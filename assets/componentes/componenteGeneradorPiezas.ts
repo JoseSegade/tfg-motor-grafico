@@ -1,29 +1,29 @@
-import ComponenteBase from 'motor/logica/componentes/componenteBase';
-import Escena from 'motor/logica/escena/escena';
-import ObjetoVirtual from 'motor/logica/escena/objetoVirtual';
-import ComponenteSpriteAnimado from 'motor/logica/componentes/componentesDefault/componenteSpriteAnimado';
-import Transform from 'motor/fisica/matematicas/transform';
+import ComponenteBase from '../../motor/logica/componentes/componenteBase';
+import Escena from '../../motor/logica/escena/escena';
+import ObjetoVirtual from '../../motor/logica/escena/objetoVirtual';
+import ComponenteSpriteAnimado from '../../motor/logica/componentes/componentesDefault/componenteSpriteAnimado';
+import Transform from '../../motor/fisica/matematicas/transform';
 import Casilla from './casilla';
 import ComponenteTablero from './componenteTablero';
 import ComponenteArrastrarPieza from './componenteArrastrarPieza';
-import SuscripcionMensaje from 'motor/logica/mensajes/suscripcionMensaje';
-import Mensaje from 'motor/logica/mensajes/mensaje';
+import SuscripcionMensaje from '../../motor/logica/mensajes/suscripcionMensaje';
+import Mensaje from '../../motor/logica/mensajes/mensaje';
 
 export default class ComponenteGeneradorPiezas
   extends ComponenteBase
   implements SuscripcionMensaje {
   public jsonPrefab: any;
   public prefabObj: ObjetoVirtual;
-  public anchoTablero: number = 8;
-  public altoTablero: number = 8;
-  public anchoFicha: number = 1;
-  public altoFicha: number = 1;
+  public anchoTablero = 8;
+  public altoTablero = 8;
+  public anchoFicha = 1;
+  public altoFicha = 1;
   public framesFichas: { [key: string]: number } = {};
   private componenteTablero: ComponenteTablero;
   private fichas: ObjetoVirtual[] = [];
   private SELECCIONAR_BLANCAS = 'SELECCIONAR_BLANCAS';
   private SELECCIONAR_NEGRAS = 'SELECCIONAR_NEGRAS';
-  private instanciado: boolean = false;
+  private instanciado = false;
 
   public cargarConfiguracion(): void {
     this.prefabObj = Escena.cargarObjetoVirtual(this.jsonPrefab, undefined);
@@ -49,9 +49,6 @@ export default class ComponenteGeneradorPiezas
           this.componenteTablero.printTablero();
           this.instanciado = true;
       }
-  }
-
-  public activar(): void {
   }
 
   private instanciarFichas(): void {

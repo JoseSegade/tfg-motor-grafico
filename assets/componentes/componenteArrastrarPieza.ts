@@ -1,9 +1,9 @@
-import ComponenteArrastrarConClick from 'motor/logica/componentes/componentesDefault/componenteArrastrarConClick';
-import Vector3 from 'motor/fisica/matematicas/vector3';
+import ComponenteArrastrarConClick from '../../motor/logica/componentes/componentesDefault/componenteArrastrarConClick';
+import Vector3 from '../../motor/fisica/matematicas/vector3';
 import Casilla from './casilla';
 import ComponenteTablero from './componenteTablero';
-import Vector2 from 'motor/fisica/matematicas/vector2';
-import Mensaje from 'motor/logica/mensajes/mensaje';
+import Vector2 from '../../motor/fisica/matematicas/vector2';
+import Mensaje from '../../motor/logica/mensajes/mensaje';
 
 interface Jugada {
   jugada: string;
@@ -14,7 +14,7 @@ export default class ComponenteArrastrarPieza extends ComponenteArrastrarConClic
   public posicionInicial: Vector3 = Vector3.zero;
   public casillaActual: Casilla;
   public componenteTablero: ComponenteTablero;
-  private arrastrandose: boolean = false;
+  private arrastrandose = false;
   private haMuerto = false;
 
   private MOVER_JUGADOR = 'MoverJugador';
@@ -70,8 +70,7 @@ export default class ComponenteArrastrarPieza extends ComponenteArrastrarConClic
     return false;
   }
 
-  public recibirMensaje(mensaje: Mensaje) {
-    super.recibirMensaje(mensaje);
+  public recibirMensaje(mensaje: Mensaje): void {
     if (this.haMuerto) {
       return;
     }

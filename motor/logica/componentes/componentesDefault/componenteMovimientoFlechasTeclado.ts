@@ -1,4 +1,4 @@
-﻿import EventosInput, { FlechasTeclado } from '../../../sistema/eventosInput'
+﻿import EventosInput, { FlechasTeclado } from '../../../sistema/input/eventosInput'
 import ComponenteBase from '../componenteBase';
 
 /**

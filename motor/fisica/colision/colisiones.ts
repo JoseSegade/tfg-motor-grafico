@@ -65,7 +65,6 @@ export default class Colisiones {
                                 colisionesActuales.push(nuevaCol);
                                 comp.alEntrarColision(otro);
                                 otro.alEntrarColision(comp);
-                                //Mensaje.enviarPrioritariamente('COLLISION_ENTRY', undefined, colData);
                             } else {
                                 colisionesActuales = colisionesActuales.concat(elementos);
                                 comp.alMantenerColision(otro);
@@ -82,7 +81,6 @@ export default class Colisiones {
             .forEach((v) => {
                 v.a.alSalirColision(v.b);
                 v.b.alSalirColision(v.a);
-                //Mensaje.enviarPrioritariamente('COLLISION_EXIT', undefined, v);
             });
 
         Colisiones._colisiones.splice(0, Colisiones._colisiones.length);

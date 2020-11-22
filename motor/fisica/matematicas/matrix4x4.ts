@@ -1,13 +1,15 @@
 ﻿import Vector3 from "./vector3";
 import Vector4 from "./vector4";
 
+/**
+ * Defines a matrix system, column based.
+ */
 export default class Matrix4x4 {
 
     private _data: number[] = [];
 
     private constructor() {
         this._data = [
-            //  Identity matrix
             1.0, 0.0, 0.0, 0.0,
             0.0, 1.0, 0.0, 0.0,
             0.0, 0.0, 1.0, 0.0,
@@ -26,18 +28,32 @@ export default class Matrix4x4 {
     public static ortographic(left: number, right: number, bottom: number, top: number, nearClip: number, farClip: number): Matrix4x4 {
         const m: Matrix4x4 = new Matrix4x4();
 
-        const lr: number = 1.0 / (left - right);
-        const bt: number = 1.0 / (bottom - top);
-        const nf: number = 1.0 / (nearClip - farClip);
+        const rl: number = (right - left);
+        const tb: number = (top - bottom);
+        const fn: number = (farClip - nearClip);
 
-        m._data[0] = -2.0 * lr;
-        m._data[5] = -2.0 * bt;
-        m._data[10] = 2.0 * nf;
+        m._data[0] = 2.0 / rl;
+        m._data[5] = 2.0 / tb;
+        m._data[10] = -2.0 / fn;
 
-        m._data[12] = (left + right) * lr;
-        m._data[13] = (top + bottom) * bt;
-        m._data[14] = (farClip + nearClip) * nf;
+        m._data[12] = -(right + left) / rl;
+        m._data[13] = -(top + bottom) / tb;
+        m._data[14] = -(farClip + nearClip) / fn;
 
+        return m;
+    }
+
+    public static perspective(aspectRatio: number, fieldOfView: number, nearClip: number, farClip: number): Matrix4x4 {
+        const m: Matrix4x4 = new Matrix4x4();
+
+        const f = 1.0 / Math.tan(fieldOfView / 2);
+        
+        m._data[0] = f / aspectRatio;
+        m._data[5] = f;
+        m._data[10] = (farClip + nearClip) / (nearClip - farClip);
+        m._data[11] = -1.0;
+        m._data[14] = (2.0 * farClip * nearClip) / (nearClip - farClip);
+        m._data[15] = 0.0;
         return m;
     }
 
@@ -55,43 +71,43 @@ export default class Matrix4x4 {
         return m;
     }
 
-    public static rotationX(angleInRadians: number): Matrix4x4 {
+    public static rotationX(radians: number): Matrix4x4 {
         const m = new Matrix4x4();
 
-        const c = Math.cos(angleInRadians);
-        const s = Math.sin(angleInRadians);
+        const c = Math.cos(radians);
+        const s = Math.sin(radians);
 
         m._data[5] = c;
-        m._data[6] = -s;
-        m._data[9] = s;
+        m._data[6] = s;
+        m._data[9] = -s;
         m._data[10] = c;
 
         return m;
     }
 
-    public static rotationY(angleInRadians: number): Matrix4x4 {
+    public static rotationY(radians: number): Matrix4x4 {
         const m = new Matrix4x4();
 
-        const c = Math.cos(angleInRadians);
-        const s = Math.sin(angleInRadians);
+        const c = Math.cos(radians);
+        const s = Math.sin(radians);
 
         m._data[0] = c;
-        m._data[2] = s;
-        m._data[8] = -s;
+        m._data[2] = -s;
+        m._data[8] = s;
         m._data[10] = c;
 
         return m;
     }
 
-    public static rotationZ(angleInRadians: number): Matrix4x4 {
+    public static rotationZ(radians: number): Matrix4x4 {
         const m = new Matrix4x4();
 
-        const c = Math.cos(angleInRadians);
-        const s = Math.sin(angleInRadians);
+        const c = Math.cos(radians);
+        const s = Math.sin(radians);
 
         m._data[0] = c;
-        m._data[1] = -s;
-        m._data[4] = s;
+        m._data[1] = s;
+        m._data[4] = -s;
         m._data[5] = c;
 
         return m;
@@ -111,11 +127,11 @@ export default class Matrix4x4 {
     }
 
     /**
-     * Calculates rotation of a matrix rotated the specified angles (in radians)
+     * Calculates rotation of a matrix rotated the specified angles (in degrees)
      * @param rotation Vector with rotation values.
      */
     public static rotationXYZ(rotation: Vector3): Matrix4x4 {
-        return Matrix4x4.rotationXYZRadians(rotation.x, rotation.y, rotation.z);
+        return Matrix4x4.rotationXYZRadians((rotation.x * Math.PI) / 180, (rotation.y * Math.PI) / 180, (rotation.z * Math.PI) / 180);
     }
 
     public static scale(scale: Vector3): Matrix4x4 {
@@ -134,8 +150,8 @@ export default class Matrix4x4 {
     public static multiply(a: Matrix4x4, b: Matrix4x4): Matrix4x4 {
         const m = new Matrix4x4();
 
-        const aVectors: Vector4[] = Vector4.subdivideMatrix4x4(Matrix4x4.transpose(a));
-        const bVectors: Vector4[] = Vector4.subdivideMatrix4x4(b);
+        const aVectors: Vector4[] = this.subdivideMatrix4x4(Matrix4x4.transpose(a));
+        const bVectors: Vector4[] = this.subdivideMatrix4x4(b);
 
         m._data.forEach((_, index, arr) => {
             const vectorA: Vector4 = aVectors[(index % 4)];
@@ -144,6 +160,50 @@ export default class Matrix4x4 {
         });
 
         return m;
+    }
+
+    public static lookAt(eye: Vector3, at: Vector3, up: Vector3): Matrix4x4 {
+        const zAxis = Vector3.normalize(Vector3.sub(at, eye));
+        const xAxis = Vector3.normalize(Vector3.cross(zAxis, up));
+        const yAxis = Vector3.cross(xAxis, zAxis);
+        
+        zAxis.scale(-1);
+        
+        const ret = this.setMatrix4x4WithVector4([
+            new Vector4(xAxis.x, xAxis.y, xAxis.z, -1 * Vector3.dot(xAxis, eye).sum()),
+            new Vector4(yAxis.x, yAxis.y, yAxis.z, -1 * Vector3.dot(yAxis, eye).sum()),
+            new Vector4(zAxis.x, zAxis.y, zAxis.z, -1 * Vector3.dot(zAxis, eye).sum()),
+            new Vector4(0, 0, 0, 1),
+        ]);       
+
+        return ret;
+    }
+
+    public static setMatrix4x4WithVector4(vectorList: Vector4[]): Matrix4x4 {
+        const m = new Matrix4x4();
+
+        vectorList.forEach((vec4, idx): void => {
+            m._data[idx * 4 + 0] = vec4.x;
+            m._data[idx * 4 + 1] = vec4.y;
+            m._data[idx * 4 + 2] = vec4.z;
+            m._data[idx * 4 + 3] = vec4.w;
+        });
+
+        return m;
+    }
+
+    /**
+     * Subdivides the provided matrix in an array of four vectors.
+     * @param matrix Matrix to subdivide.
+     */
+    public static subdivideMatrix4x4(matrix: Matrix4x4): Vector4[] {
+        const array: Vector4[] = [];
+
+        for (let i = 0; i < 4; ++i) {
+            array[i] = new Vector4(matrix.data[i * 4 + 0], matrix.data[i * 4 + 1], matrix.data[i * 4 + 2], matrix.data[i * 4 + 3]);
+        }
+
+        return array;
     }
 
     /**
@@ -159,6 +219,10 @@ export default class Matrix4x4 {
         return m;
     }
 
+    public get(row: number, col: number): number {
+        return this._data[col + (4 * row)];
+    }
+
     /**
      * Copies the data of the provided matrix inside this matrix's data.
      * @param m Matrix to copy from.
@@ -167,6 +231,20 @@ export default class Matrix4x4 {
         this._data.forEach((_, index, arr) => {
             arr[index] = m._data[index];
         });
+    }
+
+    public traslate(vec: Vector3): Matrix4x4 {
+        this._data[12] += vec.x;
+        this._data[13] += vec.y;
+        this._data[14] += vec.z;
+
+        return this;
+    }
+
+    public rotate(rot: Vector3): Matrix4x4 {
+        const other = Matrix4x4.rotationXYZ(rot);
+        this.copyFrom(Matrix4x4.multiply(this, other));
+        return this;
     }
 
     /**
@@ -180,7 +258,7 @@ export default class Matrix4x4 {
      * Makes a pretty print of the matrix.
      * @param fixedDecimals specifies decimals to be printed in console. Default = 3.
      */
-    public printInConsole(fixedDecimals: number = 3): void {
+    public printInConsole(fixedDecimals = 3): void {
         console.log(this._data.reduce((prev, current, idx): string => {
             if ((idx % 4 === 0)) {
                 prev += `[${current.toFixed(fixedDecimals)}, `;

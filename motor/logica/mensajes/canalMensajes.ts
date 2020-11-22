@@ -1,6 +1,6 @@
 ﻿import SuscripcionMensaje from "./suscripcionMensaje";
 import ImplementadorMensaje from "./implementadorMensaje";
-import Mensaje, { PrioridadMensaje } from "./mensaje";
+import Mensaje from "./mensaje";
 
 
 /**
@@ -57,12 +57,7 @@ export default class CanalMensaje {
         }
 
         suscriptores.forEach(suscriptor => {
-            if (mensaje.prioridad === PrioridadMensaje.ALTA) {
-                suscriptor.recibirMensaje(mensaje);
-            }
-            else {
-                CanalMensaje._colaMensajes.push(new ImplementadorMensaje(mensaje, suscriptor));
-            }
+            CanalMensaje._colaMensajes.push(new ImplementadorMensaje(mensaje, suscriptor));
         });
     }
 

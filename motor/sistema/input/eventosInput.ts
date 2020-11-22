@@ -1,7 +1,7 @@
-﻿import Vector2 from '../fisica/matematicas/vector2';
-import ConstantesMensajeria from '../constantes/constantesMensajeria';
+﻿import Vector2 from '../../fisica/matematicas/vector2';
+import ConstantesMensajeria from '../../constantes/constantesMensajeria';
 import DatosRaton from './datosRaton';
-import Mensaje from '../logica/mensajes/mensaje';
+import Input from './input';
 
 /**
  * Codigos de las flechas del teclado.
@@ -50,6 +50,17 @@ export default class EventosInput {
             : EventosInput._teclas[codigoTecla];
     }
 
+    
+    private static pulsarTecla(event: KeyboardEvent): boolean {
+        EventosInput._teclas[event.key] = true;
+        return true;
+    }
+    
+    private static soltarTecla(event: KeyboardEvent): boolean {
+        EventosInput._teclas[event.key] = false;
+        return true;
+    }
+
     /**
      * Obtiene un vector con la posicion x e y del raton.
      * */
@@ -65,25 +76,14 @@ export default class EventosInput {
         EventosInput._resolucion.copyFrom(resolucion);
     }
 
-    private static pulsarTecla(event: KeyboardEvent): boolean {
-        EventosInput._teclas[event.key] = true;
-        return true;
-    }
-
-    private static soltarTecla(event: KeyboardEvent): boolean {
-        EventosInput._teclas[event.key] = false;
-        return true;
-    }
-
     private static moverCursor(event: MouseEvent): void {
         const rect: DOMRect = (event.target as HTMLElement).getBoundingClientRect();
         EventosInput._cursorX =
         Math.floor((event.clientX - Math.floor(rect.left)) * (1 / EventosInput._resolucion.x));
         EventosInput._cursorY =
         Math.floor((event.clientY - Math.floor(rect.top)) * (1 / EventosInput._resolucion.y));
-        Mensaje.enviarPrioritariamente(
+        Input.notificar(
             ConstantesMensajeria.MOVER_CLICK,
-            this,
             new DatosRaton(
                 EventosInput._clickIzd,
                 EventosInput._clickDch,
@@ -98,9 +98,8 @@ export default class EventosInput {
         } else if (event.button === 2) {
             this._clickDch = true;
         }
-        Mensaje.enviarPrioritariamente(
+        Input.notificar(
             ConstantesMensajeria.PULSAR_CLICK,
-            this,
             new DatosRaton(
                 EventosInput._clickIzd,
                 EventosInput._clickDch,
@@ -116,9 +115,8 @@ export default class EventosInput {
             this._clickDch = false;
         }
 
-        Mensaje.enviarPrioritariamente(
+        Input.notificar(
             ConstantesMensajeria.SOLTAR_CLICK,
-            this,
             new DatosRaton(
                 EventosInput._clickIzd,
                 EventosInput._clickDch,

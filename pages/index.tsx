@@ -1,9 +1,10 @@
-﻿import React, { useState, useEffect } from 'react';
-import MotorGrafico from 'motor/motorGrafico';
+﻿// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import React, { useState, useEffect } from 'react';
 import { GetStaticProps } from 'next';
-import lectorRecursos, { RecursosLeidos } from 'motor/logica/importadores/lectorRecursos';
+import MotorGrafico from '../motor/motorGrafico';
+import lectorRecursos, { RecursosLeidos } from '../motor/logica/importadores/lectorRecursos';
 
-interface props {
+interface Props {
     recursos: RecursosLeidos;
 }
 
@@ -12,17 +13,61 @@ interface TamanoVentana {
     alto: number;
 }
 
-const ElementoMotor = ({ recursos }: props): JSX.Element => {
-    const motorGrafico: MotorGrafico = new MotorGrafico(512, 512);
+const useWindowLoad = (): boolean => {
+    const [isLoaded, setWindowLoad] = useState({
+        loaded: false,
+    });
+
+    useEffect(() => {
+        function handleLoading(): void {
+            setWindowLoad({
+                loaded: true,
+            });
+        }
+
+        window.addEventListener('load', handleLoading);
+
+        return (): void => window.removeEventListener('load', handleLoading);
+    }, []);
+
+    return isLoaded.loaded;
+};
+
+const useWindowSize = (): TamanoVentana => {
+    const [windowSize, setWindowSize] = useState({
+        ancho: undefined,
+        alto: undefined,
+    });
+
+    useEffect(() => {
+        function handleResize(): void {
+            setWindowSize({
+                ancho: window.innerWidth,
+                alto: window.innerHeight,
+            });
+        }
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return (): void => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    return windowSize;
+};
+
+let firstLoaded = false;
+const motorGrafico: MotorGrafico = new MotorGrafico();
+const ElementoMotor = ({ recursos }: Props): JSX.Element => {
     motorGrafico.inicializarRecursosProgramables(recursos);
     const tamanoVentana: TamanoVentana = useWindowSize();
     const ventanaCargada: boolean = useWindowLoad();
-    
-    if (ventanaCargada) {
-        motorGrafico.iniciar('viewport');
-    }
 
-    if (motorGrafico) {
+    if (ventanaCargada) {
+        if(!firstLoaded) {
+            motorGrafico.iniciar('viewport', 512, 512);
+            firstLoaded = true;
+        }
         motorGrafico.cambiarTamano(tamanoVentana.ancho, tamanoVentana.alto);
     }
 
@@ -42,7 +87,7 @@ const ElementoMotor = ({ recursos }: props): JSX.Element => {
     );
 };
 
-export const getStaticProps: GetStaticProps<props> = async () => {
+export const getStaticProps: GetStaticProps<Props> = async () => {
     const recursos = await lectorRecursos();
 
     return {
@@ -52,47 +97,6 @@ export const getStaticProps: GetStaticProps<props> = async () => {
     };
 };
 
-const useWindowLoad = (): boolean => {
-    const [isLoaded, setWindowLoad] = useState({
-        loaded: false,
-    });
 
-    useEffect(() => {
-        function handleLoading() {
-            setWindowLoad({
-                loaded: true,
-            });
-        }
-
-        window.addEventListener('load', handleLoading);
-
-        return () => window.removeEventListener('load', handleLoading);
-    }, []);
-
-    return isLoaded.loaded;
-};
-
-const useWindowSize = (): TamanoVentana => {
-    const [windowSize, setWindowSize] = useState({
-        ancho: undefined,
-        alto: undefined,
-    });
-
-    useEffect(() => {
-        function handleResize() {
-            setWindowSize({
-                ancho: window.innerWidth,
-                alto: window.innerHeight,
-            });
-        }
-
-        window.addEventListener('resize', handleResize);
-        handleResize();
-
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    return windowSize;
-};
 
 export default ElementoMotor;

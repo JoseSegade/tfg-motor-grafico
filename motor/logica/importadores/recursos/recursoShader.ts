@@ -1,16 +1,16 @@
-﻿import Recurso from "./recurso";
+import Recurso from "./recurso";
 
 
 /**
  * Almacena los datos de un archivo txt y su contenido como string.
  * */
-export default class RecursoTexto implements Recurso {
+export default class RecursoShader implements Recurso {
 
     readonly nombre: string;
     readonly datos: string;
 
     /**
-     * Crea un nuevo texto (archivo txt) y lo almacena como recurso.
+     * Crea un nuevo shader (archivo .vert || .frag) y lo almacena como recurso.
      * @param nombre Nombre del recurso
      * @param datos Datos como string,
      */

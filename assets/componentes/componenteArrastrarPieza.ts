@@ -1,4 +1,4 @@
-import ComponenteArrastrarConClick from '../../motor/logica/componentes/componentesDefault/componenteArrastrarConClick';
+import ComponenteArrastrarConClick from '../../motor/logica/componentes/componentesDefault/componenteClickable';
 import Vector3 from '../../motor/fisica/matematicas/vector3';
 import Casilla from './casilla';
 import ComponenteTablero from './componenteTablero';

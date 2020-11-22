@@ -1,9 +1,11 @@
 import Shader from "../../sistema/gl/shader";
+import ViewProj from "../escena/viewProj";
 
 export default interface Renderizable{
   /**
      * Rendea por pantalla el componente.
-     * @param _shader Shader que se utilizara.
+     * @param shader Shader que se utilizara.
+     * @param camara Camara desde la que se renderiza.
      */
-    render(_shader: Shader): void;
+    render(shader: Shader, camara: ViewProj): void;
 }

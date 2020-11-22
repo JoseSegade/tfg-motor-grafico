@@ -3,6 +3,7 @@ import ConstantesError from 'motor/constantes/constantesError';
 import Componente from '../componentes/componente';
 import MundoVirtual from './mundoVirtual';
 import Matrix4x4 from '../../fisica/matematicas/matrix4x4';
+import ViewProj from './viewProj';
 
 export default class Camara extends ObjetoVirtual {
   public isOrtho: boolean;
@@ -23,11 +24,15 @@ export default class Camara extends ObjetoVirtual {
   ) {
     super(id, nombre, mundoVirtual);
 
+    this._alto = 1;
+    this._ancho = 1;
     this.isOrtho = isOrtho || false;
-    this.nearClip = nearClip || (this.isOrtho ? -100.0 : 0.001);
-    this.nearClip = farClip || 1000.0;
+    this._nearClip = nearClip || (this.isOrtho ? -100.0 : 0.001);
+    this._farClip = farClip || 1000.0;
 
     this._anguloVision = 60.0;
+
+    this.changeProyectionMat();
   }
 
   public updateProporcionCamara(ancho: number, alto: number): void {
@@ -69,6 +74,10 @@ export default class Camara extends ObjetoVirtual {
 
   public get viewMatrix(): Matrix4x4 {
     return this.worldMatrix;
+  }
+
+  public getMatricesViewProj(): ViewProj {
+    return { view: this.viewMatrix, proj: this.proyectionMatrix };
   }
 
   public changeProyectionMat(): Matrix4x4 {

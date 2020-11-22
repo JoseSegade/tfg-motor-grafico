@@ -21,11 +21,11 @@ export class CanvasWebGl {
     return this._canvas;
   }
 
-  public get ancho(): number{
+  public get ancho(): number {
     return this._ancho;
   }
 
-  public get alto(): number{
+  public get alto(): number {
     return this._alto;
   }
 
@@ -97,31 +97,22 @@ export class CanvasWebGl {
     gl.clear(gl.COLOR_BUFFER_BIT);
   }
 
-  public subirFloatTiempo(shader: Shader): void{
-    const iTimeLoc: WebGLUniformLocation = shader.obtenerIdentificacion(
-      'iTime',
-      true,
-      );
-      gl.uniform1f(iTimeLoc, performance.now() / 1000);
+  public subirFloatTiempo(shader: Shader): void {
+    const iTimeLoc: WebGLUniformLocation = shader.obtenerIdentificacion('iTime', true);
+    gl.uniform1f(iTimeLoc, performance.now() / 1000);
   }
 
   public subirVecResolucion(shader: Shader): void {
-    const iResLoc: WebGLUniformLocation = shader.obtenerIdentificacion(
-      'iResolution',
-      true,
-    );
-    gl.uniform3fv(iResLoc, new Float32Array([this.ancho,this.alto,1]));
+    const iResLoc: WebGLUniformLocation = shader.obtenerIdentificacion('iResolution', true);
+    gl.uniform3fv(iResLoc, new Float32Array([this.ancho, this.alto, 1]));
   }
 
-  public subirMatrizVista(shader: Shader, matriz: Matrix4x4 ): void {
-    const viewLocation: WebGLUniformLocation = shader.obtenerIdentificacion(
-      'view',
-      true,
-    );
+  public subirMatrizVista(shader: Shader, matriz: Matrix4x4): void {
+    const viewLocation: WebGLUniformLocation = shader.obtenerIdentificacion('view', true);
     gl.uniformMatrix4fv(viewLocation, false, new Float32Array(matriz.data));
   }
 
-  public subirMatrizProyeccion(shader: Shader, matriz: Matrix4x4): void {       
+  public subirMatrizProyeccion(shader: Shader, matriz: Matrix4x4): void {
     const projectionLocation: WebGLUniformLocation = shader.obtenerIdentificacion(
       'projection',
       true,
@@ -129,8 +120,14 @@ export class CanvasWebGl {
     gl.uniformMatrix4fv(projectionLocation, false, new Float32Array(matriz.data));
   }
 
-  public subirMatricesCamara(shader: SharedArrayBuffer, view: Matrix4x4, proj: Matrix4x4) {
-    
+  public subirMatricesCamara(shader: Shader, viewProj: { view: Matrix4x4; proj: Matrix4x4 }) {
+    if (viewProj?.view) {
+      this.subirMatrizVista(shader, viewProj.view);
+    }
+
+    if (viewProj?.proj) {
+      this.subirMatrizProyeccion(shader, viewProj.proj);
+    }
   }
 
   private crearCanvas(id?: string): HTMLCanvasElement {

@@ -6,6 +6,7 @@ import RecursoJson from '../importadores/recursos/recursoJson';
 import Mensaje from '../mensajes/mensaje';
 import Shader from '../../sistema/gl/shader';
 import ConstantesError from '../../constantes/constantesError';
+import ViewProj from './viewProj';
 
 /**
  * Gestiona los Escenas.
@@ -16,8 +17,14 @@ export default class EscenaControlador implements SuscripcionMensaje {
     private static _escenas: { [id: string]: string } = {};
     private static _escenaActual: Escena;
     private static _instanciaSingleton: EscenaControlador;
+    private static _escenaCargada: boolean;
+    private static _alCargar: () => void;
 
     private constructor() {}
+
+    public static get escenaCargada() : boolean {
+        return this._escenaCargada;
+    }
 
     /**
      * Inicializa el singleton.
@@ -34,9 +41,17 @@ export default class EscenaControlador implements SuscripcionMensaje {
         return this._numeroEscenas;
     }
 
+    public static getEscena(): Escena {
+        return this._escenaActual;
+    }
+
     public static updateCamara(ancho: number, alto: number): void {
         this._escenaActual?.updateCamara(ancho, alto);
     }    
+
+    public static getMatricesCamara(): ViewProj {
+        return this._escenaActual?.getMatricesCamara();
+    }
 
     public static inicializarEscenas(directorios: string[]): void {
         directorios.forEach((escenaJson) => {
@@ -55,7 +70,9 @@ export default class EscenaControlador implements SuscripcionMensaje {
      * Cambia entre las escenas.
      * @param id Id de la escena al que se quiere cambiar.
      */
-    public static cambiarEscena(id: string): void {
+    public static cambiarEscena(id: string, f: () => void): void {
+        this._alCargar = f;
+        this._escenaCargada = false;
         if (EscenaControlador._escenaActual !== undefined) {
             EscenaControlador._escenaActual = undefined;
         }
@@ -129,7 +146,7 @@ export default class EscenaControlador implements SuscripcionMensaje {
         EscenaControlador._escenaActual = new Escena(idEscena, nombreEscena);
         EscenaControlador._escenaActual.inicializar(datos);
         EscenaControlador._escenaActual.cargarConfiguracion();
-
-        Mensaje.enviar(ConstantesMensajeria.ESCENA_PREPARADA, this);
+        
+        this._alCargar();
     }
 }

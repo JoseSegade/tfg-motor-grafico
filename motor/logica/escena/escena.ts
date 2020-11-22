@@ -4,6 +4,7 @@ import Shader from '../../sistema/gl/shader';
 import ObjetoVirtual from './objetoVirtual';
 import Componentes from '../componentes/componentes';
 import Camara from './camara';
+import ViewProj from './viewProj';
 
 /**
  * Posibles estados de un Escena.
@@ -70,7 +71,7 @@ export default class Escena {
         if(configEscena.camaras) {
             const camaras: Array<any> = configEscena.camaras;
             camaras.forEach((cam) => {
-                const camara = Escena.cargarCamara(cam);
+                const camara = Escena.cargarCamara(cam, this._mundo.objetoMundo);
                 this._camaras[camara.id] = camara;
                 this._camaraActual = this._camaraActual < 0 ? camara.id : this._camaraActual;
             });
@@ -106,7 +107,7 @@ export default class Escena {
      */
     public render(shader: Shader): void {
         if (this._estadoActual === EstadosEscena.ACTUALIZANDO) {
-            this._mundo.render(shader);
+            this._mundo.render(shader, this.getMatricesCamara());
         }
     }
 
@@ -114,13 +115,21 @@ export default class Escena {
         this._camaras[this._camaraActual]?.updateProporcionCamara(ancho, alto);
     }
 
-    public static cargarCamara(cam: any): Camara {
-        if(!cam.id) {
+    public getMatricesCamara(): ViewProj {
+        return this._camaras[this._camaraActual].getMatricesViewProj();
+    }
+
+    public static cargarCamara(cam: any, objVirtual: ObjetoVirtual): Camara {
+        if(cam.id === undefined) {
             throw new Error(ConstantesError.ERROR_ID_CAMARA);
         }
-        const camara = new Camara(cam.id, cam.nombre, undefined, cam.isOrtho); 
+        const camara = new Camara(cam.id, cam.nombre, objVirtual?.mundoVirtual, cam.isOrtho); 
 
         Escena.cargarConfiguraciones(camara, cam);
+        
+        if (objVirtual !== undefined) {
+            objVirtual.anadirObjetoHijo(camara);
+        }
 
         return camara;
     }

@@ -2,6 +2,7 @@
 import Sprite from '../../../graficos/sprite';
 import Shader from '../../../sistema/gl/shader';
 import Renderizable from '../renderizable';
+import ViewProj from 'motor/logica/escena/viewProj';
 
 /**
  * Esta clase asocia un sprite a un componente para que el objeto se pueda pintar en pantalla
@@ -39,7 +40,7 @@ export default class ComponenteSprite extends ComponenteBase implements Renderiz
      * Rendea el sprite en pantalla.
      * @param shader Shader de dibujado.
      */
-    public render(shader: Shader): void {
-        this.sprite.dibujar(shader, this.objetoVirtual.worldMatrix);
+    public render(shader: Shader, matrices: ViewProj): void {
+        this.sprite.dibujar(shader, this.objetoVirtual.worldMatrix, matrices);
     }
 }

@@ -60,7 +60,7 @@ export default class CanalMensaje {
             CanalMensaje._colaMensajes.push(new ImplementadorMensaje(mensaje, suscriptor));
         });
     }
-
+    
     /**
      * Actualiza la cola de suscripcion.
      * @param milisegundos Tiempo desde la ultima actualizacion.
@@ -69,8 +69,8 @@ export default class CanalMensaje {
         if (CanalMensaje._colaMensajes.length === 0) {
             return;
         }
-
-        CanalMensaje._colaMensajes.forEach(nodo => {
+        
+        CanalMensaje._colaMensajes.forEach(nodo => {            
             nodo.subscriptor.recibirMensaje(nodo.mensaje);
         });
         CanalMensaje._colaMensajes.splice(0, CanalMensaje._colaMensajes.length);

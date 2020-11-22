@@ -4,6 +4,7 @@ import Transform from '../../fisica/matematicas/transform';
 import Componente from '../componentes/componente';
 import Shader from '../../sistema/gl/shader';
 import MundoVirtual from './mundoVirtual';
+import ViewProj from './viewProj';
 
 /**
  * Objeto que se renderizara en una escena
@@ -187,10 +188,10 @@ export default class ObjetoVirtual {
    * Renderiza este objeto y todos sus hijos.
    * @param shader Shader para renderizar.
    */
-  public render(shader: Shader): void {
+  public render(shader: Shader, matrices: ViewProj): void {
     if (this._esVisible) {
-      this._componentes.filter(c => typeof c['render'] === 'function').forEach((c) => c['render'](shader));
-      this._objetosHijo.forEach((c) => c.render(shader));
+      this._componentes.filter(c => typeof c['render'] === 'function').forEach((c) => c['render'](shader, matrices));
+      this._objetosHijo.forEach((c) => c.render(shader, matrices));
     }
   }
 

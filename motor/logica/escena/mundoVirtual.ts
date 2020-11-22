@@ -1,5 +1,6 @@
 ﻿import ObjetoVirtual from './objetoVirtual';
 import Shader from '../../sistema/gl/shader';
+import ViewProj from './viewProj';
 
 /**
  * Mundo virtual donde se cargaran los objetos.
@@ -62,8 +63,8 @@ export default class MundoVirtual {
      * Renderiza el mundo virtual.
      * @param shader Shader con el que se renderiza.
      */
-    public render(shader: Shader): void {
-        this._objetoMundo.render(shader);
+    public render(shader: Shader, matrices: ViewProj): void {
+        this._objetoMundo.render(shader, matrices);
     }
 
     public debug_imprimirEscenaPorPantalla() {

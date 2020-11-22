@@ -1,5 +1,4 @@
-﻿import Matrix4x4 from './fisica/matematicas/matrix4x4';
-import Importadores from './logica/importadores/importadores';
+﻿import Importadores from './logica/importadores/importadores';
 import EventosInput from './sistema/input/eventosInput';
 import EscenaControlador from './logica/escena/escenaControlador';
 import { CanvasWebGl } from './sistema/gl/canvasWebGl';
@@ -13,9 +12,8 @@ import GestorShader from './sistema/gl/gestorShader';
 /**
  * MotorGrafico
  * */
-export default class MotorGrafico {
+export default class MotorGrafico  {
   private _canvas: CanvasWebGl;
-  private _view: Matrix4x4;
   private _previousTime = 0;
 
   /**
@@ -42,9 +40,6 @@ export default class MotorGrafico {
     console.log('Cargando motor por primera vez...');
 
     this._canvas = new CanvasWebGl(elementName, ancho, alto);
-
-    this._view = Matrix4x4.identity;
-    this._view.data[14] = -6;
      
     Importadores.inicializar();
     EventosInput.inicializar(this._canvas.HTMLCanvas);
@@ -52,19 +47,17 @@ export default class MotorGrafico {
     GestorShader.crearShaders();    
     
     Materiales.inicializarMateriales();
-    
-    this.cambiarTamano(ancho, alto);
 
     this.cargarConfiguracion();
   }
-
-
+  
+  
   public cambiarTamano(anchoVentana: number, altoVentana: number): void {
-      const escala = this._canvas.cambiarTamano(anchoVentana, altoVentana);
-      EscenaControlador.updateCamara(this._canvas.ancho, this._canvas.alto);
-      EventosInput.cambiarResolucion(escala);
+    const escala = this._canvas.cambiarTamano(anchoVentana, altoVentana);
+    EscenaControlador.updateCamara(this._canvas.ancho, this._canvas.alto);
+    EventosInput.cambiarResolucion(escala);
   }  
-
+  
   private cargarConfiguracion(): void {
     CanalMensaje.update(0);
     if(!GestorShader.estaCargado()) {
@@ -73,7 +66,7 @@ export default class MotorGrafico {
     else {
       GestorShader.usarShaderPorDefecto();
       // TODO: Cambiar escena de manera dinamica
-      EscenaControlador.cambiarEscena('ajedrez');
+      EscenaControlador.cambiarEscena('ajedrez', () => { EscenaControlador.updateCamara(this._canvas.ancho, this._canvas.alto)});        
       this.loop();
     }
   }
@@ -95,7 +88,7 @@ export default class MotorGrafico {
   private render(): void {
     this._canvas.limpiarBufferColor();
     const shader = GestorShader.shaderPorDefecto;
+    this._canvas.subirMatricesCamara(shader, EscenaControlador.getMatricesCamara());
     EscenaControlador.render(shader);
-    EscenaControlador.subirCamaraAlShader(this._canvas, shader);  
   }
 }

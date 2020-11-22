@@ -7,6 +7,7 @@ import { gl } from '../sistema/gl/canvasWebGl';
 import Matrix4x4 from '../fisica/matematicas/matrix4x4';
 import Shader from '../sistema/gl/shader';
 import AttributeInfo from '../sistema/gl/attributeInfo';
+import ViewProj from 'motor/logica/escena/viewProj';
 
 /**
  * Almacena los datos necesarios para pintar un sprite bidimensional.
@@ -120,7 +121,19 @@ export default class Sprite {
    * @param shader Shader de pintado.
    * @param model Matrix model.
    */
-  public dibujar(shader: Shader, model: Matrix4x4): void {
+  public dibujar(shader: Shader, model: Matrix4x4, viewProj: ViewProj): void {
+    if(viewProj) {
+      const { view, proj } = viewProj;
+      const modelView = Matrix4x4.multiply(view, model);
+      const modelViewProj = Matrix4x4.multiply(proj, modelView);
+
+      
+      const modelViewId: WebGLUniformLocation = shader.obtenerIdentificacion('modelview', true);
+      gl.uniformMatrix4fv(modelViewId, false, modelView.toFloat32Array());
+      
+      const modelViewProjId: WebGLUniformLocation = shader.obtenerIdentificacion('modelviewproj', true);
+      gl.uniformMatrix4fv(modelViewProjId, false, modelViewProj.toFloat32Array());
+    }
     const modelId: WebGLUniformLocation = shader.obtenerIdentificacion('model', true);
     gl.uniformMatrix4fv(modelId, false, model.toFloat32Array());
 

@@ -43,6 +43,22 @@ export default class Quaternion {
     this._z = vec.z;
   }
 
+  public adjust():Quaternion {
+    if(Math.abs(this._x - 0) < 0.00001) {
+      this._x = 0;
+    }
+    if(Math.abs(this._y - 0) < 0.00001) {
+      this._y = 0;
+    }
+    if(Math.abs(this._z - 0) < 0.00001) {
+      this._z = 0;
+    }
+    if(Math.abs(this._w - 0) < 0.00001) {
+      this._w = 0;
+    }
+    return this;
+  }
+
   /**
    * Gets the inverse rotation.
    */
@@ -50,7 +66,7 @@ export default class Quaternion {
     const q_i = Quaternion.identity;
     q_i._w = this._w;
     q_i.xyz = this.xyz.scale(-1);
-    return q_i;
+    return q_i.adjust();
   }
 
   /**
@@ -66,7 +82,7 @@ export default class Quaternion {
     this._w = w;
     this.xyz = xyz;
 
-    return this;
+    return this.adjust();
   }
 
   /**
@@ -78,7 +94,7 @@ export default class Quaternion {
     this._x /= d;
     this._y /= d;
     this._z /= d;
-    return this;
+    return this.adjust();;
   }
 
   /**
@@ -87,17 +103,17 @@ export default class Quaternion {
    */
   public static toMatrix4x4(q: Quaternion): Matrix4x4 {
     const ret = Matrix4x4.identity;
-    ret.data[0] = 1 - 2 * (q._y * q._y + q._z * q._z);
+    ret.data[0] = 1.0 - (2.0 * (q._y * q._y + q._z * q._z));
     ret.data[1] = 2 * (q._x * q._y + q._z * q._w);
     ret.data[2] = 2 * (q._x * q._z - q._y * q._w);
 
     ret.data[4] = 2 * (q._x * q._y - q._z * q._w);
-    ret.data[5] = 1 - 2 * (q._x * q._x + q._z * q._z);
+    ret.data[5] = 1.0 - (2.0 * (q._x * q._x + q._z * q._z));
     ret.data[6] = 2 * (q._y * q._z + q._x * q._w);
 
     ret.data[8] = 2 * (q._x * q._z + q._y * q._w);
     ret.data[9] = 2 * (q._y * q._z - q._x * q._w);
-    ret.data[10] = 1 - 2 * (q._y * q._y + q._y * q._y);
+    ret.data[10] = 1 - (2 * (q._y * q._y + q._y * q._y));
 
     return ret;
   }
@@ -116,7 +132,7 @@ export default class Quaternion {
       mat.get(1, 0) - mat.get(0, 1),
     ).div(new Vector3(4 * w));
     ret.xyz = xyz;
-    return ret;
+    return ret.adjust();
   }
 
   /**
@@ -142,7 +158,7 @@ export default class Quaternion {
     ret._y = cr * sp * cy + sr * cp * sy;
     ret._z = cr * cp * sy - sr * sp * cy;
 
-    return ret;
+    return ret.adjust();
   }
 
   /**
@@ -157,7 +173,7 @@ export default class Quaternion {
 
     const dot = Vector3.dot(Vector3.up, toVector).sum();
     const angle = Math.acos(dot);
-    return new Quaternion(rotAxis.length === 0 ? Vector3.up : rotAxis, angle);
+    return new Quaternion(rotAxis.length === 0 ? Vector3.up : rotAxis, angle).adjust();
   }
 
   /**
@@ -202,7 +218,7 @@ export default class Quaternion {
     this._x = q._x;
     this._y = q._y;
     this._z = q._z;
-    return this;
+    return this.adjust();
   }
 
   /**
@@ -210,6 +226,6 @@ export default class Quaternion {
    * @param json Json data.
    */
   public setFromJson(json: any): Quaternion {
-    return this.copyFrom(Quaternion.eulerAnglesToQuaternion(Vector3.zero.setFromJson(json)));
+    return this.copyFrom(Quaternion.eulerAnglesToQuaternion(Vector3.zero.setFromJson(json))).adjust();
   }
 }

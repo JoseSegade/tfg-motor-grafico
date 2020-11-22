@@ -48,13 +48,13 @@ export default abstract class Shader {
         esVariableUniform: boolean,
     ): number | WebGLUniformLocation {
         const id = esVariableUniform ? this._uniforms[nombre] : this._attributes[nombre];
-        if (id === undefined) {
-            console.warn(
-                (esVariableUniform
-                    ? ConstantesError.ERROR_OBTENER_UNIFORM
-                    : ConstantesError.ERROR_OBTENER_ATTRIBUTE) + ` ${nombre} en ${this.nombre}`,
-            );
-        }
+        // if (id === undefined) {
+        //     console.warn(
+        //         (esVariableUniform
+        //             ? ConstantesError.ERROR_OBTENER_UNIFORM
+        //             : ConstantesError.ERROR_OBTENER_ATTRIBUTE) + ` ${nombre} en ${this.nombre}`,
+        //     );
+        // }
         return id;
     }
 

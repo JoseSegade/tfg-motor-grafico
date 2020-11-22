@@ -19,10 +19,6 @@
       },
       "componentes": [
         {
-          "nombre": "rotar",
-          "tipo": "ComponenteRotar"
-        },
-        {
           "nombre": "tableroSprite",
           "tipo": "ComponenteSprite",
           "nombreMaterial": "tablero",

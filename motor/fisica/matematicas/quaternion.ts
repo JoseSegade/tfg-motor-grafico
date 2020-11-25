@@ -43,17 +43,17 @@ export default class Quaternion {
     this._z = vec.z;
   }
 
-  public adjust():Quaternion {
-    if(Math.abs(this._x - 0) < 0.00001) {
+  public adjust(): Quaternion {
+    if (Math.abs(this._x - 0) < 0.00001) {
       this._x = 0;
     }
-    if(Math.abs(this._y - 0) < 0.00001) {
+    if (Math.abs(this._y - 0) < 0.00001) {
       this._y = 0;
     }
-    if(Math.abs(this._z - 0) < 0.00001) {
+    if (Math.abs(this._z - 0) < 0.00001) {
       this._z = 0;
     }
-    if(Math.abs(this._w - 0) < 0.00001) {
+    if (Math.abs(this._w - 0) < 0.00001) {
       this._w = 0;
     }
     return this;
@@ -75,12 +75,14 @@ export default class Quaternion {
    * @param q Quaternion to multiply by.
    */
   public multiply(q: Quaternion): Quaternion {
-    const w = this._w * q._w - Vector3.dot(this.xyz, q.xyz).sum();
-    const xyz = Vector3.cross(this.xyz, q.xyz)
-      .add(Vector3.scale(q.xyz, this._w))
-      .add(Vector3.scale(this.xyz, q._w));
-    this._w = w;
-    this.xyz = xyz;
+    const ret = Quaternion.identity;
+
+    ret._w = this._w * q._w - this._x * q._x - this._y * q._y - this._z * q._z;
+    ret._x = this._w * q._x + this._x * q._w - this._y * q._z + this._z * q._y;
+    ret._y = this._w * q._y + this._x * q._z + this._y * q._w - this._z * q._x;
+    ret._z = this._w * q._z - this._x * q._y + this._y * q._x + this._z * q._w;
+
+    this.copyFrom(ret);
 
     return this.adjust();
   }
@@ -94,7 +96,7 @@ export default class Quaternion {
     this._x /= d;
     this._y /= d;
     this._z /= d;
-    return this.adjust();;
+    return this.adjust();
   }
 
   /**
@@ -103,17 +105,17 @@ export default class Quaternion {
    */
   public static toMatrix4x4(q: Quaternion): Matrix4x4 {
     const ret = Matrix4x4.identity;
-    ret.data[0] = 1.0 - (2.0 * (q._y * q._y + q._z * q._z));
+    ret.data[0] = 1.0 - 2.0 * (q._y * q._y + q._z * q._z);
     ret.data[1] = 2 * (q._x * q._y + q._z * q._w);
     ret.data[2] = 2 * (q._x * q._z - q._y * q._w);
 
     ret.data[4] = 2 * (q._x * q._y - q._z * q._w);
-    ret.data[5] = 1.0 - (2.0 * (q._x * q._x + q._z * q._z));
+    ret.data[5] = 1.0 - 2.0 * (q._x * q._x + q._z * q._z);
     ret.data[6] = 2 * (q._y * q._z + q._x * q._w);
 
     ret.data[8] = 2 * (q._x * q._z + q._y * q._w);
     ret.data[9] = 2 * (q._y * q._z - q._x * q._w);
-    ret.data[10] = 1 - (2 * (q._y * q._y + q._y * q._y));
+    ret.data[10] = 1 - 2 * (q._x * q._x + q._y * q._y);
 
     return ret;
   }
@@ -124,15 +126,48 @@ export default class Quaternion {
    */
   public static matrix4x4toQuaternion(mat: Matrix4x4): Quaternion {
     const ret = Quaternion.identity;
-    const trace = 1 + mat.get(0, 0) + mat.get(1, 1) + mat.get(2, 2);
-    const w = Math.sqrt(trace) / 2;
-    const xyz = new Vector3(
-      mat.get(2, 1) - mat.get(1, 2),
-      mat.get(0, 2) - mat.get(2, 0),
-      mat.get(1, 0) - mat.get(0, 1),
-    ).div(new Vector3(4 * w));
-    ret.xyz = xyz;
-    return ret.adjust();
+    const lengths = [
+      Math.sqrt((1 + mat.get(0, 0) + mat.get(1, 1) + mat.get(2, 2)) / 4),
+      Math.sqrt((1 + mat.get(0, 0) - mat.get(1, 1) - mat.get(2, 2)) / 4),
+      Math.sqrt((1 - mat.get(0, 0) + mat.get(1, 1) - mat.get(2, 2)) / 4),
+      Math.sqrt((1 - mat.get(0, 0) - mat.get(1, 1) + mat.get(2, 2)) / 4),
+    ];
+    
+    let idx = 0;
+    for (let i = 1; i < 4; i++) {
+      if (lengths[i] > lengths[0]) {
+        idx = i;
+      }
+    }   
+
+    switch (idx) {
+      case 0:
+        ret._w = lengths[0];
+        ret._x = (mat.get(1,2)-mat.get(2,1))/(4*ret._w);
+        ret._y = (mat.get(2,0)-mat.get(0,2))/(4*ret._w);
+        ret._z = (mat.get(0,1)-mat.get(1,0))/(4*ret._w);
+        break;
+      case 1:
+        ret._x = lengths[0];
+        ret._w = (mat.get(1,2)-mat.get(2,1))/(4*ret._x);
+        ret._y = (mat.get(1,0)+mat.get(0,1))/(4*ret._x);
+        ret._z = (mat.get(2,0)+mat.get(0,2))/(4*ret._x);
+        break;
+      case 2:
+        ret._y = lengths[0];
+        ret._w = (mat.get(2,0)-mat.get(0,2))/(4*ret._y);
+        ret._x = (mat.get(1,0)+mat.get(0,1))/(4*ret._y);
+        ret._z = (mat.get(2,1)+mat.get(1,2))/(4*ret._y);
+        break;
+      case 3:
+        ret._z = lengths[0];
+        ret._w = (mat.get(0,1)-mat.get(1,0))/(4*ret._z);
+        ret._x = (mat.get(2,0)+mat.get(0,2))/(4*ret._z);
+        ret._y = (mat.get(2,1)+mat.get(1,2))/(4*ret._z);
+        break;
+    }
+
+    return ret;
   }
 
   /**
@@ -163,12 +198,12 @@ export default class Quaternion {
 
   /**
    * Creates a new quaternion looking towards the destination point.
-   * @param sourcePoint The point to start over. 
+   * @param sourcePoint The point to start over.
    * @param destPoint The point to look in.
    */
   public static lookAt(sourcePoint: Vector3, destPoint: Vector3): Quaternion {
     const toVector = Vector3.normalize(Vector3.sub(destPoint, sourcePoint));
-    
+
     const rotAxis = Vector3.normalize(Vector3.cross(Vector3.forward, toVector));
 
     const dot = Vector3.dot(Vector3.up, toVector).sum();
@@ -183,6 +218,7 @@ export default class Quaternion {
     const ret = Vector3.zero;
 
     const sr_cp = 2 * (this._w * this._x + this._y * this._z);
+    //const cr_cp = 1 - 2 * (this._x * this._x + this._y * this._y);
     const cr_cp = 1 - 2 * (this._x * this._x + this._y * this._y);
     ret.x = (Math.atan2(sr_cp, cr_cp) * 180) / Math.PI;
 
@@ -206,7 +242,7 @@ export default class Quaternion {
    */
   public rotateEuler(eulerAngles: Vector3): Quaternion {
     const q = Quaternion.eulerAnglesToQuaternion(eulerAngles);
-    return this.multiply(q);
+    return this.copyFrom(q.multiply(this)).adjust();
   }
 
   /**
@@ -218,7 +254,7 @@ export default class Quaternion {
     this._x = q._x;
     this._y = q._y;
     this._z = q._z;
-    return this.adjust();
+    return this;
   }
 
   /**
@@ -226,6 +262,6 @@ export default class Quaternion {
    * @param json Json data.
    */
   public setFromJson(json: any): Quaternion {
-    return this.copyFrom(Quaternion.eulerAnglesToQuaternion(Vector3.zero.setFromJson(json))).adjust();
+    return this.copyFrom(Quaternion.eulerAnglesToQuaternion(Vector3.zero.setFromJson(json)));
   }
 }

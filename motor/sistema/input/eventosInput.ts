@@ -20,8 +20,10 @@ export default class EventosInput {
     private static _teclas: boolean[];
     private static _cursorX: number;
     private static _cursorY: number;
-    private static _clickIzd: boolean = false;
-    private static _clickDch: boolean = false;
+    private static _clickIzd  = false;
+    private static _clickDch = false;
+    private static _clickCen = false;
+    private static _deltaScroll = 0;
     private static _resolucion: Vector2 = Vector2.one;
 
     /**
@@ -30,14 +32,15 @@ export default class EventosInput {
     public static inicializar(viewport: HTMLCanvasElement): void {
         this._teclas = new Array<boolean>(255);
 
-        // keyboard
+        // teclado
         window.addEventListener('keydown', EventosInput.pulsarTecla);
         window.addEventListener('keyup', EventosInput.soltarTecla);
 
-        // mouse
+        // raton
         viewport.addEventListener('mousemove', EventosInput.moverCursor);
         viewport.addEventListener('mousedown', EventosInput.pulsarClick);
         viewport.addEventListener('mouseup', EventosInput.soltarClick);
+        viewport.addEventListener('wheel', EventosInput.moverRueda)
     }
 
     /**
@@ -78,16 +81,18 @@ export default class EventosInput {
 
     private static moverCursor(event: MouseEvent): void {
         const rect: DOMRect = (event.target as HTMLElement).getBoundingClientRect();
-        EventosInput._cursorX =
-        Math.floor((event.clientX - Math.floor(rect.left)) * (1 / EventosInput._resolucion.x));
-        EventosInput._cursorY =
-        Math.floor((event.clientY - Math.floor(rect.top)) * (1 / EventosInput._resolucion.y));
+        this._cursorX =
+        Math.floor((event.clientX - Math.floor(rect.left)) * (1 / this._resolucion.x));
+        this._cursorY =
+        Math.floor((event.clientY - Math.floor(rect.top)) * (1 / this._resolucion.y));
         Input.notificar(
             ConstantesMensajeria.MOVER_CLICK,
             new DatosRaton(
-                EventosInput._clickIzd,
-                EventosInput._clickDch,
-                EventosInput.obtenerPosicionCursor(),
+                this._clickIzd,
+                this._clickDch,
+                this.obtenerPosicionCursor(),
+                this._deltaScroll,
+                this._clickCen
             ),
         );
     }
@@ -97,13 +102,17 @@ export default class EventosInput {
             this._clickIzd = true;
         } else if (event.button === 2) {
             this._clickDch = true;
+        } else if (event.button === 1) {
+            this._clickCen = true;
         }
         Input.notificar(
             ConstantesMensajeria.PULSAR_CLICK,
             new DatosRaton(
-                EventosInput._clickIzd,
-                EventosInput._clickDch,
-                EventosInput.obtenerPosicionCursor(),
+                this._clickIzd,
+                this._clickDch,
+                this.obtenerPosicionCursor(),
+                this._deltaScroll,
+                this._clickCen
             ),
         );
     }
@@ -113,15 +122,23 @@ export default class EventosInput {
             this._clickIzd = false;
         } else if (event.button === 2) {
             this._clickDch = false;
+        }else if (event.button === 1) {
+            this._clickCen = false;
         }
 
         Input.notificar(
             ConstantesMensajeria.SOLTAR_CLICK,
             new DatosRaton(
-                EventosInput._clickIzd,
-                EventosInput._clickDch,
-                EventosInput.obtenerPosicionCursor(),
+                this._clickIzd,
+                this._clickDch,
+                this.obtenerPosicionCursor(),
+                this._deltaScroll,
+                this._clickCen
             ),
         );
+    }
+
+    private static moverRueda(event: MouseEvent): void {
+        this._deltaScroll = eve
     }
 }

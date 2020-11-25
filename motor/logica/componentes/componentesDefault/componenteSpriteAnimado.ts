@@ -2,6 +2,7 @@
 import SpriteAnimado from '../../../graficos/spriteAnimado';
 import Shader from '../../../sistema/gl/shader';
 import Renderizable from '../renderizable';
+import ViewProj from '../../../logica/escena/viewProj';
 
 /**
  * Asocia un sprite animado al componente.
@@ -108,8 +109,8 @@ export default class ComponenteSpriteAnimado extends ComponenteBase implements R
      * Rendea el componente.
      * @param shader Shader de dibujado.
      */
-    public render(shader: Shader): void {
-        this.sprite.dibujar(shader, this.objetoVirtual.worldMatrix);
+    public render(shader: Shader, matrices: ViewProj): void {
+        this.sprite.dibujar(shader, this.objetoVirtual.worldMatrix, matrices);
     }
 
     /**

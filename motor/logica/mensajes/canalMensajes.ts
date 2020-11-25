@@ -66,13 +66,14 @@ export default class CanalMensaje {
      * @param milisegundos Tiempo desde la ultima actualizacion.
      */
     public static update(_milisegundos: number): void {
-        if (CanalMensaje._colaMensajes.length === 0) {
+        const longitud = CanalMensaje._colaMensajes.length;
+        if (!longitud) {
             return;
         }
         
-        CanalMensaje._colaMensajes.forEach(nodo => {            
+        CanalMensaje._colaMensajes.forEach(nodo => {
             nodo.subscriptor.recibirMensaje(nodo.mensaje);
         });
-        CanalMensaje._colaMensajes.splice(0, CanalMensaje._colaMensajes.length);
+        CanalMensaje._colaMensajes.splice(0, CanalMensaje._colaMensajes.length - (CanalMensaje._colaMensajes.length-longitud));
     }
 }

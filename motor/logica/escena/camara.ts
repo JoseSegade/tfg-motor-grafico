@@ -30,7 +30,7 @@ export default class Camara extends ObjetoVirtual {
     this._nearClip = nearClip || (this.isOrtho ? -100.0 : 0.001);
     this._farClip = farClip || 1000.0;
 
-    this._anguloVision = 60.0;
+    this.anguloVision = 60.0;
 
     this.changeProyectionMat();
   }
@@ -64,7 +64,7 @@ export default class Camara extends ObjetoVirtual {
   }
 
   public set anguloVision(value: number) {
-    this._anguloVision = value;
+    this._anguloVision = value * Math.PI / 180;
     this.changeProyectionMat();
   }
 

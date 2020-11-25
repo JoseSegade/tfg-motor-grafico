@@ -10,6 +10,7 @@ import Matrix4x4 from '../fisica/matematicas/matrix4x4';
 import Materiales from './materiales';
 import Importadores from '../logica/importadores/importadores';
 import Vector2 from '../fisica/matematicas/vector2';
+import ViewProj from '../logica/escena/viewProj';
 
 /**
  * Util para pasar los datos que cumplan con esta interfaz.
@@ -151,11 +152,11 @@ export default class SpriteAnimado extends Sprite implements SuscripcionMensaje 
      * @param shader Shader para pintar.
      * @param model Matriz model.
      */
-    public dibujar(shader: Shader, model: Matrix4x4): void {
+    public dibujar(shader: Shader, model: Matrix4x4, viewProj: ViewProj): void {
         if (this._UVFrames.length < 1) {
             return;
         }
-        super.dibujar(shader, model);
+        super.dibujar(shader, model, viewProj);
     }
 
     /**

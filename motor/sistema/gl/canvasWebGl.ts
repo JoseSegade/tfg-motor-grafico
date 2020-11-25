@@ -94,7 +94,7 @@ export class CanvasWebGl {
   }
 
   public limpiarBufferColor(): void {
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   }
 
   public subirFloatTiempo(shader: Shader): void {
@@ -145,7 +145,9 @@ export class CanvasWebGl {
   }
 
   private limpiarWebGl(): void {
-    gl.clearColor(0 / 225, 0 / 255, 0 / 255, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.clearColor(50 / 225, 50 / 255, 50 / 255, 1);
+    gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   }

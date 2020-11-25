@@ -14,45 +14,79 @@
       "transform": {
         "position": {
           "x": 0,
-          "y": 0
+          "y": 0,
+          "z": -1
         }
       },
       "componentes": [
         {
           "nombre": "tableroSprite",
           "tipo": "ComponenteSprite",
-          "nombreMaterial": "tablero",
+          "nombreMaterial": "tablero2",
           "ancho": 512,
           "alto": 512
         }
-      ],
-      "objetosHijo": [
+      ]
+    },
+    {
+      "nombre": "generadorPiezas",
+      "transform": {
+        "x": 0,
+        "y": 0
+      },
+      "componentes": [
         {
-          "nombre": "prefabFicha",
-          "transform": {
-            "position": {
-              "x": 0,
-              "y": 0
-            }
+          "nombre": "componenteTablero",
+          "tipo": "ComponenteTablero"
+        },
+        {
+          "nombre": "generador",
+          "tipo": "ComponenteGeneradorPiezas",
+          "anchoTablero": 512,
+          "altoTablero": 512,
+          "anchoFicha": 64,
+          "altoFicha": 64,
+          "framesFichas": {
+            "A": 3,
+            "Q": 4,
+            "B": 2,
+            "K": 5,
+            "R": 0,
+            "P": 6,
+            "a": 10,
+            "q": 11,
+            "b": 9,
+            "k": 12,
+            "r": 7,
+            "p": 13
           },
-          "componentes": [
-            {
-              "nombre": "fichasSprite",
-              "tipo": "ComponenteSpriteAnimado",
-              "nombreMaterial": "fichas",
-              "reproducirAutomaticamente": false,
-              "tiempoEntreFrames": 1,
-              "ancho": 64,
-              "alto": 64,
-              "anchoFrame": 213.5,
-              "altoFrame": 639,
-              "offset": 0,
-              "numeroDeFrames": 1,
-              "secuenciaFrames": [
-                0
-              ]
-            }
-          ]
+          "jsonPrefab": {
+            "nombre": "prefabFichas",
+            "transform": {
+              "position": {
+                "x": 0,
+                "y": 0
+              }
+            },
+            "componentes": [
+              {
+                "nombre": "fichasSprite",
+                "tipo": "ComponenteSpriteAnimado",
+                "nombreMaterial": "fichas2",
+                "reproducirAutomaticamente": false,
+                "tiempoEntreFrames": 1,
+                "ancho": 64,
+                "alto": 64,
+                "anchoFrame": 375,
+                "altoFrame": 1312.5,
+                "offset": 0,
+                "numeroDeFrames": 1,
+                "secuenciaFrames": [
+                  0
+                ]
+              }
+            ]
+          }
         }
       ]
     }

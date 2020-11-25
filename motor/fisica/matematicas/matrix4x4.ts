@@ -50,9 +50,9 @@ export default class Matrix4x4 {
         
         m._data[0] = f / aspectRatio;
         m._data[5] = f;
-        m._data[10] = (farClip + nearClip) / (nearClip - farClip);
+        m._data[10] = -(farClip + nearClip) / (farClip - nearClip);
         m._data[11] = -1.0;
-        m._data[14] = (2.0 * farClip * nearClip) / (nearClip - farClip);
+        m._data[14] = -(2.0 * farClip * nearClip) / (farClip - nearClip);
         m._data[15] = 0.0;
         return m;
     }
@@ -163,20 +163,26 @@ export default class Matrix4x4 {
     }
 
     public static lookAt(eye: Vector3, at: Vector3, up: Vector3): Matrix4x4 {
-        const zAxis = Vector3.normalize(Vector3.sub(at, eye));
-        const xAxis = Vector3.normalize(Vector3.cross(zAxis, up));
-        const yAxis = Vector3.cross(xAxis, zAxis);
-        
-        zAxis.scale(-1);
-        
-        const ret = this.setMatrix4x4WithVector4([
-            new Vector4(xAxis.x, xAxis.y, xAxis.z, -1 * Vector3.dot(xAxis, eye).sum()),
-            new Vector4(yAxis.x, yAxis.y, yAxis.z, -1 * Vector3.dot(yAxis, eye).sum()),
-            new Vector4(zAxis.x, zAxis.y, zAxis.z, -1 * Vector3.dot(zAxis, eye).sum()),
-            new Vector4(0, 0, 0, 1),
-        ]);       
+        const zAxis = Vector3.normalize(Vector3.sub(eye, at));
+        const xAxis = Vector3.normalize(Vector3.cross(up, zAxis));
+        const yAxis = Vector3.cross(zAxis, xAxis);
 
-        return ret;
+        
+        const or = this.setMatrix4x4WithVector4([
+            new Vector4(xAxis.x, yAxis.x, zAxis.x, 0),
+            new Vector4(xAxis.y, yAxis.y, zAxis.y, 0),
+            new Vector4(xAxis.z, yAxis.z, zAxis.z, 0),
+            new Vector4(0, 0, 0, 1),
+        ]);   
+        
+        const tr = this.setMatrix4x4WithVector4([
+            new Vector4(1,0,0,0),
+            new Vector4(0,1,0,0),
+            new Vector4(0,0,1,0),
+            new Vector4(-eye.x,-eye.y,-eye.z,1),
+        ])
+
+        return this.multiply(or, tr);
     }
 
     public static setMatrix4x4WithVector4(vectorList: Vector4[]): Matrix4x4 {

@@ -5,6 +5,7 @@ import ImportadorImagen from './importadorImagen';
 import ImportadorJson from './importadorJson';
 import ConstantesMensajeria from '../../constantes/constantesMensajeria';
 import ImportadorShader from './importadorShader';
+import ImportadorObj from './importadorObj';
 
 /**
  * Gestor de los importadores de recursos.
@@ -25,6 +26,7 @@ export default class Importadores {
         this._importadores.push(new ImportadorImagen());
         this._importadores.push(new ImportadorJson());
         this._importadores.push(new ImportadorShader());
+        this._importadores.push(new ImportadorObj());
     }
 
     /**

@@ -26,6 +26,8 @@ export default class Transform {
      * */
     public getTransformationMatrix(): Matrix4x4 {
         const tra = Matrix4x4.translation(this.position);
+        //this.rotation.copyFrom(Quaternion.identity);
+        //this.rotation.rotateEuler(new Vector3(0,5,0));
         const rot = Quaternion.toMatrix4x4(this.rotation);
         const sca = Matrix4x4.scale(this.scale);
 

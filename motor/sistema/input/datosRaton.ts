@@ -19,9 +19,15 @@ export default class DatosRaton {
      * */
     public readonly posicion: Vector2;
 
-    public constructor(btnIzquierdo: boolean, btnDerecho: boolean, posicion: Vector2) {
+    public readonly diferenciaScroll: number;
+    
+    public readonly btnCentral: boolean;
+
+    public constructor(btnIzquierdo: boolean, btnDerecho: boolean, posicion: Vector2, diferenciaScroll: number, btnCentral: boolean) {
         this.btnIzquierdo = btnIzquierdo;
         this.btnDerecho = btnDerecho;
         this.posicion = posicion;
+        this.diferenciaScroll = diferenciaScroll;
+        this.btnCentral = btnCentral;
     }
 }

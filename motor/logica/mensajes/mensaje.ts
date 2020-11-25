@@ -14,7 +14,7 @@ export default class Mensaje {
     /**
      * Contexto de envio.
      * */
-    public contexto: any;
+    public contexto?: any;
 
     /**
      * Referencia al objeto que envia el mensaje.
@@ -30,7 +30,7 @@ export default class Mensaje {
     public constructor(codigo: string, remitente: any, contexto?: any) {
         this.codigo = codigo;
         this.remitente = remitente;
-        this.contexto = contexto;
+        this.contexto = contexto || undefined;
     }
 
     /**

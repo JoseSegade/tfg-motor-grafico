@@ -66,7 +66,7 @@ export default class MotorGrafico  {
     else {
       GestorShader.usarShaderPorDefecto();
       // TODO: Cambiar escena de manera dinamica
-      EscenaControlador.cambiarEscena('ajedrez', () => { EscenaControlador.updateCamara(this._canvas.ancho, this._canvas.alto)});        
+      EscenaControlador.cambiarEscena('mesh', () => { EscenaControlador.updateCamara(this._canvas.ancho, this._canvas.alto)});        
       this.loop();
     }
   }
@@ -88,6 +88,8 @@ export default class MotorGrafico  {
   private render(): void {
     this._canvas.limpiarBufferColor();
     const shader = GestorShader.shaderPorDefecto;
+    this._canvas.subirVecResolucion(shader);
+    this._canvas.subirFloatTiempo(shader);
     this._canvas.subirMatricesCamara(shader, EscenaControlador.getMatricesCamara());
     EscenaControlador.render(shader);
   }

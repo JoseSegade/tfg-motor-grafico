@@ -1,0 +1,62 @@
+﻿{
+  "nombre": "Mesh",
+  "id": 2,
+  "camaras": [
+    {
+      "id": 0,
+      "nombre": "CAMARA0",
+      "isOrtho": false,
+      "transform": {
+        "position": {
+          "z": -10,
+          "x": 0
+        }
+      }
+    }
+  ],
+  "objetos": [
+    {
+      "nombre": "tablero",
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "rotation": {
+          "x": 75
+        }
+      },
+      "componentes": [
+        {
+          "nombre": "cube",
+          "tipo": "ComponenteMesh",
+          "nombreMalla": "plane.obj",
+          "nombreMaterial": "tablero"
+        },
+        {
+          "nombre": "rota",
+          "tipo":"ComponenteRotar"
+        }
+      ],
+      "objetosHijo": [
+        {
+          "nombre": "fichaA",
+          "transform": {
+            "position": {
+              "x": -0.5,
+              "z": -3.5
+            }
+          },
+          "componentes": [
+            {
+              "nombre": "r",
+              "tipo": "ComponenteMesh",
+              "nombreMalla": "king.obj",
+              "nombreMaterial": "kingTex"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

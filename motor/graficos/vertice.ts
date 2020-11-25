@@ -16,6 +16,8 @@ export default class Vertice {
      * */
     public coordenadasTextura: Vector2 = Vector2.zero;
 
+    public normales: Vector3 = Vector3.zero;
+
     /**
      * Crea un nuevo vertice.
      * @param x Coordenada x del espacio.
@@ -31,6 +33,7 @@ export default class Vertice {
 
         this.coordenadasTextura.x = tu;
         this.coordenadasTextura.y = tv;
+
     }
 
     /**

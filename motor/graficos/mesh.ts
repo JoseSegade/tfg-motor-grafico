@@ -11,6 +11,7 @@ import Material from './material';
 import BufferWebGl from '../sistema/gl/bufferWebGl';
 import AttributeInfo from '../sistema/gl/attributeInfo';
 import { gl } from '../sistema/gl/canvasWebGl';
+import Vector3 from 'motor/fisica/matematicas/vector3';
 
 export default class MeshBase implements SuscripcionMensaje {
   private _nombre: string;

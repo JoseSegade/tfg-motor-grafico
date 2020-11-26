@@ -4,6 +4,8 @@ import Componente from '../componentes/componente';
 import MundoVirtual from './mundoVirtual';
 import Matrix4x4 from '../../fisica/matematicas/matrix4x4';
 import ViewProj from './viewProj';
+import Vector3 from 'motor/fisica/matematicas/vector3';
+import Quaternion from 'motor/fisica/matematicas/quaternion';
 
 export default class Camara extends ObjetoVirtual {
   public isOrtho: boolean;
@@ -73,7 +75,8 @@ export default class Camara extends ObjetoVirtual {
   }
 
   public get viewMatrix(): Matrix4x4 {
-    return this.worldMatrix;
+    const m = Matrix4x4.inverse(this.worldMatrix);
+    return m;
   }
 
   public getMatricesViewProj(): ViewProj {

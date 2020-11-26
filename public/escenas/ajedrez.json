@@ -47,18 +47,18 @@
           "anchoFicha": 64,
           "altoFicha": 64,
           "framesFichas": {
-            "A": 3,
-            "Q": 4,
+            "A": 0,
+            "Q": 1,
             "B": 2,
-            "K": 5,
-            "R": 0,
-            "P": 6,
-            "a": 10,
-            "q": 11,
-            "b": 9,
-            "k": 12,
-            "r": 7,
-            "p": 13
+            "K": 3,
+            "R": 4,
+            "P": 5,
+            "a": 6,
+            "q": 7,
+            "b": 8,
+            "k": 9,
+            "r": 10,
+            "p": 11
           },
           "jsonPrefab": {
             "nombre": "prefabFichas",
@@ -69,16 +69,20 @@
               }
             },
             "componentes": [
+                  {
+                    "nombre": "comportamientoArrastrar",
+                    "tipo": "ComponenteArrastrarPieza"
+                  },
               {
                 "nombre": "fichasSprite",
                 "tipo": "ComponenteSpriteAnimado",
-                "nombreMaterial": "fichas2",
+                "nombreMaterial": "fichas",
                 "reproducirAutomaticamente": false,
                 "tiempoEntreFrames": 1,
                 "ancho": 64,
                 "alto": 64,
-                "anchoFrame": 375,
-                "altoFrame": 1312.5,
+                "anchoFrame": 213.5,
+                "altoFrame": 639,
                 "offset": 0,
                 "numeroDeFrames": 1,
                 "secuenciaFrames": [
@@ -90,5 +94,5 @@
         }
       ]
     }
-  ]  
+  ]
 }

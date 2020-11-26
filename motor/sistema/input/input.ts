@@ -9,14 +9,14 @@ export default class Input {
    * Ultima informacion de raton registrada.
    */
   public static get infoRaton(): DatosRaton {
-    return this._infoRaton;
+    return Input._infoRaton;
   }
 
   /**
    * Ultima informacion de raton registrada.
    */
   public static set infoRaton(datos: DatosRaton) {
-    this._infoRaton = datos;
+    Input._infoRaton = datos;
   } 
 
   /**
@@ -24,8 +24,8 @@ export default class Input {
    * @param clickable Objeto clickable.
    */
   public static suscribirse(clickable: Clickable) {
-    if(!this._suscriptores.includes(clickable)) {
-      this._suscriptores.push(clickable);
+    if(!Input._suscriptores.includes(clickable)) {
+      Input._suscriptores.push(clickable);
     }
   }
 
@@ -35,8 +35,8 @@ export default class Input {
    * @param datos Datos de raton.
    */
   public static notificar(codigo: string, datos: DatosRaton): void  {
-    this._infoRaton = datos;
-    this._suscriptores.forEach(suscriptor => {
+    Input._infoRaton = datos;
+    Input._suscriptores.forEach(suscriptor => {
       suscriptor.notificar(codigo, datos);
     });
   }

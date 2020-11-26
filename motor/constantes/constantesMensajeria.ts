@@ -8,4 +8,5 @@ export default class ConstantesMensajeria {
     public static SOLTAR_CLICK = 'SOLTAR_CLICK';
     public static ESCENA_PREPARADA = 'ESCENA_PREPARADA';
     public static MOVER_CLICK = 'MOVER_CLICK';
+    public static MOVER_RUEDA = 'MOVER_RUEDA';
 }

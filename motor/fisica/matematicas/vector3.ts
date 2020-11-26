@@ -202,8 +202,8 @@ export default class Vector3 {
         return ret;
     }
 
-    public static normalize(vector: Vector3): Vector3 {        
-        return Vector3.zero.copyFrom(this.scale(vector, 1 / vector.length));
+    public static normalize(vector: Vector3): Vector3 {  
+        return Vector3.zero.copyFrom(this.scale(vector, vector.length === 0 ? 0 : 1 / vector.length));
     }
 
     /**

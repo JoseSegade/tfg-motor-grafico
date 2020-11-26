@@ -203,13 +203,35 @@ export default class Quaternion {
    */
   public static lookAt(sourcePoint: Vector3, destPoint: Vector3): Quaternion {
     const toVector = Vector3.normalize(Vector3.sub(destPoint, sourcePoint));
+    const dot = Vector3.dot(Vector3.up, toVector).sum();
 
+    if(Math.abs(dot - (-1.0))< 0.00001) {
+      return new Quaternion(Vector3.up, Math.PI);
+    }
+    if(Math.abs(dot - (1.0)) < 0.00001) {
+      return Quaternion.identity;
+    }
+    
+    const angle = Math.acos(dot);
     const rotAxis = Vector3.normalize(Vector3.cross(Vector3.forward, toVector));
 
-    const dot = Vector3.dot(Vector3.up, toVector).sum();
-    const angle = Math.acos(dot);
-    return new Quaternion(rotAxis.length === 0 ? Vector3.up : rotAxis, angle).adjust();
+    return new Quaternion(rotAxis, angle);
   }
+
+  public static lookRotation(lookAt: Vector3, upDirection: Vector3) {
+    const forward = Vector3.normalize(lookAt);
+    const up = Vector3.normalize(upDirection);
+    const right = Vector3.cross(up, forward);
+    
+    const ret = Quaternion.identity;
+    ret._w = Math.sqrt(1.0 + right.x + up.y + forward.z) * 0.5;
+    const w4_recip = 1.0 / (4.0 * ret._w);
+    ret._x = (forward.y - up.z) * w4_recip;
+    ret._y = (right.z - forward.x) * w4_recip;
+    ret._z = (up.x - right.y) * w4_recip;
+    
+    return ret.getInverse();
+    }
 
   /**
    * Transforms the quaternion into a vector 3 containing the three euler angles in degrees.
@@ -218,7 +240,6 @@ export default class Quaternion {
     const ret = Vector3.zero;
 
     const sr_cp = 2 * (this._w * this._x + this._y * this._z);
-    //const cr_cp = 1 - 2 * (this._x * this._x + this._y * this._y);
     const cr_cp = 1 - 2 * (this._x * this._x + this._y * this._y);
     ret.x = (Math.atan2(sr_cp, cr_cp) * 180) / Math.PI;
 

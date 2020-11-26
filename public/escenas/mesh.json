@@ -7,9 +7,13 @@
       "nombre": "CAMARA0",
       "isOrtho": false,
       "transform": {
+        "rotation": {
+          "x":-35.63
+        },
         "position": {
-          "z": -10,
-          "x": 0
+          "x": 0,
+          "y": 8,
+          "z": 10
         }
       }
     }
@@ -23,7 +27,7 @@
           "y": 0
         },
         "rotation": {
-          "x": 75
+          "x": 0
         }
       },
       "componentes": [
@@ -49,7 +53,7 @@
           },
           "componentes": [
             {
-              "nombre": "r",
+              "nombre": "k",
               "tipo": "ComponenteMesh",
               "nombreMalla": "king.obj",
               "nombreMaterial": "kingTex"

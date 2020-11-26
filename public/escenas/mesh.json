@@ -8,7 +8,7 @@
       "isOrtho": false,
       "transform": {
         "rotation": {
-          "x":-35.63
+          "x": -35.63
         },
         "position": {
           "x": 0,
@@ -30,35 +30,48 @@
           "x": 0
         }
       },
+      "nombreMaterial": "tablero",
       "componentes": [
         {
-          "nombre": "cube",
+          "nombre": "componenteTablero",
+          "tipo": "ComponenteTablero"
+        },
+        {
+          "nombre": "tablero",
           "tipo": "ComponenteMesh",
-          "nombreMalla": "plane.obj",
-          "nombreMaterial": "tablero"
+          "nombreMalla": "plane.obj"
         },
         {
           "nombre": "rota",
-          "tipo":"ComponenteRotar"
-        }
-      ],
-      "objetosHijo": [
+          "tipo": "ComponenteRotar"
+        },
         {
-          "nombre": "fichaA",
-          "transform": {
-            "position": {
-              "x": -0.5,
-              "z": -3.5
-            }
+          "tamanoCasillaX": 1,
+          "tamanoCasillaY": 1,
+          "tipo": "ComponenteInstanciadorPiezas",
+          "nombre": "instanciador",
+          "equivalenciaObj": {
+            "A": "king.obj",
+            "Q": "queen.obj",
+            "B": "bishop.obj",
+            "K": "knight.obj",
+            "R": "rook.obj",
+            "P": "pawn.obj"
           },
-          "componentes": [
-            {
-              "nombre": "k",
-              "tipo": "ComponenteMesh",
-              "nombreMalla": "king.obj",
-              "nombreMaterial": "kingTex"
-            }
-          ]
+          "nombresTex": {
+            "A": "kingTex",
+            "Q": "queenTex",
+            "B": "bishopTex",
+            "K": "knightTex",
+            "R": "rookTex",
+            "P": "pawnTex",
+            "a": "kingTex1",
+            "q": "queenTex1",
+            "b": "bishopTex1",
+            "k": "knightTex1",
+            "r": "rookTex1",
+            "p": "pawnTex1"
+          }
         }
       ]
     }

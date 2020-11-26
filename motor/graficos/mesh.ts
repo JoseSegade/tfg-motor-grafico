@@ -6,26 +6,21 @@ import Importadores from '../logica/importadores/importadores';
 import ConstantesMensajeria from '../constantes/constantesMensajeria';
 import Matrix4x4 from '../fisica/matematicas/matrix4x4';
 import ViewProj from '../logica/escena/viewProj';
-import Materiales from './materiales';
 import Material from './material';
 import BufferWebGl from '../sistema/gl/bufferWebGl';
 import AttributeInfo from '../sistema/gl/attributeInfo';
 import { gl } from '../sistema/gl/canvasWebGl';
-import Vector3 from 'motor/fisica/matematicas/vector3';
 
 export default class MeshBase implements SuscripcionMensaje {
   private _nombre: string;
-  private _nombreMaterial: string;
   private _material: Material;
   private _buffer: BufferWebGl;
 
   private modelo: number[] = [];
   private _estaCargado = false;
 
-  public constructor(nombre: string, nombreMaterial: string) {
+  public constructor(nombre: string) {
     this._nombre = nombre;
-    this._nombreMaterial = nombreMaterial;
-    this._material = Materiales.obtenerMaterial(this._nombreMaterial);
     this._estaCargado = false;
 
     const recursoObj: RecursoObj = Importadores.obtenerRecurso(this._nombre) as RecursoObj;
@@ -46,12 +41,6 @@ export default class MeshBase implements SuscripcionMensaje {
   public destroy(): void {
     if (this._buffer) {
       this._buffer.destroy();
-    }
-
-    if (this._material) {
-      Materiales.destruirMaterial(this._nombreMaterial);
-      this._material = undefined;
-      this._nombreMaterial = undefined;
     }
   }
 
@@ -132,6 +121,10 @@ export default class MeshBase implements SuscripcionMensaje {
     if (mensaje.codigo === ConstantesMensajeria.RECURSO_CARGADO + this._nombre) {
       this.inicializarModelo(mensaje.contexto as RecursoObj);
     }
+  }
+
+  public usarMaterial(mat: Material) {
+    this._material = mat;
   }
   
   public dibujar(shader: Shader, model: Matrix4x4, viewProj: ViewProj): void {

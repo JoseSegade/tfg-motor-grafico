@@ -31,9 +31,9 @@ export default class Meshes {
    * Obtiene la textura y si no esta la crea.
    * @param nombre Nombre identificatorio de la textura.
    */
-  public static obtenerMesh(nombre: string, nombreMaterial: string): Mesh {
+  public static obtenerMesh(nombre: string): Mesh {
       if (Meshes._meshes[nombre] === undefined) {
-          const mesh: Mesh = new Mesh(nombre, nombreMaterial);
+          const mesh: Mesh = new Mesh(nombre);
           Meshes._meshes[nombre] = new UnidadDeMesh(mesh);
       } else {
           Meshes._meshes[nombre].referencias++;

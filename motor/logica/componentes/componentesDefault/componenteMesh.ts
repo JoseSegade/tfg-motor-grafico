@@ -10,13 +10,13 @@ export default class ComponenteMesh extends ComponenteBase implements Renderizab
 
   public nombre: string;
   public nombreMalla: string;
-  public nombreMaterial: string;
-
+  
   public cargarConfiguracion(): void {
-    this._mesh = Meshes.obtenerMesh(this.nombreMalla, this.nombreMaterial)
+    this._mesh = Meshes.obtenerMesh(this.nombreMalla)
   }
 
   public render(shader: Shader, camara: ViewProj) {
+    this._mesh.usarMaterial(this.objetoVirtual.material);
     this._mesh.dibujar(shader, this.objetoVirtual.worldMatrix, camara);
   }
 

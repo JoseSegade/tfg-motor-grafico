@@ -5,6 +5,7 @@ import Componente from '../componentes/componente';
 import Shader from '../../sistema/gl/shader';
 import MundoVirtual from './mundoVirtual';
 import ViewProj from './viewProj';
+import Material from 'motor/graficos/material';
 
 /**
  * Objeto que se renderizara en una escena
@@ -12,6 +13,7 @@ import ViewProj from './viewProj';
 export default class ObjetoVirtual {
   public id: number;
   public objetoPadre: ObjetoVirtual;
+  private _material: Material;
   private _objetosHijo: ObjetoVirtual[] = [];
   private _estaConfigurado: boolean = false;
   private _mundoVirtual: MundoVirtual;
@@ -45,6 +47,10 @@ export default class ObjetoVirtual {
 
   public get mundoVirtual(): MundoVirtual {
     return this._mundoVirtual;
+  }
+
+  public get material(): Material {
+    return this._material;
   }
 
   /**
@@ -200,6 +206,10 @@ export default class ObjetoVirtual {
    * */
   public obtenerPosicionGlobal(): Vector3 {
     return new Vector3(this._worldM.data[12], this._worldM.data[13], this._worldM.data[14]);
+  }
+
+  public cargarMaterial(mat: Material){
+    this._material = mat;
   }
 
   /**

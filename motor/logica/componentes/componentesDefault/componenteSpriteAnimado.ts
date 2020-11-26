@@ -25,11 +25,6 @@ export default class ComponenteSpriteAnimado extends ComponenteBase implements R
     public tiempoEntreFrames: number;
 
     /**
-     * Nombre del material que se empleara.
-     */
-    public nombreMaterial: string;
-
-    /**
      * Ancho total de la imagen que se utiliza como spritesheet.
      */
     public ancho: number;
@@ -77,7 +72,7 @@ export default class ComponenteSpriteAnimado extends ComponenteBase implements R
     public cargarConfiguracion(): void {
         this.sprite = new SpriteAnimado({
             nombre: this.nombre,
-            nombreMaterial: this.nombreMaterial,
+            nombreMaterial: this.objetoVirtual.material.nombre,
             ancho: this.ancho,
             alto: this.alto,
             anchoFrame: this.anchoFrame,

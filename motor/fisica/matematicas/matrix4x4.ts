@@ -244,6 +244,12 @@ export default class Matrix4x4 {
   }
 
   public static inverse(m: Matrix4x4): Matrix4x4 {
+    /**
+    *
+    *  Autor original: https://stackoverflow.com/questions/1148309/inverting-a-4x4-matrix
+    * 
+    **/
+
     const ret = Matrix4x4.identity;
     const inv = [];
 

@@ -45,8 +45,6 @@ export default class MotorGrafico  {
     EventosInput.inicializar(this._canvas.HTMLCanvas);
 
     GestorShader.crearShaders();    
-    
-    Materiales.inicializarMateriales();
 
     this.cargarConfiguracion();
   }

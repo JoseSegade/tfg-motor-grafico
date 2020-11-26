@@ -5,6 +5,7 @@ import ObjetoVirtual from './objetoVirtual';
 import Componentes from '../componentes/componentes';
 import Camara from './camara';
 import ViewProj from './viewProj';
+import Materiales from 'motor/graficos/materiales';
 
 /**
  * Posibles estados de un Escena.
@@ -147,11 +148,18 @@ export default class Escena {
             objetoPadre?.mundoVirtual,
         );
 
-        Escena.cargarConfiguraciones(objetoVirtual, configuracion);
-
+        if(configuracion.nombreMaterial !== undefined) {
+            Materiales.cargarMaterial(configuracion.nombreMaterial);
+            objetoVirtual.cargarMaterial(Materiales.obtenerMaterial(configuracion.nombreMaterial));
+        }
+        else {
+            objetoVirtual.cargarMaterial(Materiales.defaultMaterial());
+        }
+        
         if (objetoPadre !== undefined) {
             objetoPadre.anadirObjetoHijo(objetoVirtual);
         }        
+        Escena.cargarConfiguraciones(objetoVirtual, configuracion);
 
         return objetoVirtual;
     }

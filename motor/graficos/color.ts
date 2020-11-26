@@ -172,4 +172,8 @@ export default class Color {
     public static get azul(): Color {
         return new Color(0, 0, 255, 255);
     }
+
+    public static get magenta(): Color {
+        return new Color(255, 0, 255, 255)
+    }
 }

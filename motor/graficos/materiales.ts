@@ -19,6 +19,7 @@ class UnidadDeMaterial {
 export default class Materiales {
   private static _materiales: { [nombre: string]: UnidadDeMaterial } = {};
   private static _listaTexturas: string[];
+  private static readonly DEFAULTMAT: string = "__DEFAULT_MAT__";
 
   private constructor() {}
 
@@ -43,11 +44,24 @@ export default class Materiales {
    * Agrega un nuevo material.
    * @param material Material que se quiere agregar.
    */
-  private static agregarMaterial(material: Material): string {
+  public static agregarMaterial(material: Material): string {
     if (Materiales._materiales[material.nombre] === undefined) {
       Materiales._materiales[material.nombre] = new UnidadDeMaterial(material);
     }
     return material.nombre;
+  }
+
+  public static defaultMaterial(): Material {
+    if(Materiales._materiales[Materiales.DEFAULTMAT] === undefined) {
+      const ret = new Material(Materiales.DEFAULTMAT, undefined, Color.negro);
+      Materiales.agregarMaterial(ret);
+      return ret;
+    }
+    return Materiales._materiales[Materiales.DEFAULTMAT].material;
+  }
+
+  public static cargarMaterial(textura: string): void {
+    Materiales.agregarMaterial(new Material(textura, `/textures/${textura}.png`, Color.blanco));
   }
 
   /**

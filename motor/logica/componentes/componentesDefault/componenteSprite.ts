@@ -32,7 +32,7 @@ export default class ComponenteSprite extends ComponenteBase implements Renderiz
      * Carga la configuracion necesaria.
      * */
     public cargarConfiguracion(): void {
-        this.sprite = new Sprite(this.nombre, this.nombreMaterial, this.ancho, this.alto);
+        this.sprite = new Sprite(this.nombre, this.objetoVirtual.material.nombre, this.ancho, this.alto);
         this.sprite.cargarConfiguracion();
     }
 

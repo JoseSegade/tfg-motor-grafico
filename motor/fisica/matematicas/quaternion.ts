@@ -219,11 +219,11 @@ export default class Quaternion {
   }
 
   public static lookRotation(lookAt: Vector3, upDirection: Vector3) {
+    const ret = Quaternion.identity;
     const forward = Vector3.normalize(lookAt);
     const up = Vector3.normalize(upDirection);
     const right = Vector3.cross(up, forward);
     
-    const ret = Quaternion.identity;
     ret._w = Math.sqrt(1.0 + right.x + up.y + forward.z) * 0.5;
     const w4_recip = 1.0 / (4.0 * ret._w);
     ret._x = (forward.y - up.z) * w4_recip;

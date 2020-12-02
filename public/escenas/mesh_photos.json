@@ -1,0 +1,148 @@
+﻿{
+  "nombre": "Mesh",
+  "id": 2,
+  "camaras": [
+    {
+      "id": 0,
+      "nombre": "CAMARA0",
+      "isOrtho": false,
+      "transform": {
+        "rotation": {
+          "x": -35.63
+        },
+        "position": {
+          "x": 0,
+          "y": 8,
+          "z": 10
+        }
+      }
+    }
+  ],
+  "objetos": [
+    {
+      "nombre": "tablero",
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "rotation": {
+          "x": 0
+        }
+      },
+      "nombreMaterial": "tablero",
+      "componentes": [       
+        
+        {
+          "nombre": "rota",
+          "tipo": "ComponenteRotar"
+        }
+        
+      ],
+      "objetosHijo": [
+        {
+          "nombre": "fichaA",
+          "nombreMaterial": "pawnTex1",
+          "transform": {
+            "position": {
+              "x": -2.5,
+              "z": 0.0
+            }
+          },
+          "componentes": [
+            {
+              "nombre": "p",
+              "tipo": "ComponenteMesh",
+              "nombreMalla": "pawn.obj"
+            }
+          ]
+        },
+        {
+          "nombre": "fichaA",
+          "nombreMaterial": "rookTex1",
+          "transform": {
+            "position": {
+              "x": -1.5,
+              "z": 0.0
+            }
+          },
+          "componentes": [
+            {
+              "nombre": "r",
+              "tipo": "ComponenteMesh",
+              "nombreMalla": "rook.obj"
+            }
+          ]
+        },
+        {
+          "nombre": "fichaA",
+          "nombreMaterial": "knightTex1",
+          "transform": {
+            "position": {
+              "x": -0.5,
+              "z": 0.0
+            }
+          },
+          "componentes": [
+            {
+              "nombre": "k",
+              "tipo": "ComponenteMesh",
+              "nombreMalla": "knight.obj"
+            }
+          ]
+        },
+        {
+          "nombre": "fichaA",
+          "nombreMaterial": "bishopTex1",
+          "transform": {
+            "position": {
+              "x": 0.5,
+              "z": 0.0
+            }
+          },
+          "componentes": [
+            {
+              "nombre": "k",
+              "tipo": "ComponenteMesh",
+              "nombreMalla": "bishop.obj"
+            }
+          ]
+        }
+        ,{
+          "nombre": "fichaA",
+          "nombreMaterial": "queenTex1",
+          "transform": {
+            "position": {
+              "x": 1.5,
+              "z": 0.0
+            }
+          },
+          "componentes": [
+            {
+              "nombre": "k",
+              "tipo": "ComponenteMesh",
+              "nombreMalla": "queen.obj"
+            }
+          ]
+        }
+        ,{
+          "nombre": "fichaA",
+          "nombreMaterial": "kingTex1",
+          "transform": {
+            "position": {
+              "x": 2.5,
+              "z": 0.0
+            }
+          },
+          "componentes": [
+            {
+              "nombre": "k",
+              "tipo": "ComponenteMesh",
+              "nombreMalla": "king.obj"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

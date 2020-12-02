@@ -11,6 +11,7 @@
   "objetos": [
     {
       "nombre": "tablero",
+      "nombreMaterial": "tablero2",
       "transform": {
         "position": {
           "x": 0,
@@ -22,7 +23,6 @@
         {
           "nombre": "tableroSprite",
           "tipo": "ComponenteSprite",
-          "nombreMaterial": "tablero2",
           "ancho": 512,
           "alto": 512
         }
@@ -62,6 +62,7 @@
           },
           "jsonPrefab": {
             "nombre": "prefabFichas",
+            "nombreMaterial": "fichas",
             "transform": {
               "position": {
                 "x": 0,
@@ -69,14 +70,13 @@
               }
             },
             "componentes": [
-                  {
-                    "nombre": "comportamientoArrastrar",
-                    "tipo": "ComponenteArrastrarPieza"
-                  },
+              {
+                "nombre": "comportamientoArrastrar",
+                "tipo": "ComponenteArrastrarPieza"
+              },
               {
                 "nombre": "fichasSprite",
                 "tipo": "ComponenteSpriteAnimado",
-                "nombreMaterial": "fichas",
                 "reproducirAutomaticamente": false,
                 "tiempoEntreFrames": 1,
                 "ancho": 64,

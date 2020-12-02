@@ -1,0 +1,24 @@
+{
+  "nombre": "escena_vacia",
+  "id": 3,
+  "camaras": [
+    {
+      "id": 0,
+      "nombre": "CAMARA0",
+      "isOrtho": true
+    }
+  ],
+  "objetos": [
+    {
+      "nombre": "sprite",
+      "componentes": [
+        {
+          "nombre": "sprite",
+          "tipo": "ComponenteSprite",
+          "ancho": 512,
+          "alto": 512
+        }
+      ]
+    }
+  ]
+}

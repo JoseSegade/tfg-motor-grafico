@@ -46,10 +46,10 @@
           "tipo": "ComponenteRotar"
         },
         {
+          "nombre": "instanciador",
+          "tipo": "ComponenteInstanciadorPiezas",
           "tamanoCasillaX": 1,
           "tamanoCasillaY": 1,
-          "tipo": "ComponenteInstanciadorPiezas",
-          "nombre": "instanciador",
           "equivalenciaObj": {
             "A": "king.obj",
             "Q": "queen.obj",

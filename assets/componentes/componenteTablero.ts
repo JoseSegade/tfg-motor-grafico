@@ -10,26 +10,26 @@ import {
 } from './chessRating';
 
 export default class ComponenteTablero extends ComponenteBase {
-  // public readonly defaultChessBoard: string[][] = [
-  //   ['r', 'k', 'b', 'q', 'a', 'b', 'k', 'r'],
-  //   ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
-  //   [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-  //   [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-  //   [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-  //   [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-  //   ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
-  //   ['R', 'K', 'B', 'Q', 'A', 'B', 'K', 'R'],
-  // ];
   public readonly defaultChessBoard: string[][] = [
-    ['r', ' ', 'b', 'a', ' ', ' ', ' ', 'r'],
-    ['p', ' ', ' ', 'p', 'B', 'p', 'K', 'p'],
-    ['k', ' ', ' ', ' ', ' ', 'k', ' ', ' '],
-    [' ', 'p', ' ', 'K', 'P', ' ', ' ', 'P'],
-    [' ', ' ', ' ', ' ', ' ', ' ', 'P', ' '],
-    [' ', ' ', ' ', 'P', ' ', ' ', ' ', ' '],
-    ['P', ' ', 'P', ' ', 'A', ' ', ' ', ' '],
-    ['q', ' ', ' ', ' ', ' ', ' ', 'b', ' '],
+    ['r', 'k', 'b', 'q', 'a', 'b', 'k', 'r'],
+    ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+    ['R', 'K', 'B', 'Q', 'A', 'B', 'K', 'R'],
   ];
+  // public readonly defaultChessBoard: string[][] = [
+  //   ['r', ' ', 'b', 'a', ' ', ' ', ' ', 'r'],
+  //   ['p', ' ', ' ', 'p', 'B', 'p', 'K', 'p'],
+  //   ['k', ' ', ' ', ' ', ' ', 'k', ' ', ' '],
+  //   [' ', 'p', ' ', 'K', 'P', ' ', ' ', 'P'],
+  //   [' ', ' ', ' ', ' ', ' ', ' ', 'P', ' '],
+  //   [' ', ' ', ' ', 'P', ' ', ' ', ' ', ' '],
+  //   ['P', ' ', 'P', ' ', 'A', ' ', ' ', ' '],
+  //   ['q', ' ', ' ', ' ', ' ', ' ', 'b', ' '],
+  // ];
   public chessBoard: string[][];
   public kingPositionC = 0;
   public kingPositionL = 0;
@@ -72,8 +72,8 @@ export default class ComponenteTablero extends ComponenteBase {
 
   public primerMovimiento(): void {
     if (this.humanAsWhite === 0) {
-      this.makeMove(this.alphaBeta(ComponenteTablero.globalDepth, 1000000, -1000000, '', 0));
       this.flipBoard();
+      this.makeMove(this.alphaBeta(ComponenteTablero.globalDepth, 1000000, -1000000, '', 0));
     }
   }
 

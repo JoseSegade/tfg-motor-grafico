@@ -22,8 +22,8 @@ export default class ComponenteArrastrarPieza extends ComponenteArrastrarConClic
 
   public puedeMoverseHacia(pos: Vector2): boolean {
     let dragMove: string;
-    const casillaInicial = this.componenteTablero.humanAsWhite ? Casilla.obtenerCasillaInversa(this.posicionInicial.xy) : Casilla.obtenerCasilla(this.posicionInicial.xy);
-    const casillaFinal = this.componenteTablero.humanAsWhite ? Casilla.obtenerCasillaInversa(pos) : Casilla.obtenerCasilla(pos);
+    const casillaInicial = !this.componenteTablero.humanAsWhite ? Casilla.obtenerCasillaInversa(this.posicionInicial.xy) : Casilla.obtenerCasilla(this.posicionInicial.xy);
+    const casillaFinal = !this.componenteTablero.humanAsWhite ? Casilla.obtenerCasillaInversa(pos) : Casilla.obtenerCasilla(pos);
     if (
       casillaFinal.y === 0 &&
       casillaInicial.y == 1 &&
@@ -129,10 +129,8 @@ export default class ComponenteArrastrarPieza extends ComponenteArrastrarConClic
 
   public alEmpezarClick(): void {
     if (!this.haMuerto && this.casillaActual.posicionRatonEnCasilla(this.posRaton)) {
+      this.objetoVirtual.transform.position.add(new Vector3(0,0,2));
       this.posicionInicial.copyFrom(this.objetoVirtual.transform.position);
-      const objPadre = this.objetoVirtual.objetoPadre;
-      objPadre.eliminarObjetoHijo(this.objetoVirtual);
-      objPadre.anadirObjetoHijo(this.objetoVirtual);
       this.arrastrandose = true;
     }
   }
@@ -146,6 +144,8 @@ export default class ComponenteArrastrarPieza extends ComponenteArrastrarConClic
         this.objetoVirtual.transform.position.copyFrom(this.posicionInicial);
       }
       this.casillaActual.cambiarCasilla(this.objetoVirtual.transform.position.xy);
+      this.objetoVirtual.transform.position.add(new Vector3(0,0,-2));
+      
     }
   }
 }

@@ -17,6 +17,7 @@ export default class ComponenteInstanciadorPiezas
   public tamanoCasillaY: number;
   public equivalenciaObj: { [key: string]: string } = {};
   public nombresTex: { [key: string]: string } = {};
+  
   private componenteTablero: ComponenteTablero;
   private fichas: ObjetoVirtual[] = [];
   private SELECCIONAR_BLANCAS = 'SELECCIONAR_BLANCAS';
@@ -94,6 +95,12 @@ export default class ComponenteInstanciadorPiezas
             0,
             filaIdx * this.tamanoCasillaY - (this.tamanoCasillaY*4) + this.tamanoCasillaY / 2
           );
+
+          //  Rotate the white knights and bishops ;)
+          if(['K', 'B'].includes(valor)) {
+            objetoInstancia.transform.rotation.rotateEuler(new Vector3(0, 180,0));
+          }
+
           const mesh = new ComponenteMesh();
           mesh.nombre = `${nombreObj}__mesh`;
           mesh.nombreMalla = nombreObj;

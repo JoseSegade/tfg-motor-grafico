@@ -72,9 +72,9 @@ export default class ComponenteGeneradorPiezas
           (objetoInstancia.obtenerComponente(
             'fichasSprite',
           ) as ComponenteSpriteAnimado).offset = this.framesFichas[v];
-          // (objetoInstancia.obtenerComponente(
-          //   'comportamientoArrastrar',
-          // ) as ComponenteArrastrarPieza).componenteTablero = this.componenteTablero;
+          (objetoInstancia.obtenerComponente(
+            'comportamientoArrastrar',
+          ) as ComponenteArrastrarPieza).componenteTablero = this.componenteTablero;
           objetoInstancia.cargarConfiguracion();
           this.fichas.push(objetoInstancia);
         }

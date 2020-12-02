@@ -64,7 +64,7 @@ export default class MotorGrafico  {
     else {
       GestorShader.usarShaderPorDefecto();
       // TODO: Cambiar escena de manera dinamica
-      EscenaControlador.cambiarEscena('mesh', () => { EscenaControlador.updateCamara(this._canvas.ancho, this._canvas.alto)});        
+      EscenaControlador.cambiarEscena('ajedrez', () => { EscenaControlador.updateCamara(this._canvas.ancho, this._canvas.alto)});        
       this.loop();
     }
   }

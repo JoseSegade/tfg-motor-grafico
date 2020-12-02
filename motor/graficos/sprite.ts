@@ -23,6 +23,8 @@ export default class Sprite {
   protected _material: Material;
   protected _vertices: Vertice[] = [];
 
+  protected _estaCargado = false;
+
   /**
    * Crea un nuevo sprite.
    * @param nombre Nombre del sprite.

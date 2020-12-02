@@ -146,7 +146,7 @@ export class CanvasWebGl {
 
   private limpiarWebGl(): void {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    gl.clearColor(50 / 225, 50 / 255, 50 / 255, 1);
+    gl.clearColor(179 / 225, 151 / 255, 54 / 255, 1);
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);

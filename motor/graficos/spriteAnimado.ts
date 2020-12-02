@@ -257,7 +257,7 @@ export default class SpriteAnimado extends Sprite implements SuscripcionMensaje 
     private cargarImagen(): void {
         if (!this._imagenCargada) {
             const material = Materiales.obtenerMaterial(this._nombreMaterial);
-            if (material.texturaDifusa.estaCargado) {
+            if (material.texturaDifusa?.estaCargado) {
                 if (Importadores.estaRecursoCargadoEnMemoria(material.nombreTexturaDifusa)) {
                     this._anchoImagen = material.texturaDifusa.ancho;
                     this._altoImagen = material.texturaDifusa.alto;

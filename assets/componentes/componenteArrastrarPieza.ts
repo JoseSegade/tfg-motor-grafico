@@ -52,15 +52,17 @@ export default class ComponenteArrastrarPieza extends ComponenteArrastrarConClic
       Mensaje.enviar(this.MOVER_JUGADOR, this, {jugada: dragMove.trim(), ficha: this});
       this.componenteTablero.flipBoard();
       this.componenteTablero.printTablero();
+      const time = performance.now();
       const jugada: string = this.componenteTablero.alphaBeta(
         ComponenteTablero.globalDepth,
         1000000,
         -1000000,
         '',
         0,
-      );
-      console.log(jugada);
-      this.componenteTablero.makeMove(jugada);
+        );
+        console.log('Total milis: ', performance.now() - time)
+        console.log(jugada);
+        this.componenteTablero.makeMove(jugada);
       this.componenteTablero.flipBoard();
       this.componenteTablero.printTablero();
       Mensaje.enviar(this.MOVER_RIVAL, this, {jugada: jugada.trim(), ficha: this});
